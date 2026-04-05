@@ -1,0 +1,7 @@
+# Binary image files — reading these causes API errors
+# (base64 embedded without media_type field → 400 invalid_request_error)
+src/assets/hero.png
+src/assets/react.svg
+src/assets/vite.svg
+public/favicon.svg
+public/icons.svg
