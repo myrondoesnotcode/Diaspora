@@ -1,4 +1,4 @@
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, useState } from 'react';
 import { SNAPSHOT_YEARS, WORLD_TOTALS } from '../data/types';
 import type { SnapshotYear } from '../data/types';
 import { getEpochForYear } from '../data/epochs';
@@ -14,8 +14,19 @@ interface Props {
 }
 
 function formatYear(y: number): string {
-  return y < 1000 ? `${y} CE` : `${y}`;
+  if (y < 0) return `${Math.abs(y)} BCE`;
+  if (y < 1000) return `${y} CE`;
+  return `${y}`;
 }
+
+function tickLabel(y: number): string {
+  if (y < 0) return `${Math.abs(y)}b`; // "500b" = 500 BCE
+  if (y < 1000) return String(y);
+  if (y >= 1900) return String(y).slice(2);
+  return String(y);
+}
+
+const KEY_YEARS_MOBILE = new Set([-500, -200, 1, 70, 500, 1000, 1492, 1800, 1900, 1939, 1948, 2024]);
 
 export default function Timeline({
   currentYear,
@@ -28,6 +39,7 @@ export default function Timeline({
   const epoch = getEpochForYear(currentYear);
   const yearIndex = SNAPSHOT_YEARS.indexOf(currentYear);
   const progress = (yearIndex / (SNAPSHOT_YEARS.length - 1)) * 100;
+  const [sourcesOpen, setSourcesOpen] = useState(false);
 
   const sliderRef = useRef<HTMLInputElement>(null);
 
@@ -74,7 +86,7 @@ export default function Timeline({
 
         {/* Year display */}
         <div
-          className="text-2xl font-bold tabular-nums flex-shrink-0 w-24 text-center"
+          className="text-2xl font-bold tabular-nums flex-shrink-0 w-28 text-center"
           style={{ color: epoch.color, textShadow: `0 0 20px ${epoch.color}66` }}
         >
           {formatYear(currentYear)}
@@ -87,10 +99,8 @@ export default function Timeline({
             {SNAPSHOT_YEARS.map((y) => {
               const isCurrent = y === currentYear;
               const tickEpoch = getEpochForYear(y);
-              // On narrow screens only label key years to avoid overlap
               const compact = window.innerWidth < 600;
-              const KEY_YEARS = new Set([70, 500, 1000, 1492, 1800, 1900, 1939, 1948, 2024]);
-              const showLabel = !compact || KEY_YEARS.has(y) || isCurrent;
+              const showLabel = !compact || KEY_YEARS_MOBILE.has(y) || isCurrent;
               return (
                 <button
                   key={y}
@@ -115,7 +125,7 @@ export default function Timeline({
                       visibility: showLabel ? 'visible' : 'hidden',
                     }}
                   >
-                    {y < 1000 ? y : y >= 1900 ? String(y).slice(2) : y}
+                    {tickLabel(y)}
                   </span>
                 </button>
               );
@@ -151,8 +161,43 @@ export default function Timeline({
               {activeMigrations} migration{activeMigrations !== 1 ? 's' : ''} active
             </div>
           )}
-          <div className="text-[9px] text-slate-600 mt-0.5">* est. DellaPergola</div>
         </div>
+      </div>
+
+      {/* Sources section */}
+      <div className="mt-2 text-center">
+        <button
+          onClick={() => setSourcesOpen((v) => !v)}
+          className="text-[10px] text-slate-500 hover:text-slate-300 transition-colors tracking-wide"
+        >
+          Sources & Methodology {sourcesOpen ? '▲' : '▼'}
+        </button>
+        {sourcesOpen && (
+          <div
+            className="mt-2 text-left text-[10px] leading-relaxed rounded-lg p-3 space-y-1.5"
+            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+          >
+            <p>
+              <span className="text-slate-300 font-semibold">World population totals: </span>
+              <span className="text-slate-400">DellaPergola, S. <em>World Jewish Population</em>, American Jewish Year Book (ongoing series). Standard academic reference for 70 CE–present.</span>
+            </p>
+            <p>
+              <span className="text-slate-300 font-semibold">Ancient & medieval demography: </span>
+              <span className="text-slate-400">Baron, S.W. <em>A Social and Religious History of the Jews</em>, 18 vols. (1952–83); Broshi, M. & Finkelstein, I. "Population of Palestine in Iron Age II," <em>BASOR</em> 287 (1992).</span>
+            </p>
+            <p>
+              <span className="text-slate-300 font-semibold">Pre-70 CE primary sources: </span>
+              <span className="text-slate-400">Josephus, <em>Jewish War</em> & <em>Antiquities</em> (c. 75–93 CE); Philo of Alexandria, <em>In Flaccum</em> (c. 38 CE) — figures treated as upper bounds. Ezra & Nehemiah for Babylonian returnee counts. Porten, B. <em>Archives from Elephantine</em> (1968) for Egyptian community.</span>
+            </p>
+            <p>
+              <span className="text-slate-300 font-semibold">Community & migration data: </span>
+              <span className="text-slate-400">Encyclopaedia Judaica, 2nd ed. (2007); Jewish Virtual Library; primary chronicles cited per entry.</span>
+            </p>
+            <p className="text-slate-500 italic">
+              Pre-500 CE figures carry ±50–100% uncertainty. Pre-1 CE estimates should be treated as order-of-magnitude only. All community populations represent estimates; see tracked vs. world totals above.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

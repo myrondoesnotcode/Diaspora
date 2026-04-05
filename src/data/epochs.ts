@@ -2,6 +2,20 @@ import type { Epoch } from './types';
 
 export const EPOCHS: Epoch[] = [
   {
+    name: 'Persian Return',
+    startYear: -500,
+    endYear: -201,
+    color: '#795548',
+    description: 'Cyrus the Great\'s Edict (538 BCE) allows exiles to return from Babylon. Second Temple founded. Three major centers: Judea, Babylon, and Egypt.',
+  },
+  {
+    name: 'Hellenistic Period',
+    startYear: -200,
+    endYear: 69,
+    color: '#4a7c59',
+    description: 'Greek and Roman rule transforms the diaspora. Alexandria rivals Babylon. Maccabean revolt (164 BCE) wins Hasmonean independence; Rome gradually tightens its grip.',
+  },
+  {
     name: 'Roman Diaspora',
     startYear: 70,
     endYear: 399,

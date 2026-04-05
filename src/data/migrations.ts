@@ -1,6 +1,43 @@
 import type { Migration } from './types';
 
 export const MIGRATIONS: Migration[] = [
+  // ── Pre-Diaspora & Biblical Exile ─────────────────────────────────────────
+  {
+    id: 'babylonian-exile',
+    from: 'jerusalem',
+    to: 'baghdad',
+    startYear: -586,
+    endYear: -500,
+    type: 'forced',
+    description: 'Nebuchadnezzar II destroys the First Temple (586 BCE) and deports Jerusalem\'s Jewish leadership and craftsmen to Babylon, beginning the great exile.',
+  },
+  {
+    id: 'persian-return',
+    from: 'baghdad',
+    to: 'jerusalem',
+    startYear: -538,
+    endYear: -400,
+    type: 'voluntary',
+    description: 'Cyrus the Great\'s Edict of Return (538 BCE) allows exiles to return to Judea. ~50,000 return and build the Second Temple, but many choose to remain in thriving Babylonian communities.',
+  },
+  {
+    id: 'hellenistic-egypt',
+    from: 'jerusalem',
+    to: 'alexandria',
+    startYear: -300,
+    endYear: -100,
+    type: 'voluntary',
+    description: 'Under Ptolemaic rule, Jewish soldiers, merchants, and scholars flock to Alexandria. The city becomes the largest Jewish community outside Judea, producing the Greek Septuagint translation of the Torah.',
+  },
+  {
+    id: 'early-rome',
+    from: 'jerusalem',
+    to: 'rome',
+    startYear: -100,
+    endYear: 70,
+    type: 'voluntary',
+    description: 'Jewish ambassadors, merchants, and freed slaves establish a growing community in Rome during the late Republic and early Empire. Pompey\'s conquest (63 BCE) brings captives; Caesar and Augustus grant special privileges.',
+  },
   // ── First Dispersion (70–200 CE) ──────────────────────────────────────────
   {
     id: 'temple-to-babylon',

@@ -24,7 +24,7 @@ function getActiveMigrationCount(year: number): number {
 }
 
 export default function App() {
-  const [currentYear, setCurrentYear] = useState<SnapshotYear>(70);
+  const [currentYear, setCurrentYear] = useState<SnapshotYear>(-500);
   const [isPlaying, setIsPlaying] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 

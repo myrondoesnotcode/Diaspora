@@ -30,11 +30,14 @@ export interface Epoch {
   description: string;
 }
 
-export const SNAPSHOT_YEARS = [70, 200, 500, 700, 1000, 1170, 1300, 1492, 1550, 1650, 1800, 1850, 1900, 1939, 1948, 1970, 2000, 2024] as const;
+export const SNAPSHOT_YEARS = [-500, -200, 1, 70, 200, 500, 700, 1000, 1170, 1300, 1492, 1550, 1650, 1800, 1850, 1900, 1939, 1948, 1970, 2000, 2024] as const;
 export type SnapshotYear = typeof SNAPSHOT_YEARS[number];
 
-// Historical world Jewish population estimates (Sergio DellaPergola)
+// Historical world Jewish population estimates (Sergio DellaPergola; pre-70 CE: Broshi, Baron)
 export const WORLD_TOTALS: Partial<Record<SnapshotYear, number>> = {
+  [-500]: 1_000_000,
+  [-200]: 2_500_000,
+  1: 5_000_000,
   70: 4_500_000,
   200: 5_000_000,
   500: 4_000_000,

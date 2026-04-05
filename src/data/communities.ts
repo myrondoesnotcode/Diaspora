@@ -13,6 +13,7 @@ export const COMMUNITIES: Community[] = [
     culturalType: 'Mixed',
     significance: 'Holy city and spiritual center of the Jewish people for three millennia.',
     populations: {
+      [-500]: 100000, [-200]: 200000, 1: 600000,
       70: 80000, 200: 20000, 500: 15000, 700: 12000, 1000: 8000,
       1170: 7000, 1300: 5000, 1492: 5000, 1550: 12000, 1650: 8000,
       1800: 8000, 1850: 15000, 1900: 40000, 1939: 85000, 1948: 100000,
@@ -41,6 +42,7 @@ export const COMMUNITIES: Community[] = [
     culturalType: 'Mixed',
     significance: 'Northern Israeli port city; hub of Aliyah absorption.',
     populations: {
+      [-500]: 2000, [-200]: 3000, 1: 5000,
       70: 5000, 200: 3000, 500: 2000, 700: 2000, 1000: 2000,
       1170: 2000, 1300: 1000, 1492: 800, 1550: 1000, 1650: 1000,
       1800: 2000, 1850: 4000, 1900: 10000, 1939: 65000, 1948: 120000,
@@ -56,6 +58,7 @@ export const COMMUNITIES: Community[] = [
     culturalType: 'Mizrahi',
     significance: 'Seat of the great yeshivot (Sura, Pumbedita) and Gaonic leadership for centuries.',
     populations: {
+      [-500]: 300000, [-200]: 350000, 1: 400000,
       70: 150000, 200: 200000, 500: 300000, 700: 250000, 1000: 200000,
       1170: 150000, 1300: 120000, 1492: 100000, 1550: 80000, 1650: 80000,
       1800: 70000, 1850: 80000, 1900: 80000, 1939: 90000, 1948: 80000,
@@ -71,6 +74,7 @@ export const COMMUNITIES: Community[] = [
     culturalType: 'Sephardic',
     significance: 'Home to a large Hellenistic Jewish community; Philo wrote here.',
     populations: {
+      [-500]: 30000, [-200]: 200000, 1: 500000,
       70: 100000, 200: 60000, 500: 30000, 700: 20000, 1000: 15000,
       1170: 12000, 1300: 10000, 1492: 8000, 1550: 8000, 1650: 8000,
       1800: 12000, 1850: 18000, 1900: 30000, 1939: 65000, 1948: 55000,
@@ -86,6 +90,7 @@ export const COMMUNITIES: Community[] = [
     culturalType: 'Mizrahi',
     significance: 'Tracks Iran\'s total Jewish population; once thriving under Achaemenid and Safavid rule. The 1979 Islamic Revolution triggered an exodus of ~80,000 Jews, mostly to the US and Israel.',
     populations: {
+      [-500]: 60000, [-200]: 60000, 1: 50000,
       70: 40000, 200: 50000, 500: 70000, 700: 60000, 1000: 50000,
       1170: 50000, 1300: 45000, 1492: 45000, 1550: 40000, 1650: 45000,
       1800: 50000, 1850: 60000, 1900: 90000, 1939: 110000, 1948: 100000,
@@ -101,6 +106,7 @@ export const COMMUNITIES: Community[] = [
     culturalType: 'Yemenite',
     significance: "One of the oldest continuous Jewish diaspora communities, maintaining ancient traditions.",
     populations: {
+      [-500]: 20000, [-200]: 25000, 1: 30000,
       70: 30000, 200: 35000, 500: 40000, 700: 45000, 1000: 50000,
       1170: 55000, 1300: 50000, 1492: 48000, 1550: 45000, 1650: 45000,
       1800: 35000, 1850: 35000, 1900: 30000, 1939: 55000, 1948: 45000,
@@ -144,6 +150,7 @@ export const COMMUNITIES: Community[] = [
     culturalType: 'Sephardic',
     significance: 'Ancient Jewish community; largely emigrated to Israel after 1948.',
     populations: {
+      [-500]: 5000, [-200]: 7000, 1: 10000,
       70: 10000, 200: 12000, 500: 12000, 700: 12000, 1000: 15000,
       1170: 20000, 1300: 22000, 1492: 22000, 1550: 25000, 1650: 28000,
       1800: 25000, 1850: 25000, 1900: 25000, 1939: 32000, 1948: 28000,
@@ -159,6 +166,7 @@ export const COMMUNITIES: Community[] = [
     culturalType: 'Sephardic',
     significance: 'Oldest continuous Jewish community in Europe; the Trastevere ghetto dates to antiquity.',
     populations: {
+      [-200]: 5000, 1: 40000,
       70: 40000, 200: 50000, 500: 30000, 700: 18000, 1000: 15000,
       1170: 15000, 1300: 12000, 1492: 10000, 1550: 12000, 1650: 14000,
       1800: 10000, 1850: 12000, 1900: 15000, 1939: 15000, 1948: 14000,
@@ -417,6 +425,7 @@ export const COMMUNITIES: Community[] = [
     culturalType: 'Sephardic',
     significance: 'Ottoman capital welcomed Spanish exiles in 1492; major Sephardic metropolis.',
     populations: {
+      [-200]: 3000, 1: 8000,
       70: 10000, 200: 15000, 500: 10000, 700: 15000, 1000: 20000,
       1170: 25000, 1300: 30000, 1492: 40000, 1550: 60000, 1650: 70000,
       1800: 65000, 1850: 65000, 1900: 80000, 1939: 80000, 1948: 80000,
@@ -431,6 +440,7 @@ export const COMMUNITIES: Community[] = [
     culturalType: 'Sephardic',
     significance: 'Majority-Jewish city for centuries; "Mother of Israel" — almost entirely destroyed in the Holocaust.',
     populations: {
+      [-500]: 2000, [-200]: 3000, 1: 5000,
       70: 5000, 200: 6000, 500: 5000, 700: 5000, 1000: 5000,
       1170: 5000, 1300: 6000, 1492: 15000, 1550: 35000, 1650: 55000,
       1800: 60000, 1850: 70000, 1900: 80000, 1939: 56000, 1948: 0,
@@ -445,6 +455,7 @@ export const COMMUNITIES: Community[] = [
     culturalType: 'Sephardic',
     significance: 'Kabbalistic center; Rabbi Karo codified Jewish law here (Shulchan Aruch, 1563).',
     populations: {
+      [-500]: 2000, [-200]: 3000, 1: 4000,
       70: 5000, 200: 5000, 500: 4000, 700: 4000, 1000: 4000,
       1170: 5000, 1300: 5000, 1492: 6000, 1550: 15000, 1650: 10000,
       1800: 4000, 1850: 8000, 1900: 12000, 1939: 12000, 1948: 15000,
@@ -547,6 +558,7 @@ export const COMMUNITIES: Community[] = [
     culturalType: 'Mizrahi',
     significance: 'Ancient Jewish community traditionally dating to the time of King Solomon.',
     populations: {
+      1: 2000,
       70: 2000, 200: 3000, 500: 5000, 700: 7000, 1000: 8000,
       1170: 8000, 1300: 8000, 1492: 8000, 1550: 8000, 1650: 7000,
       1800: 6000, 1850: 5000, 1900: 5000, 1939: 5000, 1948: 3000,
@@ -562,6 +574,7 @@ export const COMMUNITIES: Community[] = [
     culturalType: 'Ethiopian',
     significance: 'Center of the Beta Israel (Falasha) — ancient Jewish community practicing Torah-based faith. Airlifted to Israel 1984–1991.',
     populations: {
+      1: 2000,
       70: 0, 200: 0, 500: 5000, 700: 10000, 1000: 15000,
       1170: 20000, 1300: 25000, 1492: 25000, 1550: 22000, 1650: 20000,
       1800: 15000, 1850: 15000, 1900: 50000, 1939: 65000, 1948: 60000,
