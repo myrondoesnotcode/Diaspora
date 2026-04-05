@@ -26,7 +26,7 @@ function tickLabel(y: number): string {
   return String(y);
 }
 
-const KEY_YEARS_MOBILE = new Set([-500, -200, 1, 70, 500, 1000, 1492, 1800, 1900, 1939, 1948, 2024]);
+const KEY_YEARS_MOBILE = new Set([-500, 1, 500, 1492, 1900, 2024]);
 
 export default function Timeline({
   currentYear,
@@ -86,7 +86,7 @@ export default function Timeline({
 
         {/* Year display */}
         <div
-          className="text-2xl font-bold tabular-nums flex-shrink-0 w-28 text-center"
+          className="text-xl sm:text-2xl font-bold tabular-nums flex-shrink-0 w-24 sm:w-28 text-center"
           style={{ color: epoch.color, textShadow: `0 0 20px ${epoch.color}66` }}
         >
           {formatYear(currentYear)}
@@ -149,15 +149,15 @@ export default function Timeline({
 
         {/* Stats */}
         <div className="flex-shrink-0 text-right">
-          <div className="text-xs text-slate-400">World Jewish Pop.*</div>
+          <div className="hidden sm:block text-xs text-slate-400">World Jewish Pop.*</div>
           <div className="font-bold text-sm" style={{ color: epoch.color }}>
             ~{fmt(WORLD_TOTALS[currentYear] ?? totalPopulation)}
           </div>
-          <div className="text-[10px] text-slate-500">
+          <div className="hidden sm:block text-[10px] text-slate-500">
             tracked: ~{fmt(totalPopulation)}
           </div>
           {activeMigrations > 0 && (
-            <div className="text-xs text-slate-400 mt-0.5">
+            <div className="hidden sm:block text-xs text-slate-400 mt-0.5">
               {activeMigrations} migration{activeMigrations !== 1 ? 's' : ''} active
             </div>
           )}
