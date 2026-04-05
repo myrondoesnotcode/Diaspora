@@ -59,7 +59,10 @@ export default function DiasporaMap({ year }: Props) {
 
   const [worldData, setWorldData] = useState<Topology | null>(null);
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
-  const [dims, setDims] = useState({ width: window.innerWidth, height: window.innerHeight });
+  const [dims, setDims] = useState({
+    width: window.innerWidth,
+    height: window.visualViewport?.height ?? window.innerHeight,
+  });
   const [zoomLevel, setZoomLevel] = useState(1);
 
   // Load world atlas
@@ -70,11 +73,19 @@ export default function DiasporaMap({ year }: Props) {
       .catch(console.error);
   }, []);
 
-  // Track container size
+  // Track container size — use visualViewport for iOS Safari accuracy
   useEffect(() => {
-    const handler = () => setDims({ width: window.innerWidth, height: window.innerHeight });
-    window.addEventListener('resize', handler);
-    return () => window.removeEventListener('resize', handler);
+    const update = () =>
+      setDims({
+        width: window.visualViewport?.width ?? window.innerWidth,
+        height: window.visualViewport?.height ?? window.innerHeight,
+      });
+    window.addEventListener('resize', update);
+    window.visualViewport?.addEventListener('resize', update);
+    return () => {
+      window.removeEventListener('resize', update);
+      window.visualViewport?.removeEventListener('resize', update);
+    };
   }, []);
 
   // D3 zoom behavior

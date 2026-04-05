@@ -87,6 +87,10 @@ export default function Timeline({
             {SNAPSHOT_YEARS.map((y) => {
               const isCurrent = y === currentYear;
               const tickEpoch = getEpochForYear(y);
+              // On narrow screens only label key years to avoid overlap
+              const compact = window.innerWidth < 600;
+              const KEY_YEARS = new Set([70, 500, 1000, 1492, 1800, 1900, 1939, 1948, 2024]);
+              const showLabel = !compact || KEY_YEARS.has(y) || isCurrent;
               return (
                 <button
                   key={y}
@@ -108,6 +112,7 @@ export default function Timeline({
                     style={{
                       color: isCurrent ? tickEpoch.color : 'rgba(255,255,255,0.35)',
                       fontWeight: isCurrent ? 700 : 400,
+                      visibility: showLabel ? 'visible' : 'hidden',
                     }}
                   >
                     {y < 1000 ? y : y >= 1900 ? String(y).slice(2) : y}
