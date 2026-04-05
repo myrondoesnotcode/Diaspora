@@ -1,3 +1,4 @@
+import React from 'react';
 import { EPOCHS, getEpochForYear } from '../data/epochs';
 import { SNAPSHOT_YEARS } from '../data/types';
 import type { SnapshotYear } from '../data/types';
@@ -13,7 +14,10 @@ export default function EpochBar({ currentYear, onSelectYear }: Props) {
   return (
     <div className="flex flex-col gap-2">
       {/* Epoch pills */}
-      <div className="flex flex-wrap gap-1.5 justify-center">
+      <div
+        className="flex gap-1.5 overflow-x-auto pb-1 sm:flex-wrap sm:justify-center"
+        style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}
+      >
         {EPOCHS.map((epoch) => {
           const isActive = epoch.name === activeEpoch.name;
           // Jump to the nearest snapshot year for this epoch

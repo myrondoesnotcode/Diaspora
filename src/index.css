@@ -22,6 +22,7 @@ body {
 #root {
   width: 100vw;
   height: 100vh;
+  height: 100dvh; /* iOS Safari: exclude browser chrome */
 }
 
 /* ── Map styles ─────────────────────────────────────────────────────────── */
@@ -169,6 +170,63 @@ body {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Zoom controls ───────────────────────────────────────────────────────── */
+.zoom-btn {
+  width: 44px;
+  height: 44px;
+  background: rgba(10, 15, 40, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 20px;
+  font-weight: 300;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+  transition: background 0.15s, opacity 0.15s;
+  line-height: 1;
+}
+
+.zoom-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.zoom-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* ── Mobile bottom-sheet tooltip ─────────────────────────────────────────── */
+.tooltip-sheet {
+  position: fixed;
+  bottom: 160px;
+  left: 0;
+  right: 0;
+  background: rgba(10, 15, 40, 0.97);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px 12px 0 0;
+  padding: 16px;
+  z-index: 200;
+  pointer-events: none;
+  animation: slideUp 0.2s ease;
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(12px);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* ── Responsive: mobile timeline ─────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .timeline-container {
+    padding: 8px 12px 12px;
+  }
 }
 
 /* ── Scrollbar ────────────────────────────────────────────────────────────── */

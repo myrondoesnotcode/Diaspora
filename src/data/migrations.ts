@@ -393,4 +393,22 @@ export const MIGRATIONS: Migration[] = [
     type: 'voluntary',
     description: 'Antisemitism and economic concerns drive French Jews (Aliyah) to Israel at record rates.',
   },
+  {
+    id: 'lodz-to-israel',
+    from: 'lodz',
+    to: 'tel-aviv',
+    startYear: 1945,
+    endYear: 1952,
+    type: 'forced',
+    description: 'A tiny fraction of Łódź survivors reach Israel; most of the 233,000-strong community perished in the Łódź Ghetto and Auschwitz.',
+  },
+  {
+    id: 'budapest-to-israel',
+    from: 'budapest',
+    to: 'tel-aviv',
+    startYear: 1948,
+    endYear: 1956,
+    type: 'voluntary',
+    description: 'Hungarian Jews emigrate to Israel in waves after independence and the 1956 Revolution.',
+  },
 ];

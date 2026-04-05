@@ -17,6 +17,7 @@ interface Props {
   y: number;
   mapWidth: number;
   mapHeight: number;
+  isMobile?: boolean;
 }
 
 function fmt(n: number): string {
@@ -25,22 +26,9 @@ function fmt(n: number): string {
   return n.toString();
 }
 
-export default function Tooltip({ community, population, x, y, mapWidth, mapHeight }: Props) {
-  const color = CULTURAL_COLORS[community.culturalType];
-
-  // Flip tooltip if too close to right or bottom edge
-  const flip = x > mapWidth * 0.7;
-  const flipY = y > mapHeight * 0.75;
-
-  const style: React.CSSProperties = {
-    left: flip ? undefined : x + 14,
-    right: flip ? mapWidth - x + 14 : undefined,
-    top: flipY ? undefined : y - 8,
-    bottom: flipY ? mapHeight - y - 8 : undefined,
-  };
-
+function TooltipContent({ community, population, color }: { community: Community; population: number; color: string }) {
   return (
-    <div className="tooltip" style={style}>
+    <>
       <div className="flex items-center gap-2 mb-2">
         <div
           className="w-3 h-3 rounded-full flex-shrink-0"
@@ -68,6 +56,35 @@ export default function Tooltip({ community, population, x, y, mapWidth, mapHeig
       )}
 
       <p className="text-xs text-slate-300 leading-relaxed">{community.significance}</p>
+    </>
+  );
+}
+
+export default function Tooltip({ community, population, x, y, mapWidth, mapHeight, isMobile }: Props) {
+  const color = CULTURAL_COLORS[community.culturalType];
+
+  if (isMobile) {
+    return (
+      <div className="tooltip-sheet">
+        <TooltipContent community={community} population={population} color={color} />
+      </div>
+    );
+  }
+
+  // Flip tooltip if too close to right or bottom edge
+  const flip = x > mapWidth * 0.7;
+  const flipY = y > mapHeight * 0.75;
+
+  const style: React.CSSProperties = {
+    left: flip ? undefined : x + 14,
+    right: flip ? mapWidth - x + 14 : undefined,
+    top: flipY ? undefined : y - 8,
+    bottom: flipY ? mapHeight - y - 8 : undefined,
+  };
+
+  return (
+    <div className="tooltip" style={style}>
+      <TooltipContent community={community} population={population} color={color} />
     </div>
   );
 }

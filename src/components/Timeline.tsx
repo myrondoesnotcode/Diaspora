@@ -1,5 +1,5 @@
 import { useRef, useCallback } from 'react';
-import { SNAPSHOT_YEARS } from '../data/types';
+import { SNAPSHOT_YEARS, WORLD_TOTALS } from '../data/types';
 import type { SnapshotYear } from '../data/types';
 import { getEpochForYear } from '../data/epochs';
 import EpochBar from './EpochBar';
@@ -53,7 +53,7 @@ export default function Timeline({
         {/* Play/Pause */}
         <button
           onClick={onPlayPause}
-          className="flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-110 active:scale-95"
+          className="flex-shrink-0 w-11 h-11 rounded-full flex items-center justify-center transition-all hover:scale-110 active:scale-95"
           style={{
             backgroundColor: epoch.color,
             boxShadow: `0 0 12px ${epoch.color}88`,
@@ -134,15 +134,19 @@ export default function Timeline({
 
         {/* Stats */}
         <div className="flex-shrink-0 text-right">
-          <div className="text-xs text-slate-400">World Jewish Pop.</div>
+          <div className="text-xs text-slate-400">World Jewish Pop.*</div>
           <div className="font-bold text-sm" style={{ color: epoch.color }}>
-            ~{fmt(totalPopulation)}
+            ~{fmt(WORLD_TOTALS[currentYear] ?? totalPopulation)}
+          </div>
+          <div className="text-[10px] text-slate-500">
+            tracked: ~{fmt(totalPopulation)}
           </div>
           {activeMigrations > 0 && (
             <div className="text-xs text-slate-400 mt-0.5">
               {activeMigrations} migration{activeMigrations !== 1 ? 's' : ''} active
             </div>
           )}
+          <div className="text-[9px] text-slate-600 mt-0.5">* est. DellaPergola</div>
         </div>
       </div>
     </div>
