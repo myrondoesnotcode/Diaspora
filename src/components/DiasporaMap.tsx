@@ -67,7 +67,7 @@ export default function DiasporaMap({ year }: Props) {
 
   // Load world atlas
   useEffect(() => {
-    fetch('countries-110m.json')
+    fetch(import.meta.env.BASE_URL + 'countries-110m.json')
       .then((r) => r.json())
       .then(setWorldData)
       .catch(console.error);
@@ -439,7 +439,7 @@ export default function DiasporaMap({ year }: Props) {
           The Jewish Diaspora
         </div>
         <div className="text-xs" style={{ color: 'rgba(255,255,255,0.45)' }}>
-          70 CE – 2024 · 1,954 Years of History
+          500 BCE – 2024 · 2,524 Years of History
         </div>
       </div>
     </div>
