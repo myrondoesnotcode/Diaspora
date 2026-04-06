@@ -7,6 +7,7 @@ import { SNAPSHOT_YEARS } from '../data/types';
 import { COMMUNITIES } from '../data/communities';
 import { MIGRATIONS } from '../data/migrations';
 import { getEpochForYear } from '../data/epochs';
+import EventCard from './EventCard';
 
 const CULTURAL_COLORS: Record<CulturalType, string> = {
   Ashkenazi: '#4a9eff',
@@ -280,6 +281,9 @@ export default function DiasporaMap({ year }: Props) {
           })}
         </g>
       </svg>
+
+      {/* What's happening card */}
+      <EventCard year={year} migrations={activeMigrations} />
 
       {/* Legend — fixed, doesn't zoom */}
       <div style={{
