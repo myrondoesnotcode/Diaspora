@@ -4,7 +4,7 @@ import type { SnapshotYear } from './data/types';
 import { COMMUNITIES } from './data/communities';
 import { MIGRATIONS } from './data/migrations';
 import DiasporaMap from './components/DiasporaMap';
-import Timeline from './components/Timeline';
+import MapOverlay from './components/MapOverlay';
 import ExploreTab from './components/ExploreTab';
 
 type ActiveTab = 'map' | 'explore';
@@ -76,18 +76,18 @@ export default function App() {
   const activeMigrations = getActiveMigrationCount(currentYear);
 
   return (
-    <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-      {/* Content area — both tabs kept mounted to preserve D3 state */}
-      <div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
-        {/* Map tab */}
+    <div style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column', background: '#f5f0e8' }}>
+
+      {/* Content area */}
+      <div style={{ flex: 1, position: 'relative', overflow: 'hidden', minHeight: 0 }}>
+
+        {/* MAP TAB — full screen map with floating overlay */}
         <div style={{
+          position: 'absolute', inset: 0,
           display: activeTab === 'map' ? 'block' : 'none',
-          width: '100%',
-          height: '100%',
-          position: 'relative',
         }}>
           <DiasporaMap year={currentYear} />
-          <Timeline
+          <MapOverlay
             currentYear={currentYear}
             isPlaying={isPlaying}
             onYearChange={handleYearChange}
@@ -97,12 +97,11 @@ export default function App() {
           />
         </div>
 
-        {/* Explore tab */}
+        {/* EXPLORE TAB */}
         <div style={{
+          position: 'absolute', inset: 0,
           display: activeTab === 'explore' ? 'flex' : 'none',
           flexDirection: 'column',
-          width: '100%',
-          height: '100%',
           overflowY: 'auto',
           WebkitOverflowScrolling: 'touch',
         } as React.CSSProperties}>
@@ -111,66 +110,43 @@ export default function App() {
       </div>
 
       {/* Bottom tab bar */}
-      <div
-        style={{
-          height: 56,
-          flexShrink: 0,
-          display: 'flex',
-          borderTop: '1px solid rgba(0,0,0,0.12)',
-          background: activeTab === 'explore' ? '#f5f0e8' : '#0d1117',
-        }}
-      >
-        {/* MAP tab */}
+      <div style={{
+        flexShrink: 0, height: 56,
+        display: 'flex',
+        background: '#f5f0e8',
+        borderTop: '1px solid rgba(0,0,0,0.1)',
+      }}>
         <button
           onClick={() => setActiveTab('map')}
           style={{
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 3,
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            color: activeTab === 'map' ? '#e07b39' : activeTab === 'explore' ? '#999' : 'rgba(255,255,255,0.45)',
+            flex: 1, display: 'flex', flexDirection: 'column',
+            alignItems: 'center', justifyContent: 'center', gap: 3,
+            background: 'none', border: 'none', cursor: 'pointer',
+            color: activeTab === 'map' ? '#e07b39' : '#9a8a7a',
           }}
         >
-          {/* Map icon */}
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
             <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" />
             <line x1="9" y1="3" x2="9" y2="18" />
             <line x1="15" y1="6" x2="15" y2="21" />
           </svg>
-          <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-            Map
-          </span>
+          <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Map</span>
         </button>
 
-        {/* EXPLORE tab */}
         <button
           onClick={() => setActiveTab('explore')}
           style={{
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 3,
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            color: activeTab === 'explore' ? '#e07b39' : 'rgba(255,255,255,0.45)',
+            flex: 1, display: 'flex', flexDirection: 'column',
+            alignItems: 'center', justifyContent: 'center', gap: 3,
+            background: 'none', border: 'none', cursor: 'pointer',
+            color: activeTab === 'explore' ? '#e07b39' : '#9a8a7a',
           }}
         >
-          {/* Book icon */}
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
             <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
             <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
           </svg>
-          <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-            Explore
-          </span>
+          <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Explore</span>
         </button>
       </div>
     </div>
