@@ -54,16 +54,14 @@ function getActiveMigrations(year: number): Migration[] {
 export default function DiasporaMap({ year }: Props) {
   const svgRef = useRef<SVGSVGElement>(null);
   const gRef = useRef<SVGGElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const zoomRef = useRef<d3.ZoomBehavior<SVGSVGElement, unknown> | undefined>(undefined);
   const pointerDownRef = useRef<{ x: number; y: number } | null>(null);
   const hasInitialZoomedRef = useRef(false);
 
   const [worldData, setWorldData] = useState<Topology | null>(null);
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
-  const [dims, setDims] = useState({
-    width: window.innerWidth,
-    height: window.visualViewport?.height ?? window.innerHeight,
-  });
+  const [dims, setDims] = useState({ width: 0, height: 0 });
   const [zoomLevel, setZoomLevel] = useState(1);
 
   // Load world atlas
@@ -74,27 +72,24 @@ export default function DiasporaMap({ year }: Props) {
       .catch(console.error);
   }, []);
 
-  // Track container size — use visualViewport for iOS Safari accuracy
+  // ResizeObserver — map fills whatever space the layout gives it
   useEffect(() => {
-    const update = () =>
-      setDims({
-        width: window.visualViewport?.width ?? window.innerWidth,
-        height: window.visualViewport?.height ?? window.innerHeight,
-      });
-    window.addEventListener('resize', update);
-    window.visualViewport?.addEventListener('resize', update);
-    return () => {
-      window.removeEventListener('resize', update);
-      window.visualViewport?.removeEventListener('resize', update);
-    };
+    const el = containerRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([entry]) => {
+      const { width, height } = entry.contentRect;
+      setDims({ width, height });
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
   }, []);
 
-  // D3 zoom behavior
-  const mapHeight = dims.height - 160;
-  useEffect(() => {
-    if (!svgRef.current || !gRef.current) return;
+  const isMobile = dims.width > 0 && dims.width < 768;
 
-    // Preserve zoom transform across resizes
+  // D3 zoom behavior
+  useEffect(() => {
+    if (!svgRef.current || !gRef.current || dims.width === 0 || dims.height === 0) return;
+
     const prevTransform = d3.zoomTransform(svgRef.current);
 
     const zoom = d3.zoom<SVGSVGElement, unknown>()
@@ -106,18 +101,17 @@ export default function DiasporaMap({ year }: Props) {
 
     zoomRef.current = zoom;
 
-    const mobile = dims.width < 640;
-    if (!hasInitialZoomedRef.current && mobile) {
+    if (!hasInitialZoomedRef.current && isMobile) {
       hasInitialZoomedRef.current = true;
       // Zoom to Middle East / Mediterranean on first mobile load
       const proj = d3.geoNaturalEarth1()
         .scale(dims.width / 6.3)
-        .translate([dims.width / 2, mapHeight / 2]);
+        .translate([dims.width / 2, dims.height / 2]);
       const center = proj([35, 32]);
       if (center) {
         const k = 2.8;
         const t = d3.zoomIdentity
-          .translate(dims.width / 2 - k * center[0], mapHeight / 2 - k * center[1])
+          .translate(dims.width / 2 - k * center[0], dims.height / 2 - k * center[1])
           .scale(k);
         d3.select(svgRef.current).call(zoom).call(zoom.transform, t);
       } else {
@@ -130,7 +124,24 @@ export default function DiasporaMap({ year }: Props) {
     return () => {
       if (svgRef.current) d3.select(svgRef.current).on('.zoom', null);
     };
-  }, [dims.width, mapHeight]);
+  }, [dims.width, dims.height, isMobile]);
+
+  // Skip rendering until container is measured
+  const projection = dims.width > 0 && dims.height > 0
+    ? d3.geoNaturalEarth1()
+        .scale(dims.width / 6.3)
+        .translate([dims.width / 2, dims.height / 2])
+    : null;
+
+  const pathGen = projection ? d3.geoPath().projection(projection) : null;
+  const graticule = pathGen ? d3.geoGraticule().step([30, 30])() : null;
+
+  const countryFeatures = worldData && pathGen
+    ? (topojson.feature(
+        worldData as any,
+        (worldData as any).objects.countries as GeometryCollection
+      ) as any).features
+    : [];
 
   // Derived data for current year
   const communities = COMMUNITIES.map((c) => ({
@@ -139,29 +150,10 @@ export default function DiasporaMap({ year }: Props) {
   })).filter((d) => d.population > 0);
 
   const activeMigrations = getActiveMigrations(year);
+  const communityIndex = Object.fromEntries(COMMUNITIES.map((c) => [c.id, c]));
 
-  // Build projection
-  const projection = d3
-    .geoNaturalEarth1()
-    .scale(dims.width / 6.3)
-    .translate([dims.width / 2, mapHeight / 2]);
-
-  const pathGen = d3.geoPath().projection(projection);
-  const graticule = d3.geoGraticule().step([30, 30])();
-
-  // Country features
-  const countryFeatures =
-    worldData
-      ? (
-          topojson.feature(
-            worldData as any,
-            (worldData as any).objects.countries as GeometryCollection
-          ) as any
-        ).features
-      : [];
-
-  // Arc path builder
   function arcPath(from: Community, to: Community): string | null {
+    if (!projection) return null;
     const src = projection([from.lng, from.lat]);
     const dst = projection([to.lng, to.lat]);
     if (!src || !dst) return null;
@@ -175,184 +167,168 @@ export default function DiasporaMap({ year }: Props) {
     return `M ${x1},${y1} Q ${cx},${cy} ${x2},${y2}`;
   }
 
-  const communityIndex = Object.fromEntries(COMMUNITIES.map((c) => [c.id, c]));
-  const isMobile = dims.width < 640;
-
   return (
-    <div className="map-container" style={{ height: mapHeight }}>
-      <svg
-        ref={svgRef}
-        className="map-svg"
-        width={dims.width}
-        height={mapHeight}
-        viewBox={`0 0 ${dims.width} ${mapHeight}`}
-        onPointerDown={(e) => {
-          pointerDownRef.current = { x: e.clientX, y: e.clientY };
-          // Dismiss tooltip when touching map background on mobile
-          if (
-            e.pointerType === 'touch' &&
-            !(e.target instanceof Element && e.target.classList.contains('community-circle'))
-          ) {
-            setTooltip(null);
-          }
-        }}
-      >
-        <defs>
-          <radialGradient id="oceanGradient" cx="50%" cy="50%" r="70%">
-            <stop offset="0%" stopColor="#0d1b3e" />
-            <stop offset="100%" stopColor="#020510" />
-          </radialGradient>
-          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="3" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
+    <div ref={containerRef} className="map-container">
+      {dims.width > 0 && dims.height > 0 && (
+        <svg
+          ref={svgRef}
+          className="map-svg"
+          width={dims.width}
+          height={dims.height}
+          viewBox={`0 0 ${dims.width} ${dims.height}`}
+          onPointerDown={(e) => {
+            pointerDownRef.current = { x: e.clientX, y: e.clientY };
+            if (
+              e.pointerType === 'touch' &&
+              !(e.target instanceof Element && e.target.classList.contains('community-circle'))
+            ) {
+              setTooltip(null);
+            }
+          }}
+        >
+          <defs>
+            <radialGradient id="oceanGradient" cx="50%" cy="50%" r="70%">
+              <stop offset="0%" stopColor="#0d1b3e" />
+              <stop offset="100%" stopColor="#020510" />
+            </radialGradient>
+            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="3" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
 
-        {/* Ocean — outside zoom group so it always fills the SVG */}
-        <rect width={dims.width} height={mapHeight} fill="url(#oceanGradient)" />
+          {/* Ocean — outside zoom group */}
+          <rect width={dims.width} height={dims.height} fill="url(#oceanGradient)" />
 
-        {/* Graticule — outside zoom group as fixed background reference */}
-        <path d={pathGen(graticule) ?? ''} className="graticule" />
+          {/* Graticule — outside zoom group */}
+          {graticule && pathGen && (
+            <path d={pathGen(graticule) ?? ''} className="graticule" />
+          )}
 
-        {/* Everything zoomable lives inside this group */}
-        <g ref={gRef}>
-          {/* Countries */}
-          {countryFeatures.map((feature: any, i: number) => (
-            <path
-              key={i}
-              d={pathGen(feature) ?? ''}
-              className="country"
-            />
-          ))}
+          {/* Zoomable content */}
+          <g ref={gRef}>
+            {countryFeatures.map((feature: any, i: number) => (
+              <path key={i} d={pathGen!(feature) ?? ''} className="country" />
+            ))}
 
-          {/* Migration arcs — glow layer */}
-          {activeMigrations.map((m) => {
-            const from = communityIndex[m.from];
-            const to = communityIndex[m.to];
-            if (!from || !to) return null;
-            const d = arcPath(from, to);
-            if (!d) return null;
-            const color = ARC_COLORS[m.type];
-            return (
-              <path
-                key={`glow-${m.id}`}
-                d={d}
-                className="arc-glow"
-                stroke={color}
-                strokeWidth={4}
-              />
-            );
-          })}
-
-          {/* Migration arcs — animated dash layer */}
-          {activeMigrations.map((m) => {
-            const from = communityIndex[m.from];
-            const to = communityIndex[m.to];
-            if (!from || !to) return null;
-            const d = arcPath(from, to);
-            if (!d) return null;
-            const color = ARC_COLORS[m.type];
-            return (
-              <path
-                key={`dash-${m.id}`}
-                d={d}
-                className="arc-dash"
-                stroke={color}
-              />
-            );
-          })}
-
-          {/* Community circles */}
-          {communities.map(({ community, population }) => {
-            const pos = projection([community.lng, community.lat]);
-            if (!pos) return null;
-            const [cx, cy] = pos;
-            const r = Math.max(3, radiusScale(population));
-            const color = CULTURAL_COLORS[community.culturalType];
-
-            return (
-              <g key={community.id}>
-                {/* Glow ring */}
-                <circle
-                  cx={cx}
-                  cy={cy}
-                  r={r + 2}
-                  fill="none"
-                  stroke={color}
-                  strokeOpacity={0.2}
-                  strokeWidth={3}
+            {/* Migration arcs — glow layer */}
+            {activeMigrations.map((m) => {
+              const from = communityIndex[m.from];
+              const to = communityIndex[m.to];
+              if (!from || !to) return null;
+              const d = arcPath(from, to);
+              if (!d) return null;
+              return (
+                <path
+                  key={`glow-${m.id}`}
+                  d={d}
+                  className="arc-glow"
+                  stroke={ARC_COLORS[m.type]}
+                  strokeWidth={4}
                 />
-                {/* Main circle */}
-                <circle
-                  cx={cx}
-                  cy={cy}
-                  r={r}
-                  fill={color}
-                  fillOpacity={0.75}
-                  stroke={color}
-                  strokeWidth={1}
-                  strokeOpacity={0.9}
-                  className="community-circle"
-                  onPointerEnter={(e) => {
-                    if (e.pointerType === 'touch') return;
-                    const svg = svgRef.current;
-                    if (!svg) return;
-                    const rect = svg.getBoundingClientRect();
-                    setTooltip({
-                      community,
-                      population,
-                      x: e.clientX - rect.left,
-                      y: e.clientY - rect.top,
-                    });
-                  }}
-                  onPointerMove={(e) => {
-                    if (e.pointerType === 'touch') return;
-                    const svg = svgRef.current;
-                    if (!svg) return;
-                    const rect = svg.getBoundingClientRect();
-                    setTooltip((prev) =>
-                      prev ? { ...prev, x: e.clientX - rect.left, y: e.clientY - rect.top } : prev
-                    );
-                  }}
-                  onPointerLeave={(e) => {
-                    if (e.pointerType === 'touch') return;
-                    setTooltip(null);
-                  }}
-                  onPointerUp={(e) => {
-                    if (e.pointerType !== 'touch') return;
-                    const down = pointerDownRef.current;
-                    if (!down) return;
-                    const dist = Math.hypot(e.clientX - down.x, e.clientY - down.y);
-                    if (dist > 8) return; // was a drag, not a tap
-                    const svg = svgRef.current;
-                    if (!svg) return;
-                    const rect = svg.getBoundingClientRect();
-                    setTooltip((prev) =>
-                      prev?.community.id === community.id
-                        ? null
-                        : { community, population, x: e.clientX - rect.left, y: e.clientY - rect.top }
-                    );
-                  }}
+              );
+            })}
+
+            {/* Migration arcs — animated dash layer */}
+            {activeMigrations.map((m) => {
+              const from = communityIndex[m.from];
+              const to = communityIndex[m.to];
+              if (!from || !to) return null;
+              const d = arcPath(from, to);
+              if (!d) return null;
+              return (
+                <path
+                  key={`dash-${m.id}`}
+                  d={d}
+                  className="arc-dash"
+                  stroke={ARC_COLORS[m.type]}
                 />
-                {/* City label for large circles */}
-                {r > 14 && (
-                  <text
-                    x={cx}
-                    y={cy + r + 10}
-                    className="community-label"
-                    style={{ fontSize: Math.min(11, Math.max(8, r * 0.55)) }}
-                  >
-                    {community.name.split(' ')[0]}
-                  </text>
-                )}
-              </g>
-            );
-          })}
-        </g>
-      </svg>
+              );
+            })}
+
+            {/* Community circles */}
+            {communities.map(({ community, population }) => {
+              const pos = projection!([community.lng, community.lat]);
+              if (!pos) return null;
+              const [cx, cy] = pos;
+              const r = Math.max(3, radiusScale(population));
+              const color = CULTURAL_COLORS[community.culturalType];
+
+              return (
+                <g key={community.id}>
+                  <circle
+                    cx={cx}
+                    cy={cy}
+                    r={r + 2}
+                    fill="none"
+                    stroke={color}
+                    strokeOpacity={0.2}
+                    strokeWidth={3}
+                  />
+                  <circle
+                    cx={cx}
+                    cy={cy}
+                    r={r}
+                    fill={color}
+                    fillOpacity={0.75}
+                    stroke={color}
+                    strokeWidth={1}
+                    strokeOpacity={0.9}
+                    className="community-circle"
+                    onPointerEnter={(e) => {
+                      if (e.pointerType === 'touch') return;
+                      const svg = svgRef.current;
+                      if (!svg) return;
+                      const rect = svg.getBoundingClientRect();
+                      setTooltip({ community, population, x: e.clientX - rect.left, y: e.clientY - rect.top });
+                    }}
+                    onPointerMove={(e) => {
+                      if (e.pointerType === 'touch') return;
+                      const svg = svgRef.current;
+                      if (!svg) return;
+                      const rect = svg.getBoundingClientRect();
+                      setTooltip((prev) =>
+                        prev ? { ...prev, x: e.clientX - rect.left, y: e.clientY - rect.top } : prev
+                      );
+                    }}
+                    onPointerLeave={(e) => {
+                      if (e.pointerType === 'touch') return;
+                      setTooltip(null);
+                    }}
+                    onPointerUp={(e) => {
+                      if (e.pointerType !== 'touch') return;
+                      const down = pointerDownRef.current;
+                      if (!down) return;
+                      if (Math.hypot(e.clientX - down.x, e.clientY - down.y) > 8) return;
+                      const svg = svgRef.current;
+                      if (!svg) return;
+                      const rect = svg.getBoundingClientRect();
+                      setTooltip((prev) =>
+                        prev?.community.id === community.id
+                          ? null
+                          : { community, population, x: e.clientX - rect.left, y: e.clientY - rect.top }
+                      );
+                    }}
+                  />
+                  {r > 14 && (
+                    <text
+                      x={cx}
+                      y={cy + r + 10}
+                      className="community-label"
+                      style={{ fontSize: Math.min(11, Math.max(8, r * 0.55)) }}
+                    >
+                      {community.name.split(' ')[0]}
+                    </text>
+                  )}
+                </g>
+              );
+            })}
+          </g>
+        </svg>
+      )}
 
       {/* Tooltip */}
       {tooltip && (
@@ -362,25 +338,20 @@ export default function DiasporaMap({ year }: Props) {
           x={tooltip.x}
           y={tooltip.y}
           mapWidth={dims.width}
-          mapHeight={mapHeight}
+          mapHeight={dims.height}
           isMobile={isMobile}
         />
       )}
 
       {/* Zoom controls */}
-      <div
-        className="absolute flex flex-col gap-1.5"
-        style={{ bottom: 12, right: 12 }}
-      >
+      <div className="absolute flex flex-col gap-1.5" style={{ bottom: 12, right: 12 }}>
         <button
           className="zoom-btn"
           aria-label="Zoom in"
           disabled={zoomLevel >= 7.5}
           onClick={() => {
             if (!svgRef.current || !zoomRef.current) return;
-            d3.select(svgRef.current)
-              .transition().duration(300)
-              .call(zoomRef.current.scaleBy, 1.5);
+            d3.select(svgRef.current).transition().duration(300).call(zoomRef.current.scaleBy, 1.5);
           }}
         >
           +
@@ -391,9 +362,7 @@ export default function DiasporaMap({ year }: Props) {
           disabled={zoomLevel <= 0.85}
           onClick={() => {
             if (!svgRef.current || !zoomRef.current) return;
-            d3.select(svgRef.current)
-              .transition().duration(300)
-              .call(zoomRef.current.scaleBy, 1 / 1.5);
+            d3.select(svgRef.current).transition().duration(300).call(zoomRef.current.scaleBy, 1 / 1.5);
           }}
         >
           −
@@ -404,52 +373,12 @@ export default function DiasporaMap({ year }: Props) {
           style={{ fontSize: 14 }}
           onClick={() => {
             if (!svgRef.current || !zoomRef.current) return;
-            d3.select(svgRef.current)
-              .transition().duration(500)
-              .call(zoomRef.current.transform, d3.zoomIdentity);
+            d3.select(svgRef.current).transition().duration(500).call(zoomRef.current.transform, d3.zoomIdentity);
           }}
         >
           ↺
         </button>
       </div>
-
-      {/* Legend — hidden on mobile to save screen space */}
-      {!isMobile && (
-        <div
-          className="absolute top-3 right-3 rounded-xl p-3 text-xs"
-          style={{
-            background: 'rgba(10,15,40,0.88)',
-            border: '1px solid rgba(255,255,255,0.1)',
-            backdropFilter: 'blur(8px)',
-          }}
-        >
-          <div className="font-semibold text-white mb-2 text-center tracking-wide uppercase text-[10px]">
-            Cultural Tradition
-          </div>
-          {(Object.entries(CULTURAL_COLORS) as [CulturalType, string][]).map(([type, color]) => (
-            <div key={type} className="flex items-center gap-2 mb-1">
-              <div
-                className="w-2.5 h-2.5 rounded-full flex-shrink-0"
-                style={{ backgroundColor: color, boxShadow: `0 0 4px ${color}` }}
-              />
-              <span style={{ color: 'rgba(255,255,255,0.75)' }}>{type}</span>
-            </div>
-          ))}
-          <div className="mt-2 pt-2 border-t border-white/10">
-            <div className="font-semibold text-white mb-1 text-center tracking-wide uppercase text-[10px]">
-              Migration
-            </div>
-            <div className="flex items-center gap-2 mb-1">
-              <div className="w-6 h-0.5" style={{ background: '#ff4444' }} />
-              <span style={{ color: 'rgba(255,255,255,0.75)' }}>Forced</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-0.5" style={{ background: '#44aaff' }} />
-              <span style={{ color: 'rgba(255,255,255,0.75)' }}>Voluntary</span>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Title overlay */}
       <div className="absolute top-3 left-3">

@@ -19,17 +19,82 @@ body {
   overflow: hidden;
 }
 
+/* ── Root layout ─────────────────────────────────────────────────────────── */
 #root {
   width: 100vw;
   height: 100vh;
-  height: 100dvh; /* iOS Safari: exclude browser chrome */
+  height: 100dvh;
+}
+
+/* ── 2-panel CSS Grid ────────────────────────────────────────────────────── */
+.app-layout {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  /* Mobile: map on top (58%), history panel below (42%) */
+  grid-template-rows: 58fr 42fr;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "map"
+    "history";
+}
+
+/* Desktop ≥ 768px: side by side, map 65% / history 35% */
+@media (min-width: 768px) {
+  .app-layout {
+    grid-template-rows: 1fr;
+    grid-template-columns: 65fr 35fr;
+    grid-template-areas: "map history";
+  }
+}
+
+/* Map panel — flex column: DiasporaMap grows, MapControls sits below */
+.panel-map {
+  grid-area: map;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative; /* contains absolute-positioned tooltip + zoom buttons */
+  min-height: 0;
+}
+
+/* History panel — scrollable context section */
+.panel-history {
+  grid-area: history;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: rgba(6, 13, 31, 0.98);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 12px 16px;
+}
+
+@media (min-width: 768px) {
+  .panel-history {
+    border-top: none;
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 16px 20px;
+  }
+}
+
+/* Scrollbar styling for history panel */
+.panel-history::-webkit-scrollbar {
+  width: 3px;
+}
+.panel-history::-webkit-scrollbar-track {
+  background: transparent;
+}
+.panel-history::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
 }
 
 /* ── Map styles ─────────────────────────────────────────────────────────── */
 .map-container {
   position: relative;
   width: 100%;
-  height: 100%;
+  flex: 1;             /* fills remaining space in .panel-map flex column */
+  min-height: 0;
   background: radial-gradient(ellipse at center, #0d1b3e 0%, #060d1f 60%, #020510 100%);
 }
 
@@ -43,10 +108,6 @@ body {
   fill: none;
   stroke: rgba(255, 255, 255, 0.04);
   stroke-width: 0.5;
-}
-
-.sphere {
-  fill: url(#oceanGradient);
 }
 
 .country {
@@ -95,17 +156,15 @@ body {
   }
 }
 
-/* ── Timeline ────────────────────────────────────────────────────────────── */
-.timeline-container {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 12px 24px 16px;
-  background: linear-gradient(to top, rgba(6, 13, 31, 0.98) 0%, rgba(6, 13, 31, 0.85) 100%);
-  backdrop-filter: blur(8px);
+/* ── Map playback controls bar ───────────────────────────────────────────── */
+.map-controls {
+  flex-shrink: 0;
+  padding: 8px 14px 10px;
+  background: rgba(6, 13, 31, 0.98);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+/* ── Timeline slider ─────────────────────────────────────────────────────── */
 .timeline-slider {
   -webkit-appearance: none;
   appearance: none;
@@ -114,7 +173,11 @@ body {
   border-radius: 2px;
   outline: none;
   cursor: pointer;
-  background: linear-gradient(to right, var(--epoch-color, #2563eb) var(--progress, 0%), rgba(255,255,255,0.15) var(--progress, 0%));
+  background: linear-gradient(
+    to right,
+    var(--epoch-color, #2563eb) var(--progress, 0%),
+    rgba(255, 255, 255, 0.15) var(--progress, 0%)
+  );
 }
 
 .timeline-slider::-webkit-slider-thumb {
@@ -126,7 +189,7 @@ body {
   background: var(--epoch-color, #2563eb);
   cursor: pointer;
   box-shadow: 0 0 8px var(--epoch-color, #2563eb);
-  border: 2px solid rgba(255,255,255,0.8);
+  border: 2px solid rgba(255, 255, 255, 0.8);
 }
 
 .timeline-slider::-moz-range-thumb {
@@ -136,7 +199,7 @@ body {
   background: var(--epoch-color, #2563eb);
   cursor: pointer;
   box-shadow: 0 0 8px var(--epoch-color, #2563eb);
-  border: 2px solid rgba(255,255,255,0.8);
+  border: 2px solid rgba(255, 255, 255, 0.8);
 }
 
 /* ── Epoch pills ─────────────────────────────────────────────────────────── */
@@ -169,7 +232,7 @@ body {
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ── Zoom controls ───────────────────────────────────────────────────────── */
@@ -201,9 +264,10 @@ body {
 }
 
 /* ── Mobile bottom-sheet tooltip ─────────────────────────────────────────── */
+/* Positioned inside .panel-map (which is position: relative) */
 .tooltip-sheet {
-  position: fixed;
-  bottom: 160px;
+  position: absolute;
+  bottom: 0;
   left: 0;
   right: 0;
   background: rgba(10, 15, 40, 0.97);
@@ -219,24 +283,5 @@ body {
 
 @keyframes slideUp {
   from { transform: translateY(100%); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-/* ── Responsive: mobile timeline ─────────────────────────────────────────── */
-@media (max-width: 480px) {
-  .timeline-container {
-    padding: 8px 12px 12px;
-  }
-}
-
-/* ── Scrollbar ────────────────────────────────────────────────────────────── */
-::-webkit-scrollbar {
-  width: 4px;
-}
-::-webkit-scrollbar-track {
-  background: rgba(255,255,255,0.05);
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.2);
-  border-radius: 2px;
+  to   { transform: translateY(0);    opacity: 1; }
 }

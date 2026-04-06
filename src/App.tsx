@@ -4,7 +4,8 @@ import type { SnapshotYear } from './data/types';
 import { COMMUNITIES } from './data/communities';
 import { MIGRATIONS } from './data/migrations';
 import DiasporaMap from './components/DiasporaMap';
-import Timeline from './components/Timeline';
+import MapControls from './components/MapControls';
+import HistoryPanel from './components/HistoryPanel';
 
 function getPopulation(year: number): number {
   let total = 0;
@@ -67,13 +68,19 @@ export default function App() {
   const activeMigrations = getActiveMigrationCount(currentYear);
 
   return (
-    <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-      <DiasporaMap year={currentYear} />
-      <Timeline
+    <div className="app-layout">
+      <div className="panel-map">
+        <DiasporaMap year={currentYear} />
+        <MapControls
+          currentYear={currentYear}
+          isPlaying={isPlaying}
+          onYearChange={handleYearChange}
+          onPlayPause={handlePlayPause}
+        />
+      </div>
+      <HistoryPanel
         currentYear={currentYear}
-        isPlaying={isPlaying}
-        onYearChange={handleYearChange}
-        onPlayPause={handlePlayPause}
+        onSelectYear={handleYearChange}
         totalPopulation={totalPop}
         activeMigrations={activeMigrations}
       />
