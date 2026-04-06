@@ -27,8 +27,12 @@ jobs:
 
       - name: Deploy to gh-pages branch
         run: |
+          cd dist
+          git init
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          npx gh-pages -d dist --dotfiles
+          git add -A
+          git commit -m "Deploy: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          git push --force "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:gh-pages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
