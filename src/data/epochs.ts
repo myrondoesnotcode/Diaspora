@@ -21,6 +21,7 @@ export const EPOCHS: Epoch[] = [
       'Schäfer, Peter, *The History of the Jews in the Greco-Roman World*, 2003',
       'Cohen, Shaye J.D., *From the Maccabees to the Mishnah*, 1987',
     ],
+    mapFocus: { lng: 35, lat: 32, zoom: 2.5 },
   },
   {
     name: 'Geonic Era',
@@ -42,6 +43,7 @@ export const EPOCHS: Epoch[] = [
       'Gil, Moshe, *Jews in Islamic Countries in the Middle Ages*, 2004',
       'Neusner, Jacob, *A History of the Jews in Babylonia*, 5 vols., 1965–1970',
     ],
+    mapFocus: { lng: 44, lat: 33, zoom: 2.8 },
   },
   {
     name: 'Golden Age of Spain',
@@ -63,6 +65,7 @@ export const EPOCHS: Epoch[] = [
       'Ashtor, Eliyahu, *The Jews of Moslem Spain*, 3 vols., 1973–1984',
       'Cole, Peter (ed.), *The Dream of the Poem: Hebrew Poetry from Muslim and Christian Spain*, 2007',
     ],
+    mapFocus: { lng: -4, lat: 40, zoom: 3.5 },
   },
   {
     name: 'Era of Expulsions',
@@ -84,6 +87,7 @@ export const EPOCHS: Epoch[] = [
       'Netanyahu, Benzion, *The Origins of the Inquisition in Fifteenth Century Spain*, 1995',
       'Beinart, Haim, *The Expulsion of the Jews from Spain*, 2002',
     ],
+    mapFocus: { lng: 10, lat: 47, zoom: 2.5 },
   },
   {
     name: 'Polish–Ottoman Axis',
@@ -105,6 +109,7 @@ export const EPOCHS: Epoch[] = [
       'Shaw, Stanford, *The Jews of the Ottoman Empire and the Turkish Republic*, 1991',
       'Rosman, Moshe, *Founder of Hasidism: A Quest for the Historical Ba\'al Shem Tov*, 1996',
     ],
+    mapFocus: { lng: 25, lat: 43, zoom: 2.5 },
   },
   {
     name: 'Emancipation',
@@ -126,6 +131,7 @@ export const EPOCHS: Epoch[] = [
       'Meyer, Michael A., *Response to Modernity: A History of the Reform Movement in Judaism*, 1988',
       'Sorkin, David, *The Transformation of German Jewry, 1780–1840*, 1987',
     ],
+    mapFocus: { lng: 10, lat: 50, zoom: 2.8 },
   },
   {
     name: 'Mass Migration',
@@ -147,6 +153,7 @@ export const EPOCHS: Epoch[] = [
       'Hertzberg, Arthur, *The Zionist Idea*, 1959',
       'Frankel, Jonathan, *Prophecy and Politics: Socialism, Nationalism, and the Russian Jews 1862–1917*, 1981',
     ],
+    mapFocus: { lng: -20, lat: 48, zoom: 1.3 },
   },
   {
     name: 'Holocaust & Founding',
@@ -168,6 +175,7 @@ export const EPOCHS: Epoch[] = [
       'Bauer, Yehuda, *A History of the Holocaust*, 1982',
       'Morris, Benny, *1948: A History of the First Arab-Israeli War*, 2008',
     ],
+    mapFocus: { lng: 18, lat: 50, zoom: 2.2 },
   },
   {
     name: 'Israeli Era',
@@ -189,6 +197,7 @@ export const EPOCHS: Epoch[] = [
       'DellaPergola, Sergio, *World Jewish Population*, American Jewish Year Book, 2020',
       'Shapira, Anita, *Israel: A History*, 2012',
     ],
+    mapFocus: { lng: 30, lat: 35, zoom: 1.8 },
   },
 ];
 

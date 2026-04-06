@@ -6,6 +6,7 @@ import type { Community, CulturalType } from '../data/types';
 import { SNAPSHOT_YEARS } from '../data/types';
 import { COMMUNITIES } from '../data/communities';
 import { MIGRATIONS } from '../data/migrations';
+import { getEpochForYear } from '../data/epochs';
 
 const CULTURAL_COLORS: Record<CulturalType, string> = {
   Ashkenazi: '#4a9eff',
@@ -86,6 +87,8 @@ export default function DiasporaMap({ year }: Props) {
   const [dims, setDims] = useState({ width: 300, height: 300 });
   const [selected, setSelected] = useState<SelectedCommunity | null>(null);
   const zoomRef = useRef<d3.ZoomBehavior<SVGSVGElement, unknown> | null>(null);
+  const dimsRef = useRef(dims);
+  const prevEpochRef = useRef<string>(getEpochForYear(year).name);
 
   // Load world topology
   useEffect(() => {
@@ -101,7 +104,10 @@ export default function DiasporaMap({ year }: Props) {
     if (!el) return;
     const observer = new ResizeObserver((entries) => {
       const { width, height } = entries[0].contentRect;
-      if (width > 0 && height > 0) setDims({ width, height });
+      if (width > 0 && height > 0) {
+        setDims({ width, height });
+        dimsRef.current = { width, height };
+      }
     });
     observer.observe(el);
     return () => observer.disconnect();
@@ -123,6 +129,35 @@ export default function DiasporaMap({ year }: Props) {
       d3.select(svgRef.current!).on('.zoom', null);
     };
   }, [dims]);
+
+  // Animate to epoch region when epoch changes
+  useEffect(() => {
+    const epoch = getEpochForYear(year);
+    if (epoch.name === prevEpochRef.current) return;
+    prevEpochRef.current = epoch.name;
+
+    if (!epoch.mapFocus || !svgRef.current || !zoomRef.current) return;
+    const { lng, lat, zoom: k } = epoch.mapFocus;
+    const { width, height } = dimsRef.current;
+
+    const proj = d3.geoNaturalEarth1()
+      .scale(width / 3.2)
+      .rotate([-35, 0])
+      .translate([width / 2, height / 2]);
+
+    const pos = proj([lng, lat]);
+    if (!pos) return;
+    const [px, py] = pos;
+    const tx = width / 2 - px * k;
+    const ty = height / 2 - py * k;
+    const transform = d3.zoomIdentity.translate(tx, ty).scale(k);
+
+    d3.select(svgRef.current)
+      .transition()
+      .duration(900)
+      .ease(d3.easeCubicInOut)
+      .call(zoomRef.current.transform, transform);
+  }, [year]);
 
   const handleReset = useCallback(() => {
     if (!svgRef.current || !zoomRef.current) return;
