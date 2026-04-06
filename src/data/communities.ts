@@ -572,4 +572,372 @@ export const COMMUNITIES: Community[] = [
       1970: 305000, 2000: 375000, 2024: 400000,
     },
   },
+
+  // ── Hungary ──────────────────────────────────────────────────────────────────
+  {
+    id: 'budapest',
+    name: 'Budapest (Hungary)',
+    lat: 47.5,
+    lng: 19.05,
+    culturalType: 'Ashkenazi',
+    significance: 'Hungary\'s Jews, emancipated in 1867, built a brilliant bourgeois culture; 565,000 were deported and killed in 1944 — the last and fastest mass deportation of the Holocaust.',
+    populations: {
+      70: 0, 200: 0, 500: 0, 700: 0, 1000: 5000,
+      1170: 8000, 1300: 12000, 1492: 10000, 1550: 15000, 1650: 20000,
+      1800: 80000, 1850: 250000, 1900: 700000, 1939: 825000, 1948: 260000,
+      1970: 100000, 2000: 54000, 2024: 45000,
+    },
+  },
+
+  // ── Austria / Vienna ─────────────────────────────────────────────────────────
+  {
+    id: 'vienna',
+    name: 'Vienna',
+    lat: 48.21,
+    lng: 16.37,
+    culturalType: 'Ashkenazi',
+    significance: 'Habsburg capital and crossroads of Ashkenazi culture; Herzl, Freud, and Mahler lived here. After the 1938 Anschluss, 185,000 Jews were stripped of rights and forced to flee or face deportation.',
+    populations: {
+      70: 0, 200: 0, 500: 0, 700: 0, 1000: 0,
+      1170: 0, 1300: 2000, 1492: 1000, 1550: 3000, 1650: 5000,
+      1800: 15000, 1850: 50000, 1900: 175000, 1939: 91000, 1948: 7000,
+      1970: 10000, 2000: 12000, 2024: 15000,
+    },
+  },
+
+  // ── Bohemia / Czech ───────────────────────────────────────────────────────────
+  {
+    id: 'prague',
+    name: 'Prague (Bohemia–Moravia)',
+    lat: 50.08,
+    lng: 14.44,
+    culturalType: 'Ashkenazi',
+    significance: 'Home of the Maharal and the Golem legend; Josefov (Jewish Quarter) is one of Europe\'s oldest; Kafka and Werfel were Praguers. Most Czech Jews perished in Theresienstadt and Auschwitz.',
+    populations: {
+      70: 0, 200: 0, 500: 1000, 700: 2000, 1000: 5000,
+      1170: 8000, 1300: 10000, 1492: 8000, 1550: 12000, 1650: 15000,
+      1800: 20000, 1850: 35000, 1900: 90000, 1939: 118000, 1948: 44000,
+      1970: 15000, 2000: 10000, 2024: 10000,
+    },
+  },
+
+  // ── Berlin / Germany ─────────────────────────────────────────────────────────
+  {
+    id: 'berlin',
+    name: 'Berlin',
+    lat: 52.52,
+    lng: 13.4,
+    culturalType: 'Ashkenazi',
+    significance: 'Capital of the Haskalah (Jewish Enlightenment); Moses Mendelssohn\'s city. Grew to 160,000 Jews by 1933, most of whom fled or were murdered. Now a surprising new hub for Israeli and Russian Jewish immigrants.',
+    populations: {
+      70: 0, 200: 0, 500: 0, 700: 0, 1000: 0,
+      1170: 0, 1300: 0, 1492: 0, 1550: 1000, 1650: 2000,
+      1800: 10000, 1850: 28000, 1900: 100000, 1939: 75000, 1948: 7000,
+      1970: 6000, 2000: 25000, 2024: 45000,
+    },
+  },
+
+  // ── Łódź / Poland ────────────────────────────────────────────────────────────
+  {
+    id: 'lodz',
+    name: 'Łódź (Poland)',
+    lat: 51.77,
+    lng: 19.46,
+    culturalType: 'Ashkenazi',
+    significance: 'Second-largest Jewish city in Europe by 1939; the textile industry capital drew hundreds of thousands. The Łódź Ghetto held 200,000 Jews — its last 70,000 were deported to Auschwitz-Birkenau in 1944.',
+    populations: {
+      70: 0, 200: 0, 500: 0, 700: 0, 1000: 0,
+      1170: 0, 1300: 0, 1492: 0, 1550: 0, 1650: 0,
+      1800: 12000, 1850: 50000, 1900: 170000, 1939: 250000, 1948: 5000,
+      1970: 10000, 2000: 1000, 2024: 500,
+    },
+  },
+
+  // ── Lwów / Lviv ──────────────────────────────────────────────────────────────
+  {
+    id: 'lwow',
+    name: 'Lwów / Lviv (Galicia)',
+    lat: 49.84,
+    lng: 24.03,
+    culturalType: 'Ashkenazi',
+    significance: 'Capital of Galicia and a great center of Hasidism, Zionism, and Hebrew literature. 110,000 Jews were systematically murdered in the Janowska camp and mass shootings of 1941–44.',
+    populations: {
+      70: 0, 200: 0, 500: 0, 700: 0, 1000: 0,
+      1170: 0, 1300: 2000, 1492: 3000, 1550: 8000, 1650: 15000,
+      1800: 20000, 1850: 40000, 1900: 55000, 1939: 110000, 1948: 2000,
+      1970: 2000, 2000: 1500, 2024: 1000,
+    },
+  },
+
+  // ── Białystok ────────────────────────────────────────────────────────────────
+  {
+    id: 'bialystok',
+    name: 'Białystok (Poland)',
+    lat: 53.13,
+    lng: 23.16,
+    culturalType: 'Ashkenazi',
+    significance: 'Major textile center where Jews were 50% of the population; the 1906 pogrom shocked the world. The ghetto\'s 50,000 Jews were deported to Treblinka in 1943.',
+    populations: {
+      70: 0, 200: 0, 500: 0, 700: 0, 1000: 0,
+      1170: 0, 1300: 0, 1492: 0, 1550: 0, 1650: 0,
+      1800: 5000, 1850: 20000, 1900: 50000, 1939: 50000, 1948: 1200,
+      1970: 500, 2000: 200, 2024: 100,
+    },
+  },
+
+  // ── Riga / Latvia ────────────────────────────────────────────────────────────
+  {
+    id: 'riga',
+    name: 'Riga (Latvia)',
+    lat: 56.95,
+    lng: 24.11,
+    culturalType: 'Ashkenazi',
+    significance: 'Capital of Baltic Jewish life; 95,000 Latvian Jews — including almost all of Riga\'s community — were murdered in the Rumbula and Bikernieki forests in late 1941.',
+    populations: {
+      70: 0, 200: 0, 500: 0, 700: 0, 1000: 0,
+      1170: 0, 1300: 0, 1492: 0, 1550: 0, 1650: 2000,
+      1800: 12000, 1850: 30000, 1900: 70000, 1939: 95000, 1948: 7000,
+      1970: 40000, 2000: 12000, 2024: 7000,
+    },
+  },
+
+  // ── Chernivtsi / Czernowitz ───────────────────────────────────────────────────
+  {
+    id: 'chernivtsi',
+    name: 'Chernivtsi (Czernowitz)',
+    lat: 48.29,
+    lng: 25.94,
+    culturalType: 'Ashkenazi',
+    significance: 'The "Vienna of the East" and capital of German-language Jewish literature; birthplace of poet Paul Celan. Jews were half the city\'s population. Romanian occupation killed tens of thousands; survivors were deported to Transnistria.',
+    populations: {
+      70: 0, 200: 0, 500: 0, 700: 0, 1000: 0,
+      1170: 0, 1300: 0, 1492: 0, 1550: 0, 1650: 0,
+      1800: 10000, 1850: 25000, 1900: 35000, 1939: 55000, 1948: 15000,
+      1970: 25000, 2000: 3000, 2024: 1500,
+    },
+  },
+
+  // ── Romania / Bucharest ──────────────────────────────────────────────────────
+  {
+    id: 'bucharest',
+    name: 'Bucharest (Romania)',
+    lat: 44.43,
+    lng: 26.1,
+    culturalType: 'Ashkenazi',
+    significance: 'Romania harbored the third-largest Jewish population in Europe. Romanian forces murdered 280,000 Jews in Moldova and Transnistria; Transylvanian Jews were killed by Hungary. Postwar Romania uniquely sold emigration visas to Israel.',
+    populations: {
+      70: 0, 200: 0, 500: 0, 700: 0, 1000: 0,
+      1170: 0, 1300: 0, 1492: 5000, 1550: 10000, 1650: 20000,
+      1800: 60000, 1850: 200000, 1900: 500000, 1939: 760000, 1948: 430000,
+      1970: 100000, 2000: 15000, 2024: 10000,
+    },
+  },
+
+  // ── Bulgaria / Sofia ─────────────────────────────────────────────────────────
+  {
+    id: 'sofia',
+    name: 'Sofia (Bulgaria)',
+    lat: 42.7,
+    lng: 23.32,
+    culturalType: 'Sephardic',
+    significance: 'Descendants of 1492 Spanish exiles welcomed by Suleiman the Magnificent. In a rare act of resistance, the Bulgarian Orthodox Church, parliament, and public refused to allow deportation of Bulgarian Jews — 50,000 were saved.',
+    populations: {
+      70: 0, 200: 0, 500: 0, 700: 0, 1000: 0,
+      1170: 0, 1300: 0, 1492: 5000, 1550: 10000, 1650: 15000,
+      1800: 15000, 1850: 20000, 1900: 40000, 1939: 50000, 1948: 44000,
+      1970: 5000, 2000: 2500, 2024: 2000,
+    },
+  },
+
+  // ── Yugoslavia / Belgrade ────────────────────────────────────────────────────
+  {
+    id: 'belgrade',
+    name: 'Belgrade (Yugoslavia)',
+    lat: 44.82,
+    lng: 20.46,
+    culturalType: 'Sephardic',
+    significance: 'Sephardic community descended from 1492 exiles; Yugoslavia\'s Jews were 80% killed by Nazi-allied Ustasha in Croatia and German forces in Serbia — one of the highest percentage losses in Europe.',
+    populations: {
+      70: 0, 200: 0, 500: 0, 700: 0, 1000: 0,
+      1170: 0, 1300: 0, 1492: 2000, 1550: 5000, 1650: 8000,
+      1800: 10000, 1850: 15000, 1900: 25000, 1939: 70000, 1948: 12000,
+      1970: 7000, 2000: 3000, 2024: 2000,
+    },
+  },
+
+  // ── Hamburg ──────────────────────────────────────────────────────────────────
+  {
+    id: 'hamburg',
+    name: 'Hamburg',
+    lat: 53.55,
+    lng: 10.0,
+    culturalType: 'Sephardic',
+    significance: 'Germany\'s great port and earliest site of Sephardic settlement; Portuguese converso merchants arrived in 1590. The city\'s Jews were major figures in the Hamburg Stock Exchange and the Reform movement.',
+    populations: {
+      70: 0, 200: 0, 500: 0, 700: 0, 1000: 0,
+      1170: 0, 1300: 0, 1492: 0, 1550: 0, 1650: 2000,
+      1800: 8000, 1850: 15000, 1900: 18000, 1939: 14000, 1948: 2000,
+      1970: 3000, 2000: 10000, 2024: 8000,
+    },
+  },
+
+  // ── Syria / Aleppo ───────────────────────────────────────────────────────────
+  {
+    id: 'aleppo',
+    name: 'Aleppo (Syria)',
+    lat: 36.2,
+    lng: 37.16,
+    culturalType: 'Mizrahi',
+    significance: 'One of the great ancient Jewish cities; home of the Aleppo Codex (Keter Aram Tzova), the most authoritative Hebrew manuscript. The community absorbed 1492 Sephardic exiles and maintained distinct minhagim into the 20th century.',
+    populations: {
+      70: 5000, 200: 8000, 500: 10000, 700: 12000, 1000: 12000,
+      1170: 12000, 1300: 10000, 1492: 15000, 1550: 15000, 1650: 12000,
+      1800: 10000, 1850: 12000, 1900: 12000, 1939: 12000, 1948: 8000,
+      1970: 2000, 2000: 200, 2024: 0,
+    },
+  },
+
+  // ── Syria / Damascus ─────────────────────────────────────────────────────────
+  {
+    id: 'damascus',
+    name: 'Damascus (Syria)',
+    lat: 33.51,
+    lng: 36.29,
+    culturalType: 'Mizrahi',
+    significance: 'Ancient community with roots in the First Temple period; center of the Damascus Rite liturgy. The 1840 Damascus Affair (blood libel) was the first modern international human-rights campaign on behalf of Jews.',
+    populations: {
+      70: 10000, 200: 12000, 500: 10000, 700: 10000, 1000: 10000,
+      1170: 10000, 1300: 8000, 1492: 12000, 1550: 12000, 1650: 10000,
+      1800: 8000, 1850: 10000, 1900: 15000, 1939: 30000, 1948: 20000,
+      1970: 5000, 2000: 500, 2024: 0,
+    },
+  },
+
+  // ── Algeria / Algiers ────────────────────────────────────────────────────────
+  {
+    id: 'algiers',
+    name: 'Algiers (Algeria)',
+    lat: 36.74,
+    lng: 3.06,
+    culturalType: 'Sephardic',
+    significance: 'Ancient North African community; the 1870 Crémieux Decree made Algerian Jews French citizens, uniquely assimilating them into French culture. Almost the entire community of 130,000 emigrated to France after Algerian independence in 1962.',
+    populations: {
+      70: 5000, 200: 10000, 500: 15000, 700: 20000, 1000: 25000,
+      1170: 30000, 1300: 35000, 1492: 40000, 1550: 50000, 1650: 55000,
+      1800: 70000, 1850: 80000, 1900: 100000, 1939: 130000, 1948: 140000,
+      1970: 10000, 2000: 500, 2024: 100,
+    },
+  },
+
+  // ── Djerba / Tunisia ─────────────────────────────────────────────────────────
+  {
+    id: 'djerba',
+    name: 'Djerba (Tunisia)',
+    lat: 33.87,
+    lng: 10.85,
+    culturalType: 'Sephardic',
+    significance: 'Island community claiming descent from priests who fled Jerusalem in 586 BCE; the El Ghriba synagogue is among the oldest in the world. The annual Lag B\'Omer pilgrimage still draws thousands of Jewish visitors.',
+    populations: {
+      70: 2000, 200: 3000, 500: 4000, 700: 4000, 1000: 5000,
+      1170: 5000, 1300: 6000, 1492: 7000, 1550: 7000, 1650: 7000,
+      1800: 8000, 1850: 10000, 1900: 12000, 1939: 12000, 1948: 12000,
+      1970: 8000, 2000: 1500, 2024: 1200,
+    },
+  },
+
+  // ── Bukhara / Uzbekistan ─────────────────────────────────────────────────────
+  {
+    id: 'bukhara',
+    name: 'Bukhara (Central Asia)',
+    lat: 39.77,
+    lng: 64.42,
+    culturalType: 'Mizrahi',
+    significance: 'Ancient Silk Road community speaking Judeo-Tajik (Bukhori); maintained distinct liturgy and traditions for two millennia under Persian, Arab, Mongol, and Russian rule. Most emigrated to Israel and Queens, New York after 1991.',
+    populations: {
+      70: 5000, 200: 8000, 500: 10000, 700: 15000, 1000: 18000,
+      1170: 20000, 1300: 18000, 1492: 15000, 1550: 15000, 1650: 12000,
+      1800: 10000, 1850: 12000, 1900: 15000, 1939: 20000, 1948: 22000,
+      1970: 40000, 2000: 10000, 2024: 3000,
+    },
+  },
+
+  // ── Georgia / Tbilisi ────────────────────────────────────────────────────────
+  {
+    id: 'tbilisi',
+    name: 'Tbilisi (Georgia)',
+    lat: 41.69,
+    lng: 44.83,
+    culturalType: 'Mizrahi',
+    significance: 'Georgian Jews are among the most ancient diaspora communities, with 2,600 years of continuous settlement. They maintained a unique Georgian-language liturgy and were largely unaffected by both medieval persecutions and the Holocaust.',
+    populations: {
+      70: 10000, 200: 12000, 500: 20000, 700: 25000, 1000: 25000,
+      1170: 22000, 1300: 20000, 1492: 18000, 1550: 18000, 1650: 18000,
+      1800: 22000, 1850: 35000, 1900: 55000, 1939: 65000, 1948: 65000,
+      1970: 85000, 2000: 8000, 2024: 6000,
+    },
+  },
+
+  // ── Philadelphia ─────────────────────────────────────────────────────────────
+  {
+    id: 'philadelphia',
+    name: 'Philadelphia',
+    lat: 39.95,
+    lng: -75.17,
+    culturalType: 'Ashkenazi',
+    significance: 'One of America\'s oldest Jewish communities (Congregation Mikveh Israel, 1740); major center of Jewish publication, religious leadership, and later, immigrant absorption from Eastern Europe.',
+    populations: {
+      70: 0, 200: 0, 500: 0, 700: 0, 1000: 0,
+      1170: 0, 1300: 0, 1492: 0, 1550: 0, 1650: 0,
+      1800: 2500, 1850: 8000, 1900: 75000, 1939: 270000, 1948: 300000,
+      1970: 350000, 2000: 270000, 2024: 240000,
+    },
+  },
+
+  // ── Miami / South Florida ────────────────────────────────────────────────────
+  {
+    id: 'miami',
+    name: 'Miami / South Florida',
+    lat: 25.77,
+    lng: -80.19,
+    culturalType: 'Mixed',
+    significance: 'Transformed after WWII from a resort town into the third-largest American Jewish community; home to large Cuban-Sephardic, Israeli, and South American Jewish populations.',
+    populations: {
+      70: 0, 200: 0, 500: 0, 700: 0, 1000: 0,
+      1170: 0, 1300: 0, 1492: 0, 1550: 0, 1650: 0,
+      1800: 0, 1850: 0, 1900: 1000, 1939: 8000, 1948: 25000,
+      1970: 150000, 2000: 350000, 2024: 400000,
+    },
+  },
+
+  // ── São Paulo / Brazil ───────────────────────────────────────────────────────
+  {
+    id: 'sao-paulo',
+    name: 'São Paulo (Brazil)',
+    lat: -23.55,
+    lng: -46.63,
+    culturalType: 'Mixed',
+    significance: 'Brazil hosts the largest Jewish community in Latin America; Syrian (Aleppo) and Eastern European Jews built the community. São Paulo\'s Higienópolis neighborhood was known as "Higienolândia" for its Jewish character.',
+    populations: {
+      70: 0, 200: 0, 500: 0, 700: 0, 1000: 0,
+      1170: 0, 1300: 0, 1492: 0, 1550: 0, 1650: 0,
+      1800: 0, 1850: 1000, 1900: 5000, 1939: 80000, 1948: 100000,
+      1970: 150000, 2000: 130000, 2024: 120000,
+    },
+  },
+
+  // ── Beer Sheva / Negev ────────────────────────────────────────────────────────
+  {
+    id: 'beer-sheva',
+    name: 'Beer Sheva (Negev)',
+    lat: 31.25,
+    lng: 34.79,
+    culturalType: 'Mixed',
+    significance: 'Abraham\'s city in Genesis; refounded as a modern city in 1948 and transformed by mass immigration from North Africa, the Soviet Union, and Ethiopia into a major Israeli metropolis and technology hub.',
+    populations: {
+      70: 2000, 200: 1000, 500: 500, 700: 500, 1000: 0,
+      1170: 0, 1300: 0, 1492: 0, 1550: 0, 1650: 0,
+      1800: 0, 1850: 0, 1900: 0, 1939: 3000, 1948: 5000,
+      1970: 90000, 2000: 160000, 2024: 210000,
+    },
+  },
 ];
