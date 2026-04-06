@@ -67,7 +67,7 @@ export default function App() {
   const activeMigrations = getActiveMigrationCount(currentYear);
 
   return (
-    <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+    <div style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden' }}>
       <DiasporaMap year={currentYear} />
       <Timeline
         currentYear={currentYear}

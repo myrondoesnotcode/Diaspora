@@ -40,7 +40,6 @@ const radiusScale = d3.scaleSqrt().domain([0, MAX_POP]).range([0, 42]).clamp(tru
 
 function getPopulation(community: Community, year: number): number {
   const years = Object.keys(community.populations).map(Number).sort((a, b) => a - b);
-  // find exact or nearest past year
   let val = 0;
   for (const y of years) {
     if (y <= year) val = community.populations[y] ?? 0;
@@ -50,6 +49,75 @@ function getPopulation(community: Community, year: number): number {
 
 function getActiveMigrations(year: number): Migration[] {
   return MIGRATIONS.filter((m) => year >= m.startYear && year <= m.endYear);
+}
+
+function computeZoom(
+  activeMigrations: Migration[],
+  communities: { community: Community; population: number }[],
+  communityIndex: Record<string, Community>,
+  projection: d3.GeoProjection,
+  viewWidth: number,
+  viewHeight: number
+): { scale: number; tx: number; ty: number } {
+  // Collect zoom targets: active migration endpoints first
+  const seen = new Set<string>();
+  const targets: Community[] = [];
+
+  if (activeMigrations.length > 0) {
+    for (const m of activeMigrations) {
+      for (const id of [m.from, m.to]) {
+        if (!seen.has(id) && communityIndex[id]) {
+          seen.add(id);
+          targets.push(communityIndex[id]);
+        }
+      }
+    }
+  }
+
+  // Fall back to top communities by population if not enough migration points
+  if (targets.length < 2) {
+    const sorted = [...communities].sort((a, b) => b.population - a.population);
+    for (const { community } of sorted) {
+      if (!seen.has(community.id)) {
+        seen.add(community.id);
+        targets.push(community);
+      }
+      if (targets.length >= 10) break;
+    }
+  }
+
+  const projected = targets
+    .map((c) => projection([c.lng, c.lat]))
+    .filter(Boolean) as [number, number][];
+
+  if (projected.length === 0) return { scale: 1, tx: 0, ty: 0 };
+
+  const xs = projected.map((p) => p[0]);
+  const ys = projected.map((p) => p[1]);
+  const minX = Math.min(...xs);
+  const maxX = Math.max(...xs);
+  const minY = Math.min(...ys);
+  const maxY = Math.max(...ys);
+
+  const cx = (minX + maxX) / 2;
+  const cy = (minY + maxY) / 2;
+
+  // Ensure minimum span to avoid zooming into a single point
+  const spanX = Math.max(maxX - minX, 80);
+  const spanY = Math.max(maxY - minY, 60);
+
+  // Padding factor: how much breathing room around the bounding box
+  const padding = 2.2;
+  const scaleX = viewWidth / (spanX * padding);
+  const scaleY = viewHeight / (spanY * padding);
+
+  const scale = Math.max(1, Math.min(scaleX, scaleY, 5));
+
+  return {
+    scale,
+    tx: viewWidth / 2 - cx * scale,
+    ty: viewHeight / 2 - cy * scale,
+  };
 }
 
 export default function DiasporaMap({ year }: Props) {
@@ -81,12 +149,11 @@ export default function DiasporaMap({ year }: Props) {
 
   const activeMigrations = getActiveMigrations(year);
 
-  // Build projection
-  const mapHeight = dims.height - 160; // leave room for timeline
+  // Build base projection (world view, full viewport)
   const projection = d3
     .geoNaturalEarth1()
     .scale(dims.width / 6.3)
-    .translate([dims.width / 2, mapHeight / 2]);
+    .translate([dims.width / 2, dims.height / 2]);
 
   const pathGen = d3.geoPath().projection(projection);
   const graticule = d3.geoGraticule().step([30, 30])();
@@ -102,7 +169,19 @@ export default function DiasporaMap({ year }: Props) {
         ).features
       : [];
 
-  // Arc path builder
+  const communityIndex = Object.fromEntries(COMMUNITIES.map((c) => [c.id, c]));
+
+  // Compute zoom to focus on the active region
+  const { scale: zoomScale, tx: zoomTx, ty: zoomTy } = computeZoom(
+    activeMigrations,
+    communities,
+    communityIndex,
+    projection,
+    dims.width,
+    dims.height
+  );
+
+  // Arc path builder (uses base projection; zoom is applied via SVG group transform)
   function arcPath(from: Community, to: Community): string | null {
     const src = projection([from.lng, from.lat]);
     const dst = projection([to.lng, to.lat]);
@@ -117,16 +196,16 @@ export default function DiasporaMap({ year }: Props) {
     return `M ${x1},${y1} Q ${cx},${cy} ${x2},${y2}`;
   }
 
-  const communityIndex = Object.fromEntries(COMMUNITIES.map((c) => [c.id, c]));
+  const zoomTransform = `translate(${zoomTx}px, ${zoomTy}px) scale(${zoomScale})`;
 
   return (
-    <div className="map-container" style={{ height: mapHeight }}>
+    <div className="map-container" style={{ position: 'absolute', inset: 0 }}>
       <svg
         ref={svgRef}
         className="map-svg"
         width={dims.width}
-        height={mapHeight}
-        viewBox={`0 0 ${dims.width} ${mapHeight}`}
+        height={dims.height}
+        viewBox={`0 0 ${dims.width} ${dims.height}`}
       >
         <defs>
           <radialGradient id="oceanGradient" cx="50%" cy="50%" r="70%">
@@ -142,124 +221,129 @@ export default function DiasporaMap({ year }: Props) {
           </filter>
         </defs>
 
-        {/* Ocean */}
-        <rect width={dims.width} height={mapHeight} fill="url(#oceanGradient)" />
+        {/* Ocean background — stays fullscreen, outside zoom group */}
+        <rect width={dims.width} height={dims.height} fill="url(#oceanGradient)" />
 
-        {/* Graticule */}
-        <path d={pathGen(graticule) ?? ''} className="graticule" />
+        {/* Zoomable map content */}
+        <g
+          style={{
+            transform: zoomTransform,
+            transformOrigin: '0 0',
+            transition: 'transform 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+          }}
+        >
+          {/* Graticule */}
+          <path d={pathGen(graticule) ?? ''} className="graticule" />
 
-        {/* Countries */}
-        {countryFeatures.map((feature: any, i: number) => (
-          <path
-            key={i}
-            d={pathGen(feature) ?? ''}
-            className="country"
-          />
-        ))}
+          {/* Countries */}
+          {countryFeatures.map((feature: any, i: number) => (
+            <path key={i} d={pathGen(feature) ?? ''} className="country" />
+          ))}
 
-        {/* Migration arcs — glow layer */}
-        {activeMigrations.map((m) => {
-          const from = communityIndex[m.from];
-          const to = communityIndex[m.to];
-          if (!from || !to) return null;
-          const d = arcPath(from, to);
-          if (!d) return null;
-          const color = ARC_COLORS[m.type];
-          return (
-            <path
-              key={`glow-${m.id}`}
-              d={d}
-              className="arc-glow"
-              stroke={color}
-              strokeWidth={4}
-            />
-          );
-        })}
-
-        {/* Migration arcs — animated dash layer */}
-        {activeMigrations.map((m) => {
-          const from = communityIndex[m.from];
-          const to = communityIndex[m.to];
-          if (!from || !to) return null;
-          const d = arcPath(from, to);
-          if (!d) return null;
-          const color = ARC_COLORS[m.type];
-          return (
-            <path
-              key={`dash-${m.id}`}
-              d={d}
-              className="arc-dash"
-              stroke={color}
-            />
-          );
-        })}
-
-        {/* Community circles */}
-        {communities.map(({ community, population }) => {
-          const pos = projection([community.lng, community.lat]);
-          if (!pos) return null;
-          const [cx, cy] = pos;
-          const r = Math.max(3, radiusScale(population));
-          const color = CULTURAL_COLORS[community.culturalType];
-
-          return (
-            <g key={community.id}>
-              {/* Glow ring */}
-              <circle
-                cx={cx}
-                cy={cy}
-                r={r + 2}
-                fill="none"
+          {/* Migration arcs — glow layer */}
+          {activeMigrations.map((m) => {
+            const from = communityIndex[m.from];
+            const to = communityIndex[m.to];
+            if (!from || !to) return null;
+            const d = arcPath(from, to);
+            if (!d) return null;
+            const color = ARC_COLORS[m.type];
+            return (
+              <path
+                key={`glow-${m.id}`}
+                d={d}
+                className="arc-glow"
                 stroke={color}
-                strokeOpacity={0.2}
-                strokeWidth={3}
+                strokeWidth={4}
               />
-              {/* Main circle */}
-              <circle
-                cx={cx}
-                cy={cy}
-                r={r}
-                fill={color}
-                fillOpacity={0.75}
+            );
+          })}
+
+          {/* Migration arcs — animated dash layer */}
+          {activeMigrations.map((m) => {
+            const from = communityIndex[m.from];
+            const to = communityIndex[m.to];
+            if (!from || !to) return null;
+            const d = arcPath(from, to);
+            if (!d) return null;
+            const color = ARC_COLORS[m.type];
+            return (
+              <path
+                key={`dash-${m.id}`}
+                d={d}
+                className="arc-dash"
                 stroke={color}
-                strokeWidth={1}
-                strokeOpacity={0.9}
-                className="community-circle"
-                onMouseEnter={(e) => {
-                  const svg = svgRef.current;
-                  if (!svg) return;
-                  const rect = svg.getBoundingClientRect();
-                  setTooltip({
-                    community,
-                    population,
-                    x: e.clientX - rect.left,
-                    y: e.clientY - rect.top,
-                  });
-                }}
-                onMouseMove={(e) => {
-                  const svg = svgRef.current;
-                  if (!svg) return;
-                  const rect = svg.getBoundingClientRect();
-                  setTooltip((prev) =>
-                    prev ? { ...prev, x: e.clientX - rect.left, y: e.clientY - rect.top } : prev
-                  );
-                }}
-                onMouseLeave={() => setTooltip(null)}
               />
-              {/* City label for large circles */}
-              {r > 14 && (
-                <text
-                  x={cx}
-                  y={cy + r + 10}
-                  className="community-label"
-                  style={{ fontSize: Math.min(11, Math.max(8, r * 0.55)) }}
-                >
-                  {community.name.split(' ')[0]}
-                </text>
-              )}
-            </g>
-          );
-        })}
+            );
+          })}
+
+          {/* Community circles */}
+          {communities.map(({ community, population }) => {
+            const pos = projection([community.lng, community.lat]);
+            if (!pos) return null;
+            const [cx, cy] = pos;
+            const r = Math.max(3, radiusScale(population));
+            const color = CULTURAL_COLORS[community.culturalType];
+
+            return (
+              <g key={community.id}>
+                {/* Glow ring */}
+                <circle
+                  cx={cx}
+                  cy={cy}
+                  r={r + 2}
+                  fill="none"
+                  stroke={color}
+                  strokeOpacity={0.2}
+                  strokeWidth={3}
+                />
+                {/* Main circle */}
+                <circle
+                  cx={cx}
+                  cy={cy}
+                  r={r}
+                  fill={color}
+                  fillOpacity={0.75}
+                  stroke={color}
+                  strokeWidth={1}
+                  strokeOpacity={0.9}
+                  className="community-circle"
+                  onMouseEnter={(e) => {
+                    const svg = svgRef.current;
+                    if (!svg) return;
+                    const rect = svg.getBoundingClientRect();
+                    setTooltip({
+                      community,
+                      population,
+                      x: e.clientX - rect.left,
+                      y: e.clientY - rect.top,
+                    });
+                  }}
+                  onMouseMove={(e) => {
+                    const svg = svgRef.current;
+                    if (!svg) return;
+                    const rect = svg.getBoundingClientRect();
+                    setTooltip((prev) =>
+                      prev ? { ...prev, x: e.clientX - rect.left, y: e.clientY - rect.top } : prev
+                    );
+                  }}
+                  onMouseLeave={() => setTooltip(null)}
+                />
+                {/* City label for large circles */}
+                {r > 14 && (
+                  <text
+                    x={cx}
+                    y={cy + r + 10}
+                    className="community-label"
+                    style={{ fontSize: Math.min(11, Math.max(8, r * 0.55)) }}
+                  >
+                    {community.name.split(' ')[0]}
+                  </text>
+                )}
+              </g>
+            );
+          })}
+        </g>
       </svg>
 
       {/* Tooltip */}
@@ -270,7 +354,7 @@ export default function DiasporaMap({ year }: Props) {
           x={tooltip.x}
           y={tooltip.y}
           mapWidth={dims.width}
-          mapHeight={mapHeight}
+          mapHeight={dims.height}
         />
       )}
 
