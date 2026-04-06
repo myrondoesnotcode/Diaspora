@@ -1,5 +1,6 @@
 import { EPOCHS, getEpochForYear } from '../data/epochs';
 import { COMMUNITIES } from '../data/communities';
+import { WORLD_JEWISH_POP, WORLD_TOTAL_POP } from '../data/worldStats';
 import { SNAPSHOT_YEARS } from '../data/types';
 import type { SnapshotYear, CulturalType } from '../data/types';
 
@@ -41,6 +42,36 @@ function nearestSnapshotYear(midYear: number): SnapshotYear {
   return SNAPSHOT_YEARS.reduce((prev, curr) =>
     Math.abs(curr - midYear) < Math.abs(prev - midYear) ? curr : prev
   );
+}
+
+/**
+ * Returns the two snapshot years that best represent the start and end of an epoch.
+ * - snapA: first snapshot year >= epoch.startYear
+ * - snapB: last snapshot year <= epoch.endYear that is after snapA;
+ *   if the epoch spans only one snapshot interval, use the next snapshot after snapA.
+ */
+function getEpochSnapshotYears(epoch: typeof EPOCHS[0]): [SnapshotYear, SnapshotYear] {
+  const snapAIdx = SNAPSHOT_YEARS.findIndex(y => y >= epoch.startYear);
+  const snapA = SNAPSHOT_YEARS[snapAIdx < 0 ? 0 : snapAIdx];
+
+  // Find the last snapshot year within the epoch that comes AFTER snapA
+  let snapBIdx = -1;
+  for (let i = SNAPSHOT_YEARS.length - 1; i > snapAIdx; i--) {
+    if (SNAPSHOT_YEARS[i] <= epoch.endYear) {
+      snapBIdx = i;
+      break;
+    }
+  }
+  // If no snapshot falls within the epoch after snapA, use the very next snapshot
+  if (snapBIdx === -1) snapBIdx = Math.min(snapAIdx + 1, SNAPSHOT_YEARS.length - 1);
+
+  return [snapA as SnapshotYear, SNAPSHOT_YEARS[snapBIdx] as SnapshotYear];
+}
+
+function fmtWorldPop(n: number): string {
+  if (n >= 1_000_000) return `~${(n / 1_000_000).toFixed(2)}M`;
+  if (n >= 1_000) return `~${Math.round(n / 1000)}k`;
+  return `~${n}`;
 }
 
 function getTopCommunitiesForEpoch(epoch: typeof EPOCHS[0]): { name: string; pop: number; type: CulturalType }[] {
@@ -102,6 +133,12 @@ export default function ExploreTab({ currentYear, onSelectEpoch }: Props) {
             const isActive = epoch.name === activeEpoch.name;
             const targetYear = nearestSnapshotYear(Math.round((epoch.startYear + epoch.endYear) / 2));
             const topCommunities = getTopCommunitiesForEpoch(epoch);
+            const [snapA, snapB] = getEpochSnapshotYears(epoch);
+            const popA = WORLD_JEWISH_POP[snapA];
+            const popB = WORLD_JEWISH_POP[snapB];
+            const pctA = (popA / WORLD_TOTAL_POP[snapA]) * 100;
+            const pctB = (popB / WORLD_TOTAL_POP[snapB]) * 100;
+            const popChange = ((popB - popA) / popA) * 100;
 
             return (
               <div key={epoch.name} style={{ paddingLeft: 32, paddingBottom: i < EPOCHS.length - 1 ? 28 : 0, position: 'relative' }}>
@@ -147,6 +184,56 @@ export default function ExploreTab({ currentYear, onSelectEpoch }: Props) {
                     >
                       View map
                     </button>
+                  </div>
+
+                  {/* Population stat boxes */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                    {/* Start snapshot */}
+                    <div style={{
+                      flex: 1, background: epoch.color + '0f', borderRadius: 10,
+                      padding: '8px 10px', border: `1px solid ${epoch.color}22`,
+                    }}>
+                      <div style={{ fontSize: 10, fontWeight: 700, color: '#9a8a7a', marginBottom: 2 }}>
+                        {formatYear(snapA)}
+                      </div>
+                      <div style={{ fontSize: 16, fontWeight: 800, color: epoch.color, lineHeight: 1.1 }}>
+                        {fmtWorldPop(popA)}
+                      </div>
+                      <div style={{ fontSize: 10, color: '#6b5a4a', marginTop: 2 }}>
+                        {pctA.toFixed(2)}% of world
+                      </div>
+                    </div>
+
+                    {/* Change indicator */}
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0 }}>
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                        style={{ transform: popChange >= 0 ? 'rotate(180deg)' : undefined }}>
+                        <path d="M6 10L1 4h10L6 10z"
+                          fill={popChange >= 0 ? '#27ae60' : '#e74c3c'} />
+                      </svg>
+                      <div style={{
+                        fontSize: 11, fontWeight: 700, marginTop: 2,
+                        color: popChange >= 0 ? '#27ae60' : '#e74c3c',
+                      }}>
+                        {popChange >= 0 ? '+' : ''}{popChange.toFixed(0)}%
+                      </div>
+                    </div>
+
+                    {/* End snapshot */}
+                    <div style={{
+                      flex: 1, background: epoch.color + '0f', borderRadius: 10,
+                      padding: '8px 10px', border: `1px solid ${epoch.color}22`,
+                    }}>
+                      <div style={{ fontSize: 10, fontWeight: 700, color: '#9a8a7a', marginBottom: 2 }}>
+                        {formatYear(snapB)}
+                      </div>
+                      <div style={{ fontSize: 16, fontWeight: 800, color: epoch.color, lineHeight: 1.1 }}>
+                        {fmtWorldPop(popB)}
+                      </div>
+                      <div style={{ fontSize: 10, color: '#6b5a4a', marginTop: 2 }}>
+                        {pctB.toFixed(2)}% of world
+                      </div>
+                    </div>
                   </div>
 
                   {/* Description */}
