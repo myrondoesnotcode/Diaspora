@@ -36,7 +36,7 @@ interface Props {
 const MAX_POP = Math.max(
   ...COMMUNITIES.flatMap((c) => Object.values(c.populations).map(Number))
 );
-const radiusScale = d3.scaleSqrt().domain([0, MAX_POP]).range([0, 42]).clamp(true);
+const radiusScale = d3.scaleSqrt().domain([0, MAX_POP]).range([0, 22]).clamp(true);
 
 function getPopulation(community: Community, year: number): number {
   const years = Object.keys(community.populations).map(Number).sort((a, b) => a - b);
@@ -82,7 +82,7 @@ export default function DiasporaMap({ year }: Props) {
   const activeMigrations = getActiveMigrations(year);
 
   // Build projection
-  const mapHeight = dims.height - 160; // leave room for timeline
+  const mapHeight = dims.height - 160 - 56; // leave room for timeline + tab bar
   const projection = d3
     .geoNaturalEarth1()
     .scale(dims.width / 6.3)
@@ -247,7 +247,7 @@ export default function DiasporaMap({ year }: Props) {
                 onMouseLeave={() => setTooltip(null)}
               />
               {/* City label for large circles */}
-              {r > 14 && (
+              {r > 18 && (
                 <text
                   x={cx}
                   y={cy + r + 10}
