@@ -335,18 +335,34 @@ export default function DiasporaMap({ year }: Props) {
           onClick={(e) => e.stopPropagation()}
           style={{
             position: 'absolute', bottom: 0, left: 0, right: 0,
+            zIndex: 20,
             background: '#f5f0e8',
             borderTop: '1px solid rgba(0,0,0,0.1)',
             borderRadius: '16px 16px 0 0',
-            padding: '16px 20px 24px',
+            padding: '12px 20px 20px',
+            maxHeight: '55%',
+            overflowY: 'auto',
+            WebkitOverflowScrolling: 'touch',
             animation: 'slideUp 0.25s ease',
-          }}
+          } as React.CSSProperties}
         >
-          {/* Handle */}
-          <div style={{ width: 36, height: 4, background: 'rgba(0,0,0,0.15)', borderRadius: 2, margin: '0 auto 14px' }} />
+          {/* Handle + close */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', marginBottom: 14 }}>
+            <div style={{ width: 36, height: 4, background: 'rgba(0,0,0,0.15)', borderRadius: 2 }} />
+            <button
+              onClick={() => setSelected(null)}
+              style={{
+                position: 'absolute', right: 0,
+                width: 28, height: 28, borderRadius: '50%',
+                background: 'rgba(0,0,0,0.07)', border: 'none',
+                cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 16, color: '#6b5a4a',
+              }}
+            >×</button>
+          </div>
 
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
-            <div style={{ flex: 1 }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
                 <div style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: CULTURAL_COLORS[selected.community.culturalType], flexShrink: 0 }} />
                 <div style={{ fontSize: 17, fontWeight: 700, color: '#1a1410' }}>{selected.community.name}</div>
@@ -358,6 +374,7 @@ export default function DiasporaMap({ year }: Props) {
                   background: CULTURAL_COLORS[selected.community.culturalType] + '18',
                   border: `1px solid ${CULTURAL_COLORS[selected.community.culturalType]}33`,
                   borderRadius: 20, padding: '2px 8px',
+                  flexShrink: 0,
                 }}>
                   {selected.community.culturalType}
                 </span>
