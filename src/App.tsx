@@ -4,7 +4,10 @@ import type { SnapshotYear } from './data/types';
 import { COMMUNITIES } from './data/communities';
 import { MIGRATIONS } from './data/migrations';
 import DiasporaMap from './components/DiasporaMap';
-import Timeline from './components/Timeline';
+import MapOverlay from './components/MapOverlay';
+import ExploreTab from './components/ExploreTab';
+
+type ActiveTab = 'map' | 'explore';
 
 function getPopulation(year: number): number {
   let total = 0;
@@ -26,6 +29,7 @@ function getActiveMigrationCount(year: number): number {
 export default function App() {
   const [currentYear, setCurrentYear] = useState<SnapshotYear>(70);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [activeTab, setActiveTab] = useState<ActiveTab>('map');
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const advanceYear = useCallback(() => {
@@ -63,20 +67,88 @@ export default function App() {
     });
   }, [currentYear]);
 
+  const handleSelectEpoch = useCallback((year: SnapshotYear) => {
+    setCurrentYear(year);
+    setActiveTab('map');
+  }, []);
+
   const totalPop = getPopulation(currentYear);
   const activeMigrations = getActiveMigrationCount(currentYear);
 
   return (
-    <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-      <DiasporaMap year={currentYear} />
-      <Timeline
-        currentYear={currentYear}
-        isPlaying={isPlaying}
-        onYearChange={handleYearChange}
-        onPlayPause={handlePlayPause}
-        totalPopulation={totalPop}
-        activeMigrations={activeMigrations}
-      />
+    <div style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column', background: '#f5f0e8' }}>
+
+      {/* Content area */}
+      <div style={{ flex: 1, position: 'relative', overflow: 'hidden', minHeight: 0 }}>
+
+        {/* MAP TAB — full screen map with floating overlay */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          display: activeTab === 'map' ? 'block' : 'none',
+        }}>
+          <DiasporaMap year={currentYear} />
+          <MapOverlay
+            currentYear={currentYear}
+            isPlaying={isPlaying}
+            onYearChange={handleYearChange}
+            onPlayPause={handlePlayPause}
+            totalPopulation={totalPop}
+            activeMigrations={activeMigrations}
+          />
+        </div>
+
+        {/* EXPLORE TAB */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          display: activeTab === 'explore' ? 'flex' : 'none',
+          flexDirection: 'column',
+          overflowY: 'auto',
+          WebkitOverflowScrolling: 'touch',
+        } as React.CSSProperties}>
+          <ExploreTab currentYear={currentYear} onSelectEpoch={handleSelectEpoch} />
+        </div>
+      </div>
+
+      {/* Bottom tab bar */}
+      <div style={{
+        flexShrink: 0, height: 56,
+        display: 'flex',
+        background: '#f5f0e8',
+        borderTop: '1px solid rgba(0,0,0,0.1)',
+      }}>
+        <button
+          onClick={() => setActiveTab('map')}
+          style={{
+            flex: 1, display: 'flex', flexDirection: 'column',
+            alignItems: 'center', justifyContent: 'center', gap: 3,
+            background: 'none', border: 'none', cursor: 'pointer',
+            color: activeTab === 'map' ? '#e07b39' : '#9a8a7a',
+          }}
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" />
+            <line x1="9" y1="3" x2="9" y2="18" />
+            <line x1="15" y1="6" x2="15" y2="21" />
+          </svg>
+          <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Map</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('explore')}
+          style={{
+            flex: 1, display: 'flex', flexDirection: 'column',
+            alignItems: 'center', justifyContent: 'center', gap: 3,
+            background: 'none', border: 'none', cursor: 'pointer',
+            color: activeTab === 'explore' ? '#e07b39' : '#9a8a7a',
+          }}
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+          </svg>
+          <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Explore</span>
+        </button>
+      </div>
     </div>
   );
 }
