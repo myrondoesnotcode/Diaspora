@@ -35,9 +35,7 @@ export default function ExploreTab({ currentYear, onSelectEpoch }: Props) {
   const activeEpoch = getEpochForYear(currentYear);
 
   return (
-    <div
-      style={{ background: '#f5f0e8', flex: 1, overflowY: 'auto', WebkitOverflowScrolling: 'touch' }}
-    >
+    <div style={{ background: '#f5f0e8', flex: 1 }}>
       {/* Header */}
       <div className="px-4 pt-5 pb-3">
         <div

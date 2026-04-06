@@ -77,22 +77,37 @@ export default function App() {
 
   return (
     <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-      {/* Map tab — kept mounted so D3 state and world topology fetch are preserved */}
-      <div style={{ display: activeTab === 'map' ? 'contents' : 'none' }}>
-        <DiasporaMap year={currentYear} />
-        <Timeline
-          currentYear={currentYear}
-          isPlaying={isPlaying}
-          onYearChange={handleYearChange}
-          onPlayPause={handlePlayPause}
-          totalPopulation={totalPop}
-          activeMigrations={activeMigrations}
-        />
-      </div>
+      {/* Content area — both tabs kept mounted to preserve D3 state */}
+      <div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
+        {/* Map tab */}
+        <div style={{
+          display: activeTab === 'map' ? 'block' : 'none',
+          width: '100%',
+          height: '100%',
+          position: 'relative',
+        }}>
+          <DiasporaMap year={currentYear} />
+          <Timeline
+            currentYear={currentYear}
+            isPlaying={isPlaying}
+            onYearChange={handleYearChange}
+            onPlayPause={handlePlayPause}
+            totalPopulation={totalPop}
+            activeMigrations={activeMigrations}
+          />
+        </div>
 
-      {/* Explore tab */}
-      <div style={{ display: activeTab === 'explore' ? 'contents' : 'none' }}>
-        <ExploreTab currentYear={currentYear} onSelectEpoch={handleSelectEpoch} />
+        {/* Explore tab */}
+        <div style={{
+          display: activeTab === 'explore' ? 'flex' : 'none',
+          flexDirection: 'column',
+          width: '100%',
+          height: '100%',
+          overflowY: 'auto',
+          WebkitOverflowScrolling: 'touch',
+        } as React.CSSProperties}>
+          <ExploreTab currentYear={currentYear} onSelectEpoch={handleSelectEpoch} />
+        </div>
       </div>
 
       {/* Bottom tab bar */}
