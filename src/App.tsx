@@ -6,6 +6,7 @@ import { MIGRATIONS } from './data/migrations';
 import DiasporaMap from './components/DiasporaMap';
 import MapOverlay from './components/MapOverlay';
 import ExploreTab from './components/ExploreTab';
+import IntroModal from './components/IntroModal';
 
 type ActiveTab = 'map' | 'explore';
 
@@ -30,6 +31,7 @@ export default function App() {
   const [currentYear, setCurrentYear] = useState<SnapshotYear>(70);
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeTab, setActiveTab] = useState<ActiveTab>('map');
+  const [showIntro, setShowIntro] = useState(true);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const advanceYear = useCallback(() => {
@@ -108,6 +110,8 @@ export default function App() {
           <ExploreTab currentYear={currentYear} onSelectEpoch={handleSelectEpoch} />
         </div>
       </div>
+
+      {showIntro && <IntroModal onClose={() => setShowIntro(false)} />}
 
       {/* Bottom tab bar */}
       <div style={{
