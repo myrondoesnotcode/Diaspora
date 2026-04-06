@@ -57,7 +57,6 @@ export default function DiasporaMap({ year }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const zoomRef = useRef<d3.ZoomBehavior<SVGSVGElement, unknown> | undefined>(undefined);
   const pointerDownRef = useRef<{ x: number; y: number } | null>(null);
-  const hasInitialZoomedRef = useRef(false);
 
   const [worldData, setWorldData] = useState<Topology | null>(null);
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
@@ -86,7 +85,7 @@ export default function DiasporaMap({ year }: Props) {
 
   const isMobile = dims.width > 0 && dims.width < 768;
 
-  // D3 zoom behavior
+  // D3 zoom behavior — set up once when dims are known, preserve transform on resize
   useEffect(() => {
     if (!svgRef.current || !gRef.current || dims.width === 0 || dims.height === 0) return;
 
@@ -100,31 +99,12 @@ export default function DiasporaMap({ year }: Props) {
       });
 
     zoomRef.current = zoom;
-
-    if (!hasInitialZoomedRef.current && isMobile) {
-      hasInitialZoomedRef.current = true;
-      // Zoom to Middle East / Mediterranean on first mobile load
-      const proj = d3.geoNaturalEarth1()
-        .scale(dims.width / 6.3)
-        .translate([dims.width / 2, dims.height / 2]);
-      const center = proj([35, 32]);
-      if (center) {
-        const k = 2.8;
-        const t = d3.zoomIdentity
-          .translate(dims.width / 2 - k * center[0], dims.height / 2 - k * center[1])
-          .scale(k);
-        d3.select(svgRef.current).call(zoom).call(zoom.transform, t);
-      } else {
-        d3.select(svgRef.current).call(zoom).call(zoom.transform, prevTransform);
-      }
-    } else {
-      d3.select(svgRef.current).call(zoom).call(zoom.transform, prevTransform);
-    }
+    d3.select(svgRef.current).call(zoom).call(zoom.transform, prevTransform);
 
     return () => {
       if (svgRef.current) d3.select(svgRef.current).on('.zoom', null);
     };
-  }, [dims.width, dims.height, isMobile]);
+  }, [dims.width, dims.height]);
 
   // Skip rendering until container is measured
   const projection = dims.width > 0 && dims.height > 0

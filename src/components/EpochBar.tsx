@@ -12,50 +12,34 @@ export default function EpochBar({ currentYear, onSelectYear }: Props) {
   const activeEpoch = getEpochForYear(currentYear);
 
   return (
-    <div className="flex flex-col gap-2">
-      {/* Epoch pills */}
-      <div
-        className="flex gap-1.5 overflow-x-auto pb-1 sm:flex-wrap sm:justify-center"
-        style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}
-      >
-        {EPOCHS.map((epoch) => {
-          const isActive = epoch.name === activeEpoch.name;
-          // Jump to the nearest snapshot year for this epoch
-          const midYear = Math.round((epoch.startYear + epoch.endYear) / 2);
-          const targetYear = SNAPSHOT_YEARS.reduce((prev, curr) =>
-            Math.abs(curr - midYear) < Math.abs(prev - midYear) ? curr : prev
-          );
+    <div
+      className="flex gap-1.5 overflow-x-auto pb-1 flex-wrap"
+      style={{ scrollbarWidth: 'none' } as React.CSSProperties}
+    >
+      {EPOCHS.map((epoch) => {
+        const isActive = epoch.name === activeEpoch.name;
+        const midYear = Math.round((epoch.startYear + epoch.endYear) / 2);
+        const targetYear = SNAPSHOT_YEARS.reduce((prev, curr) =>
+          Math.abs(curr - midYear) < Math.abs(prev - midYear) ? curr : prev
+        );
 
-          return (
-            <button
-              key={epoch.name}
-              onClick={() => onSelectYear(targetYear)}
-              className="epoch-pill text-xs px-2.5 py-1 rounded-full font-medium transition-all"
-              style={{
-                backgroundColor: isActive ? epoch.color : epoch.color + '22',
-                color: isActive ? '#fff' : epoch.color,
-                border: `1px solid ${epoch.color}${isActive ? 'ff' : '55'}`,
-                boxShadow: isActive ? `0 0 10px ${epoch.color}66` : 'none',
-              }}
-              title={epoch.description}
-            >
-              {epoch.name}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Active epoch description */}
-      <div
-        className="text-center text-xs px-4 py-1.5 rounded-lg mx-auto max-w-xl"
-        style={{
-          backgroundColor: activeEpoch.color + '18',
-          color: activeEpoch.color,
-          border: `1px solid ${activeEpoch.color}33`,
-        }}
-      >
-        {activeEpoch.description}
-      </div>
+        return (
+          <button
+            key={epoch.name}
+            onClick={() => onSelectYear(targetYear)}
+            className="epoch-pill text-xs px-2.5 py-1 rounded-full font-medium"
+            style={{
+              backgroundColor: isActive ? epoch.color : epoch.color + '20',
+              color: isActive ? '#fff' : epoch.color,
+              border: `1px solid ${epoch.color}${isActive ? 'ff' : '55'}`,
+              boxShadow: isActive ? `0 0 8px ${epoch.color}55` : 'none',
+            }}
+            title={epoch.description}
+          >
+            {epoch.name}
+          </button>
+        );
+      })}
     </div>
   );
 }
