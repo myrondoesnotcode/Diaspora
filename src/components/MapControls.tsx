@@ -106,14 +106,14 @@ export default function MapControls({ currentYear, isPlaying, onYearChange, onPl
                     className="w-0.5 transition-all"
                     style={{
                       height: isCurrent ? 10 : 5,
-                      backgroundColor: isCurrent ? tickEpoch.color : 'rgba(255,255,255,0.25)',
+                      backgroundColor: isCurrent ? tickEpoch.color : 'rgba(120,100,70,0.45)',
                       boxShadow: isCurrent ? `0 0 6px ${tickEpoch.color}` : 'none',
                     }}
                   />
                   <span
                     className="text-[8px] leading-none"
                     style={{
-                      color: isCurrent ? tickEpoch.color : 'rgba(255,255,255,0.35)',
+                      color: isCurrent ? tickEpoch.color : 'rgba(100,80,55,0.65)',
                       fontWeight: isCurrent ? 700 : 400,
                       visibility: showLabel ? 'visible' : 'hidden',
                     }}

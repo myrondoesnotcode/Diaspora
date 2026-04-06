@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import type { Topology, GeometryCollection } from 'topojson-specification';
@@ -57,6 +57,7 @@ export default function DiasporaMap({ year }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const zoomRef = useRef<d3.ZoomBehavior<SVGSVGElement, unknown> | undefined>(undefined);
   const pointerDownRef = useRef<{ x: number; y: number } | null>(null);
+  const hasInitialZoomedRef = useRef(false);
 
   const [worldData, setWorldData] = useState<Topology | null>(null);
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
@@ -86,7 +87,7 @@ export default function DiasporaMap({ year }: Props) {
   const isMobile = dims.width > 0 && dims.width < 768;
 
   // D3 zoom behavior — set up once when dims are known, preserve transform on resize
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!svgRef.current || !gRef.current || dims.width === 0 || dims.height === 0) return;
 
     const prevTransform = d3.zoomTransform(svgRef.current);
@@ -99,7 +100,26 @@ export default function DiasporaMap({ year }: Props) {
       });
 
     zoomRef.current = zoom;
-    d3.select(svgRef.current).call(zoom).call(zoom.transform, prevTransform);
+
+    if (!hasInitialZoomedRef.current && dims.width < 768) {
+      hasInitialZoomedRef.current = true;
+      const proj = d3.geoNaturalEarth1()
+        .scale(dims.width / 6.3)
+        .translate([dims.width / 2, dims.height / 2]);
+      const center = proj([35, 32]); // Jerusalem / Levant
+      if (center) {
+        const k = 2.5;
+        const t = d3.zoomIdentity
+          .translate(dims.width / 2 - k * center[0], dims.height / 2 - k * center[1])
+          .scale(k);
+        d3.select(svgRef.current).call(zoom).call(zoom.transform, t);
+        setZoomLevel(k);
+      } else {
+        d3.select(svgRef.current).call(zoom).call(zoom.transform, prevTransform);
+      }
+    } else {
+      d3.select(svgRef.current).call(zoom).call(zoom.transform, prevTransform);
+    }
 
     return () => {
       if (svgRef.current) d3.select(svgRef.current).on('.zoom', null);
@@ -168,8 +188,8 @@ export default function DiasporaMap({ year }: Props) {
         >
           <defs>
             <radialGradient id="oceanGradient" cx="50%" cy="50%" r="70%">
-              <stop offset="0%" stopColor="#0d1b3e" />
-              <stop offset="100%" stopColor="#020510" />
+              <stop offset="0%" stopColor="#c8b99a" />
+              <stop offset="100%" stopColor="#b09070" />
             </radialGradient>
             <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
               <feGaussianBlur stdDeviation="3" result="blur" />
@@ -364,11 +384,11 @@ export default function DiasporaMap({ year }: Props) {
       <div className="absolute top-3 left-3">
         <div
           className="text-lg font-bold tracking-tight"
-          style={{ color: 'rgba(255,255,255,0.9)', textShadow: '0 2px 12px rgba(0,0,0,0.8)' }}
+          style={{ color: 'rgba(28,23,16,0.90)', textShadow: '0 1px 4px rgba(236,228,210,0.6)' }}
         >
           The Jewish Diaspora
         </div>
-        <div className="text-xs" style={{ color: 'rgba(255,255,255,0.45)' }}>
+        <div className="text-xs" style={{ color: 'rgba(28,23,16,0.55)' }}>
           500 BCE – 2024 · 2,524 Years of History
         </div>
       </div>
