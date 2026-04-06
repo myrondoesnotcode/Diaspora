@@ -76,7 +76,7 @@ export default function App() {
   const activeMigrations = getActiveMigrationCount(currentYear);
 
   return (
-    <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+    <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
       {/* Content area — both tabs kept mounted to preserve D3 state */}
       <div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
         {/* Map tab */}
@@ -110,14 +110,14 @@ export default function App() {
         </div>
       </div>
 
-      {/* Bottom tab bar */}
+      {/* Bottom tab bar — always cream */}
       <div
         style={{
           height: 56,
           flexShrink: 0,
           display: 'flex',
-          borderTop: '1px solid rgba(0,0,0,0.12)',
-          background: activeTab === 'explore' ? '#f5f0e8' : '#0d1117',
+          borderTop: '1px solid rgba(0,0,0,0.1)',
+          background: '#f5f0e8',
         }}
       >
         {/* MAP tab */}
@@ -133,10 +133,9 @@ export default function App() {
             background: 'none',
             border: 'none',
             cursor: 'pointer',
-            color: activeTab === 'map' ? '#e07b39' : activeTab === 'explore' ? '#999' : 'rgba(255,255,255,0.45)',
+            color: activeTab === 'map' ? '#e07b39' : '#9a8a7a',
           }}
         >
-          {/* Map icon */}
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
             <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" />
             <line x1="9" y1="3" x2="9" y2="18" />
@@ -160,10 +159,9 @@ export default function App() {
             background: 'none',
             border: 'none',
             cursor: 'pointer',
-            color: activeTab === 'explore' ? '#e07b39' : 'rgba(255,255,255,0.45)',
+            color: activeTab === 'explore' ? '#e07b39' : '#9a8a7a',
           }}
         >
-          {/* Book icon */}
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
             <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
             <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />

@@ -99,14 +99,14 @@ export default function Timeline({
                     className="w-0.5 transition-all"
                     style={{
                       height: isCurrent ? 12 : 6,
-                      backgroundColor: isCurrent ? tickEpoch.color : 'rgba(255,255,255,0.25)',
+                      backgroundColor: isCurrent ? tickEpoch.color : 'rgba(0,0,0,0.2)',
                       boxShadow: isCurrent ? `0 0 6px ${tickEpoch.color}` : 'none',
                     }}
                   />
                   <span
                     className="text-[9px] leading-none transition-all"
                     style={{
-                      color: isCurrent ? tickEpoch.color : 'rgba(255,255,255,0.35)',
+                      color: isCurrent ? tickEpoch.color : 'rgba(0,0,0,0.35)',
                       fontWeight: isCurrent ? 700 : 400,
                     }}
                   >
@@ -134,12 +134,12 @@ export default function Timeline({
 
         {/* Stats */}
         <div className="flex-shrink-0 text-right">
-          <div className="text-xs text-slate-400">World Jewish Pop.</div>
+          <div className="text-xs" style={{ color: '#6b5a4a' }}>World Jewish Pop.</div>
           <div className="font-bold text-sm" style={{ color: epoch.color }}>
             ~{fmt(totalPopulation)}
           </div>
           {activeMigrations > 0 && (
-            <div className="text-xs text-slate-400 mt-0.5">
+            <div className="text-xs mt-0.5" style={{ color: '#6b5a4a' }}>
               {activeMigrations} migration{activeMigrations !== 1 ? 's' : ''} active
             </div>
           )}

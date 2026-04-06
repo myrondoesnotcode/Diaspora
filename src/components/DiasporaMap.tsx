@@ -278,34 +278,34 @@ export default function DiasporaMap({ year }: Props) {
       <div
         className="absolute top-3 right-3 rounded-xl p-3 text-xs"
         style={{
-          background: 'rgba(10,15,40,0.88)',
-          border: '1px solid rgba(255,255,255,0.1)',
+          background: 'rgba(245,240,232,0.93)',
+          border: '1px solid rgba(0,0,0,0.08)',
           backdropFilter: 'blur(8px)',
         }}
       >
-        <div className="font-semibold text-white mb-2 text-center tracking-wide uppercase text-[10px]">
+        <div className="font-semibold mb-2 text-center tracking-wide uppercase text-[10px]" style={{ color: '#6b5a4a' }}>
           Cultural Tradition
         </div>
         {(Object.entries(CULTURAL_COLORS) as [CulturalType, string][]).map(([type, color]) => (
           <div key={type} className="flex items-center gap-2 mb-1">
             <div
               className="w-2.5 h-2.5 rounded-full flex-shrink-0"
-              style={{ backgroundColor: color, boxShadow: `0 0 4px ${color}` }}
+              style={{ backgroundColor: color }}
             />
-            <span style={{ color: 'rgba(255,255,255,0.75)' }}>{type}</span>
+            <span style={{ color: '#1a1410' }}>{type}</span>
           </div>
         ))}
-        <div className="mt-2 pt-2 border-t border-white/10">
-          <div className="font-semibold text-white mb-1 text-center tracking-wide uppercase text-[10px]">
+        <div className="mt-2 pt-2" style={{ borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+          <div className="font-semibold mb-1 text-center tracking-wide uppercase text-[10px]" style={{ color: '#6b5a4a' }}>
             Migration
           </div>
           <div className="flex items-center gap-2 mb-1">
             <div className="w-6 h-0.5" style={{ background: '#ff4444' }} />
-            <span style={{ color: 'rgba(255,255,255,0.75)' }}>Forced</span>
+            <span style={{ color: '#1a1410' }}>Forced</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-6 h-0.5" style={{ background: '#44aaff' }} />
-            <span style={{ color: 'rgba(255,255,255,0.75)' }}>Voluntary</span>
+            <span style={{ color: '#1a1410' }}>Voluntary</span>
           </div>
         </div>
       </div>
@@ -314,11 +314,11 @@ export default function DiasporaMap({ year }: Props) {
       <div className="absolute top-3 left-3">
         <div
           className="text-lg font-bold tracking-tight"
-          style={{ color: 'rgba(255,255,255,0.9)', textShadow: '0 2px 12px rgba(0,0,0,0.8)' }}
+          style={{ color: '#f5f0e8', textShadow: '0 1px 8px rgba(0,0,0,0.7)' }}
         >
           The Jewish Diaspora
         </div>
-        <div className="text-xs" style={{ color: 'rgba(255,255,255,0.45)' }}>
+        <div className="text-xs" style={{ color: 'rgba(245,240,232,0.6)', textShadow: '0 1px 4px rgba(0,0,0,0.6)' }}>
           70 CE – 2024 · 1,954 Years of History
         </div>
       </div>
