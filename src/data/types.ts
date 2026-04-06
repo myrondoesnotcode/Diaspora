@@ -28,6 +28,8 @@ export interface Epoch {
   endYear: number;
   color: string;
   description: string;
+  longDescription?: string;
+  keyEvents?: { year: number; label: string }[];
 }
 
 export const SNAPSHOT_YEARS = [70, 200, 500, 700, 1000, 1170, 1300, 1492, 1550, 1650, 1800, 1850, 1900, 1939, 1948, 1970, 2000, 2024] as const;

@@ -5,6 +5,9 @@ import { COMMUNITIES } from './data/communities';
 import { MIGRATIONS } from './data/migrations';
 import DiasporaMap from './components/DiasporaMap';
 import Timeline from './components/Timeline';
+import ExploreTab from './components/ExploreTab';
+
+type ActiveTab = 'map' | 'explore';
 
 function getPopulation(year: number): number {
   let total = 0;
@@ -26,6 +29,7 @@ function getActiveMigrationCount(year: number): number {
 export default function App() {
   const [currentYear, setCurrentYear] = useState<SnapshotYear>(70);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [activeTab, setActiveTab] = useState<ActiveTab>('map');
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const advanceYear = useCallback(() => {
@@ -63,20 +67,99 @@ export default function App() {
     });
   }, [currentYear]);
 
+  const handleSelectEpoch = useCallback((year: SnapshotYear) => {
+    setCurrentYear(year);
+    setActiveTab('map');
+  }, []);
+
   const totalPop = getPopulation(currentYear);
   const activeMigrations = getActiveMigrationCount(currentYear);
 
   return (
     <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-      <DiasporaMap year={currentYear} />
-      <Timeline
-        currentYear={currentYear}
-        isPlaying={isPlaying}
-        onYearChange={handleYearChange}
-        onPlayPause={handlePlayPause}
-        totalPopulation={totalPop}
-        activeMigrations={activeMigrations}
-      />
+      {/* Map tab content */}
+      {activeTab === 'map' && (
+        <>
+          <DiasporaMap year={currentYear} />
+          <Timeline
+            currentYear={currentYear}
+            isPlaying={isPlaying}
+            onYearChange={handleYearChange}
+            onPlayPause={handlePlayPause}
+            totalPopulation={totalPop}
+            activeMigrations={activeMigrations}
+          />
+        </>
+      )}
+
+      {/* Explore tab content */}
+      {activeTab === 'explore' && (
+        <ExploreTab currentYear={currentYear} onSelectEpoch={handleSelectEpoch} />
+      )}
+
+      {/* Bottom tab bar */}
+      <div
+        style={{
+          height: 56,
+          flexShrink: 0,
+          display: 'flex',
+          borderTop: '1px solid rgba(0,0,0,0.12)',
+          background: activeTab === 'explore' ? '#f5f0e8' : '#0d1117',
+        }}
+      >
+        {/* MAP tab */}
+        <button
+          onClick={() => setActiveTab('map')}
+          style={{
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 3,
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            color: activeTab === 'map' ? '#e07b39' : activeTab === 'explore' ? '#999' : 'rgba(255,255,255,0.45)',
+          }}
+        >
+          {/* Map icon */}
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" />
+            <line x1="9" y1="3" x2="9" y2="18" />
+            <line x1="15" y1="6" x2="15" y2="21" />
+          </svg>
+          <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+            Map
+          </span>
+        </button>
+
+        {/* EXPLORE tab */}
+        <button
+          onClick={() => setActiveTab('explore')}
+          style={{
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 3,
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            color: activeTab === 'explore' ? '#e07b39' : 'rgba(255,255,255,0.45)',
+          }}
+        >
+          {/* Book icon */}
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+          </svg>
+          <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+            Explore
+          </span>
+        </button>
+      </div>
     </div>
   );
 }
