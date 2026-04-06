@@ -96,13 +96,15 @@ body {
 
 /* ── Timeline ────────────────────────────────────────────────────────────── */
 .timeline-container {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 12px 24px 72px; /* 72px = 60px tab bar + 12px breathing room */
-  background: linear-gradient(to top, rgba(6, 13, 31, 0.98) 0%, rgba(6, 13, 31, 0.85) 100%);
+  padding: 12px 16px calc(72px + env(safe-area-inset-bottom, 0px)) 16px;
+  background: linear-gradient(to top, rgba(6, 13, 31, 0.99) 0%, rgba(6, 13, 31, 0.88) 100%);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 500;
 }
 
 .timeline-slider {
@@ -169,6 +171,13 @@ body {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Mobile responsive ──────────────────────────────────────────────────── */
+@media (max-width: 400px) {
+  .timeline-tick-label {
+    display: none;
+  }
 }
 
 /* ── Scrollbar ────────────────────────────────────────────────────────────── */

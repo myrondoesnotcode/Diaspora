@@ -106,7 +106,7 @@ export default function Timeline({
                     }}
                   />
                   <span
-                    className="text-[9px] leading-none transition-all"
+                    className="text-[9px] leading-none transition-all timeline-tick-label"
                     style={{
                       color: isCurrent ? tickEpoch.color : 'rgba(255,255,255,0.35)',
                       fontWeight: isCurrent ? 700 : 400,

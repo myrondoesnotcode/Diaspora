@@ -94,21 +94,24 @@ export default function App() {
       {/* Bottom tab bar */}
       <div
         style={{
-          position: 'absolute',
+          position: 'fixed',
           bottom: 0,
           left: 0,
           right: 0,
-          height: 60,
+          height: 'calc(60px + env(safe-area-inset-bottom, 0px))',
+          paddingBottom: 'env(safe-area-inset-bottom, 0px)',
           display: 'flex',
-          alignItems: 'center',
+          alignItems: 'flex-start',
           background: activeTab === 'map'
-            ? 'transparent'
+            ? 'rgba(6,13,31,0.92)'
             : 'rgba(245,242,238,0.97)',
           borderTop: activeTab === 'map'
-            ? 'none'
+            ? '1px solid rgba(255,255,255,0.08)'
             : '1px solid rgba(0,0,0,0.08)',
-          zIndex: 200,
+          zIndex: 1000,
           pointerEvents: 'auto',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
         }}
       >
         {/* MAP tab */}

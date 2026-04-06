@@ -1,6 +1,7 @@
 import { EPOCHS } from '../data/epochs';
 import { SNAPSHOT_YEARS } from '../data/types';
 import type { SnapshotYear } from '../data/types';
+import { WORLD_JEWISH_POP, WORLD_TOTAL_POP } from '../data/worldPopulation';
 
 interface Props {
   onViewMap: (year: SnapshotYear) => void;
@@ -15,6 +16,46 @@ function nearestSnapshotYear(target: number): SnapshotYear {
 function formatYearRange(start: number, end: number): string {
   const fmt = (y: number) => (y < 1000 ? `${y} CE` : `${y}`);
   return `${fmt(start)} – ${fmt(end)}`;
+}
+
+function fmtPop(n: number): string {
+  if (n >= 1_000_000) return (n / 1_000_000).toFixed(n >= 10_000_000 ? 1 : 2) + 'M';
+  if (n >= 1_000) return (n / 1000).toFixed(0) + 'k';
+  return n.toString();
+}
+
+function pct(jewish: number, world: number): string {
+  const p = (jewish / world) * 100;
+  if (p < 0.1) return p.toFixed(3) + '%';
+  return p.toFixed(2) + '%';
+}
+
+interface EraStats {
+  startYear: SnapshotYear;
+  endYear: SnapshotYear;
+  startPop: number;
+  endPop: number;
+  startWorldPct: string;
+  endWorldPct: string;
+  changeSign: '+' | '−' | '';
+  changePct: string;
+}
+
+function computeEraStats(epochStart: number, epochEnd: number): EraStats {
+  const inRange = SNAPSHOT_YEARS.filter((y) => y >= epochStart && y <= epochEnd);
+  const startY = inRange[0] ?? nearestSnapshotYear(epochStart);
+  const endY = inRange[inRange.length - 1] ?? nearestSnapshotYear(epochEnd);
+
+  const startPop = WORLD_JEWISH_POP[startY];
+  const endPop = WORLD_JEWISH_POP[endY];
+  const startWorldPct = pct(startPop, WORLD_TOTAL_POP[startY]);
+  const endWorldPct = pct(endPop, WORLD_TOTAL_POP[endY]);
+
+  const delta = endPop - startPop;
+  const changePct = Math.abs((delta / startPop) * 100).toFixed(0) + '%';
+  const changeSign: '+' | '−' | '' = delta > 0 ? '+' : delta < 0 ? '−' : '';
+
+  return { startYear: startY, endYear: endY, startPop, endPop, startWorldPct, endWorldPct, changeSign, changePct };
 }
 
 export default function Explore({ onViewMap }: Props) {
@@ -86,7 +127,7 @@ export default function Explore({ onViewMap }: Props) {
       </div>
 
       {/* Epoch list */}
-      <div style={{ padding: '24px 24px 120px', flexShrink: 0 }}>
+      <div style={{ padding: '24px 16px 120px', flexShrink: 0 }}>
         <div
           style={{
             fontSize: 11,
@@ -103,6 +144,9 @@ export default function Explore({ onViewMap }: Props) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           {EPOCHS.map((epoch) => {
             const targetYear = nearestSnapshotYear(epoch.startYear);
+            const stats = computeEraStats(epoch.startYear, epoch.endYear);
+            const declined = stats.endPop < stats.startPop;
+            const unchanged = stats.startYear === stats.endYear;
 
             return (
               <div
@@ -188,6 +232,84 @@ export default function Explore({ onViewMap }: Props) {
                     >
                       View Map
                     </button>
+                  </div>
+
+                  {/* Population stats bar */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      gap: 6,
+                      marginTop: 10,
+                      marginBottom: 2,
+                      flexWrap: 'wrap',
+                    }}
+                  >
+                    {/* Start pop */}
+                    <div
+                      style={{
+                        flex: '1 1 auto',
+                        minWidth: 90,
+                        background: `${epoch.color}10`,
+                        border: `1px solid ${epoch.color}28`,
+                        borderRadius: 8,
+                        padding: '7px 10px',
+                      }}
+                    >
+                      <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.09em', textTransform: 'uppercase', color: '#999', marginBottom: 2 }}>
+                        {stats.startYear} CE
+                      </div>
+                      <div style={{ fontSize: 16, fontWeight: 800, color: epoch.color, lineHeight: 1 }}>
+                        ~{fmtPop(stats.startPop)}
+                      </div>
+                      <div style={{ fontSize: 10, color: '#888', marginTop: 2 }}>
+                        {stats.startWorldPct} of world
+                      </div>
+                    </div>
+
+                    {/* Arrow / change */}
+                    {!unchanged && (
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          padding: '0 4px',
+                          minWidth: 48,
+                        }}
+                      >
+                        <div style={{ fontSize: 14, color: declined ? '#e74c3c' : '#27ae60' }}>
+                          {declined ? '↓' : '↑'}
+                        </div>
+                        <div style={{ fontSize: 10, fontWeight: 700, color: declined ? '#e74c3c' : '#27ae60' }}>
+                          {stats.changeSign}{stats.changePct}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* End pop */}
+                    {!unchanged && (
+                      <div
+                        style={{
+                          flex: '1 1 auto',
+                          minWidth: 90,
+                          background: `${epoch.color}10`,
+                          border: `1px solid ${epoch.color}28`,
+                          borderRadius: 8,
+                          padding: '7px 10px',
+                        }}
+                      >
+                        <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.09em', textTransform: 'uppercase', color: '#999', marginBottom: 2 }}>
+                          {stats.endYear} {stats.endYear < 1000 ? 'CE' : ''}
+                        </div>
+                        <div style={{ fontSize: 16, fontWeight: 800, color: epoch.color, lineHeight: 1 }}>
+                          ~{fmtPop(stats.endPop)}
+                        </div>
+                        <div style={{ fontSize: 10, color: '#888', marginTop: 2 }}>
+                          {stats.endWorldPct} of world
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Long description */}
