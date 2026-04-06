@@ -2,7 +2,7 @@ import { EPOCHS, getEpochForYear } from '../data/epochs';
 import { COMMUNITIES } from '../data/communities';
 import { WORLD_JEWISH_POP, WORLD_TOTAL_POP } from '../data/worldStats';
 import { SNAPSHOT_YEARS } from '../data/types';
-import type { SnapshotYear, CulturalType } from '../data/types';
+import type { SnapshotYear, CulturalType, NotableFigure } from '../data/types';
 
 const CULTURAL_COLORS: Record<CulturalType, string> = {
   Ashkenazi: '#4a9eff',
@@ -262,6 +262,52 @@ export default function ExploreTab({ currentYear, onSelectEpoch }: Props) {
                             <span style={{ fontSize: 12, color: '#3a2a1a', lineHeight: 1.5 }}>
                               {ev.label}
                             </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Geographic center */}
+                  {epoch.geographicCenter && (
+                    <div style={{ marginBottom: 12 }}>
+                      <div style={{ fontSize: 10, fontWeight: 700, color: '#9a8a7a', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>
+                        Center of Jewish Life
+                      </div>
+                      <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: epoch.color + '14', borderRadius: 20, padding: '5px 12px', border: `1px solid ${epoch.color}33` }}>
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke={epoch.color} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                          <circle cx="12" cy="9" r="2.5"/>
+                        </svg>
+                        <span style={{ fontSize: 12, fontWeight: 600, color: epoch.color }}>{epoch.geographicCenter}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Notable figures */}
+                  {epoch.notableFigures && epoch.notableFigures.length > 0 && (
+                    <div style={{ marginBottom: 12 }}>
+                      <div style={{ fontSize: 10, fontWeight: 700, color: '#9a8a7a', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>
+                        Notable Figures
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                        {epoch.notableFigures.map((fig: NotableFigure) => (
+                          <div key={fig.name} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                            <div style={{
+                              flexShrink: 0, width: 32, height: 32, borderRadius: '50%',
+                              background: epoch.color + '18', border: `1.5px solid ${epoch.color}33`,
+                              display: 'flex', alignItems: 'center', justifyContent: 'center',
+                              fontSize: 13, fontWeight: 800, color: epoch.color,
+                            }}>
+                              {fig.name.charAt(0)}
+                            </div>
+                            <div style={{ flex: 1 }}>
+                              <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, flexWrap: 'wrap' }}>
+                                <span style={{ fontSize: 12, fontWeight: 700, color: '#1a1410' }}>{fig.name}</span>
+                                <span style={{ fontSize: 10, color: '#9a8a7a' }}>{fig.years}</span>
+                              </div>
+                              <div style={{ fontSize: 11, color: '#4a3a2a', lineHeight: 1.5, marginTop: 2 }}>{fig.role}</div>
+                            </div>
                           </div>
                         ))}
                       </div>

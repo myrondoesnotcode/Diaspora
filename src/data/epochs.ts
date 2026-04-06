@@ -16,6 +16,13 @@ export const EPOCHS: Epoch[] = [
       { year: 135, label: 'Hadrian crushes revolt; renames Judea "Syria Palaestina," bans Jews from Jerusalem' },
       { year: 200, label: 'Rabbi Judah HaNasi compiles the Mishnah, fixing the Oral Torah in writing' },
     ],
+    notableFigures: [
+      { name: 'Yohanan ben Zakkai', years: 'c. 30–90 CE', role: 'Saved Judaism by founding the Yavneh academy after the Temple\'s destruction; architect of rabbinic Judaism' },
+      { name: 'Rabbi Akiva', years: 'c. 50–135 CE', role: 'Greatest Talmudic sage; systematized Oral Law; martyred by Rome after supporting the Bar Kokhba revolt' },
+      { name: 'Judah HaNasi', years: 'c. 135–217 CE', role: 'Compiled the Mishnah (~200 CE), fixing Oral Torah in writing and ensuring its survival across the Diaspora' },
+      { name: 'Josephus', years: '37–100 CE', role: 'Historian and general; his Jewish War is our primary source for the Temple\'s destruction and the Great Revolt' },
+    ],
+    geographicCenter: 'Roman Palestine → Babylon',
     sources: [
       'Josephus, *The Jewish War*, c. 75 CE',
       'Schäfer, Peter, *The History of the Jews in the Greco-Roman World*, 2003',
@@ -38,6 +45,13 @@ export const EPOCHS: Epoch[] = [
       { year: 882, label: 'Saadia Gaon born; his *Emunot ve-Deot* pioneers Jewish rationalist philosophy' },
       { year: 960, label: 'Hai Gaon becomes last great Gaon; soon after, Babylonian supremacy begins to wane' },
     ],
+    notableFigures: [
+      { name: 'Saadia Gaon', years: '882–942 CE', role: 'First systematic Jewish philosopher; *Emunot ve-Deot* harmonized Torah with Aristotelian reason' },
+      { name: 'Hai Gaon', years: '939–1038 CE', role: 'Last and greatest of the Geonim; his 1,000+ responsa shaped Jewish law across the entire diaspora' },
+      { name: 'Anan ben David', years: 'c. 715–795 CE', role: 'Founded the Karaite movement, rejecting rabbinic authority — the most serious schism in medieval Judaism' },
+      { name: 'Natronai bar Hilai', years: 'c. 853–858 CE (Gaon)', role: 'Transmitted the Babylonian prayer rite to diaspora communities, standardizing Jewish liturgy worldwide' },
+    ],
+    geographicCenter: 'Babylonia (Iraq)',
     sources: [
       'Brody, Robert, *The Geonim of Babylonia and the Shaping of Medieval Jewish Culture*, 1998',
       'Gil, Moshe, *Jews in Islamic Countries in the Middle Ages*, 2004',
@@ -60,6 +74,13 @@ export const EPOCHS: Epoch[] = [
       { year: 1135, label: 'Maimonides (Moses ben Maimon) born in Córdoba' },
       { year: 1148, label: 'Almohad invasion; mass forced conversions and exile end the Golden Age' },
     ],
+    notableFigures: [
+      { name: 'Samuel ibn Naghrillah', years: '993–1056 CE', role: 'Vizier and military general of Granada — the highest political office ever held by a Jew in medieval Islam' },
+      { name: 'Judah Halevi', years: 'c. 1075–1141 CE', role: 'Greatest Hebrew poet of the age; his *Kuzari* argued for the spiritual primacy of the Land of Israel' },
+      { name: 'Solomon ibn Gabirol', years: 'c. 1021–1058 CE', role: 'Poet-philosopher known in Latin as Avicebron; his *Fons Vitae* influenced Scholastic Christian thought for centuries' },
+      { name: 'Abraham ibn Ezra', years: '1089–1167 CE', role: 'Grammarian, biblical commentator, astronomer, and poet; carried Andalusian Jewish learning across Europe' },
+    ],
+    geographicCenter: 'Umayyad Iberia (Al-Andalus)',
     sources: [
       'Menocal, Maria Rosa, *The Ornament of the World*, 2002',
       'Ashtor, Eliyahu, *The Jews of Moslem Spain*, 3 vols., 1973–1984',
@@ -82,6 +103,13 @@ export const EPOCHS: Epoch[] = [
       { year: 1478, label: 'Spanish Inquisition established; targets Jewish converts (*conversos*) for heresy' },
       { year: 1492, label: 'Alhambra Decree: ~200,000 Jews expelled from Spain within 90 days' },
     ],
+    notableFigures: [
+      { name: 'Maimonides (Rambam)', years: '1138–1204 CE', role: 'Greatest medieval Jewish thinker; *Mishneh Torah* codified all Jewish law; *Guide for the Perplexed* reconciled Torah and Aristotle' },
+      { name: 'Rashi', years: '1040–1105 CE', role: 'Indispensable commentator on Torah and Talmud; his clear annotations remain standard in every traditional Jewish classroom today' },
+      { name: 'Nachmanides (Ramban)', years: '1194–1270 CE', role: 'Led the Barcelona Disputation (1263); his Talmudic and Kabbalistic writings bridge rationalism and mysticism' },
+      { name: 'Isaac Abravanel', years: '1437–1508 CE', role: 'Statesman and biblical commentator; personally pleaded with Ferdinand and Isabella to reverse the 1492 expulsion — and failed' },
+    ],
+    geographicCenter: 'Western Europe → Ottoman Empire',
     sources: [
       'Chazan, Robert, *European Jewry and the First Crusade*, 1987',
       'Netanyahu, Benzion, *The Origins of the Inquisition in Fifteenth Century Spain*, 1995',
@@ -104,6 +132,13 @@ export const EPOCHS: Epoch[] = [
       { year: 1666, label: 'Sabbatai Zevi converts to Islam under Ottoman pressure; movement shatters' },
       { year: 1700, label: 'Israel Ba\'al Shem Tov born; founds Hasidic movement that revives Polish Jewry' },
     ],
+    notableFigures: [
+      { name: 'Joseph Karo', years: '1488–1575 CE', role: 'Codified the *Shulchan Aruch* (1563) in Safed — the authoritative guide to Jewish law still in use today' },
+      { name: 'Isaac Luria (the Ari)', years: '1534–1572 CE', role: 'Founder of Lurianic Kabbalah in Safed; transformed Jewish mysticism and created lasting liturgical traditions' },
+      { name: 'Israel Ba\'al Shem Tov', years: 'c. 1698–1760 CE', role: 'Founded Hasidism in Poland; revolutionary emphasis on joy, prayer, and direct experience of God over dry scholarship' },
+      { name: 'Elijah of Vilna (Vilna Gaon)', years: '1720–1797 CE', role: 'Greatest Talmudic mind of the era; led fierce opposition (*Mitnagdim*) to Hasidism from Vilnius' },
+    ],
+    geographicCenter: 'Poland-Lithuania & Ottoman Empire',
     sources: [
       'Weinryb, Bernard D., *The Jews of Poland*, 1973',
       'Shaw, Stanford, *The Jews of the Ottoman Empire and the Turkish Republic*, 1991',
@@ -126,6 +161,13 @@ export const EPOCHS: Epoch[] = [
       { year: 1858, label: 'Jews admitted to British Parliament; Lionel de Rothschild takes his seat' },
       { year: 1871, label: 'German unification; full legal emancipation for German Jews at last' },
     ],
+    notableFigures: [
+      { name: 'Moses Mendelssohn', years: '1729–1786', role: 'Father of the *Haskalah* (Jewish Enlightenment); translated the Torah into German, arguing Jews could be fully modern citizens' },
+      { name: 'Heinrich Heine', years: '1797–1856', role: 'Greatest German-Jewish poet; his lyric *Lorelei* entered the German canon; wrote: "Where they burn books, they will ultimately burn people also"' },
+      { name: 'Moses Montefiore', years: '1784–1885', role: 'Global philanthropist; used his wealth and connections to intervene for persecuted Jews from Morocco to Russia' },
+      { name: 'Samson Raphael Hirsch', years: '1808–1888', role: 'Founded Neo-Orthodoxy — the synthesis of traditional Judaism with secular education and civic participation' },
+    ],
+    geographicCenter: 'Western & Central Europe',
     sources: [
       'Katz, Jacob, *Out of the Ghetto: The Social Background of Jewish Emancipation 1770–1870*, 1973',
       'Meyer, Michael A., *Response to Modernity: A History of the Reform Movement in Judaism*, 1988',
@@ -148,6 +190,13 @@ export const EPOCHS: Epoch[] = [
       { year: 1911, label: 'Triangle Shirtwaist fire kills 146 garment workers, mostly Jewish immigrant women; spurs labor movement' },
       { year: 1917, label: 'Balfour Declaration: Britain endorses "a national home for the Jewish people" in Palestine' },
     ],
+    notableFigures: [
+      { name: 'Theodor Herzl', years: '1860–1904', role: 'Visionary founder of modern political Zionism; convened the First Zionist Congress (1897) and set the state-building project in motion' },
+      { name: 'Sholem Aleichem', years: '1859–1916', role: '"The Jewish Mark Twain"; created Tevye the Dairyman — the basis of *Fiddler on the Roof* — capturing shtetl life for the ages' },
+      { name: 'Emma Goldman', years: '1869–1940', role: 'Leading anarchist and labor organizer in America; her activism helped shape the U.S. labor movement and free speech protections' },
+      { name: 'Chaim Bialik', years: '1873–1934', role: 'National poet of the Jewish people; his Hebrew verse revived the language and gave voice to the tragedy of the pogroms' },
+    ],
+    geographicCenter: 'Eastern Europe & Lower East Side, NYC',
     sources: [
       'Howe, Irving, *World of Our Fathers*, 1976',
       'Hertzberg, Arthur, *The Zionist Idea*, 1959',
@@ -170,6 +219,13 @@ export const EPOCHS: Epoch[] = [
       { year: 1947, label: 'UN Partition Plan for Palestine passes; Arab-Jewish conflict intensifies' },
       { year: 1948, label: 'State of Israel declared, May 14; Arab-Israeli War begins immediately after' },
     ],
+    notableFigures: [
+      { name: 'David Ben-Gurion', years: '1886–1973', role: 'Declared Israeli independence on May 14, 1948; served as first Prime Minister and architect of the Jewish state' },
+      { name: 'Janusz Korczak', years: '1878–1942', role: 'Pioneering educator and children\'s author; refused rescue to accompany his 192 Warsaw orphans to Treblinka' },
+      { name: 'Hannah Senesh', years: '1921–1944', role: 'Poet and SOE paratrooper who parachuted into Nazi-occupied Europe to rescue Jews; captured and executed at 23' },
+      { name: 'Chaim Weizmann', years: '1874–1952', role: 'Chemist who secured the Balfour Declaration; became Israel\'s first President' },
+    ],
+    geographicCenter: 'Europe (destroyed) → Israel & Americas',
     sources: [
       'Hilberg, Raul, *The Destruction of the European Jews*, 3 vols., 1961',
       'Bauer, Yehuda, *A History of the Holocaust*, 1982',
@@ -192,6 +248,13 @@ export const EPOCHS: Epoch[] = [
       { year: 1990, label: 'Soviet collapse triggers emigration of ~1 million Jews to Israel (1990–2000)' },
       { year: 2024, label: 'Israel\'s Jewish population: ~7 million; world diaspora: ~8 million' },
     ],
+    notableFigures: [
+      { name: 'Golda Meir', years: '1898–1978', role: 'Fourth Prime Minister of Israel; led the country through the Yom Kippur War; first female head of government in the Middle East' },
+      { name: 'Elie Wiesel', years: '1928–2016', role: 'Auschwitz survivor; *Night* became the defining Holocaust memoir; 1986 Nobel Peace Prize for keeping the memory alive' },
+      { name: 'Menachem Begin', years: '1913–1992', role: 'Signed the Camp David Accords with Egypt (1978), achieving the first Arab-Israeli peace treaty; Nobel Peace Prize' },
+      { name: 'Natan Sharansky', years: 'b. 1948', role: 'Soviet dissident imprisoned for nine years; became the global symbol of the Soviet Jewry movement that freed one million Jews' },
+    ],
+    geographicCenter: 'Israel & United States',
     sources: [
       'Laqueur, Walter, *A History of Zionism*, 1972',
       'DellaPergola, Sergio, *World Jewish Population*, American Jewish Year Book, 2020',

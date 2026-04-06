@@ -22,6 +22,12 @@ export interface Migration {
   description: string;
 }
 
+export interface NotableFigure {
+  name: string;
+  years: string;
+  role: string;
+}
+
 export interface Epoch {
   name: string;
   startYear: number;
@@ -30,6 +36,8 @@ export interface Epoch {
   description: string;
   longDescription?: string;
   keyEvents?: { year: number; label: string }[];
+  notableFigures?: NotableFigure[];
+  geographicCenter?: string;
   sources?: string[];
   mapFocus?: { lng: number; lat: number; zoom: number };
 }
