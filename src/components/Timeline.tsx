@@ -17,6 +17,12 @@ function formatYear(y: number): string {
   return y < 1000 ? `${y} CE` : `${y}`;
 }
 
+function fmt(n: number): string {
+  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
+  if (n >= 1_000) return Math.round(n / 1000) + 'k';
+  return n.toString();
+}
+
 export default function Timeline({
   currentYear,
   isPlaying,
@@ -28,35 +34,29 @@ export default function Timeline({
   const epoch = getEpochForYear(currentYear);
   const yearIndex = SNAPSHOT_YEARS.indexOf(currentYear);
   const progress = (yearIndex / (SNAPSHOT_YEARS.length - 1)) * 100;
-
   const sliderRef = useRef<HTMLInputElement>(null);
 
   const handleSliderChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const idx = parseInt(e.target.value, 10);
-      onYearChange(SNAPSHOT_YEARS[idx]);
+      onYearChange(SNAPSHOT_YEARS[parseInt(e.target.value, 10)]);
     },
     [onYearChange]
   );
 
-  function fmt(n: number): string {
-    if (n >= 1_000_000) return (n / 1_000_000).toFixed(2) + 'M';
-    if (n >= 1_000) return (n / 1000).toFixed(0) + 'k';
-    return n.toString();
-  }
-
   return (
-    <div className="timeline-container">
+    <div className="timeline-panel">
       <EpochBar currentYear={currentYear} onSelectYear={onYearChange} />
 
-      <div className="flex items-center gap-4 mt-3">
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 10 }}>
         {/* Play/Pause */}
         <button
           onClick={onPlayPause}
-          className="flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-110 active:scale-95"
           style={{
-            backgroundColor: epoch.color,
+            flexShrink: 0, width: 36, height: 36, borderRadius: '50%',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            background: epoch.color, border: 'none', cursor: 'pointer',
             boxShadow: `0 0 12px ${epoch.color}88`,
+            transition: 'transform 0.1s',
           }}
           aria-label={isPlaying ? 'Pause' : 'Play'}
         >
@@ -72,18 +72,14 @@ export default function Timeline({
           )}
         </button>
 
-        {/* Year display */}
-        <div
-          className="text-2xl font-bold tabular-nums flex-shrink-0 w-24 text-center"
-          style={{ color: epoch.color, textShadow: `0 0 20px ${epoch.color}66` }}
-        >
+        {/* Year */}
+        <div style={{ fontSize: 22, fontWeight: 700, color: epoch.color, flexShrink: 0, width: 80, textAlign: 'center', fontVariantNumeric: 'tabular-nums' }}>
           {formatYear(currentYear)}
         </div>
 
-        {/* Slider */}
-        <div className="flex-1 relative">
-          {/* Tick marks */}
-          <div className="flex justify-between mb-1.5 px-0">
+        {/* Slider + ticks */}
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
             {SNAPSHOT_YEARS.map((y) => {
               const isCurrent = y === currentYear;
               const tickEpoch = getEpochForYear(y);
@@ -91,25 +87,20 @@ export default function Timeline({
                 <button
                   key={y}
                   onClick={() => onYearChange(y)}
-                  className="flex flex-col items-center gap-0.5 group"
-                  style={{ width: `${100 / SNAPSHOT_YEARS.length}%` }}
+                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, background: 'none', border: 'none', cursor: 'pointer', padding: 0, width: `${100 / SNAPSHOT_YEARS.length}%` }}
                   title={formatYear(y)}
                 >
-                  <div
-                    className="w-0.5 transition-all"
-                    style={{
-                      height: isCurrent ? 12 : 6,
-                      backgroundColor: isCurrent ? tickEpoch.color : 'rgba(0,0,0,0.2)',
-                      boxShadow: isCurrent ? `0 0 6px ${tickEpoch.color}` : 'none',
-                    }}
-                  />
-                  <span
-                    className="text-[9px] leading-none transition-all"
-                    style={{
-                      color: isCurrent ? tickEpoch.color : 'rgba(0,0,0,0.35)',
-                      fontWeight: isCurrent ? 700 : 400,
-                    }}
-                  >
+                  <div style={{
+                    width: 2, height: isCurrent ? 12 : 5,
+                    backgroundColor: isCurrent ? tickEpoch.color : 'rgba(0,0,0,0.2)',
+                    boxShadow: isCurrent ? `0 0 6px ${tickEpoch.color}` : 'none',
+                    transition: 'all 0.2s',
+                  }} />
+                  <span style={{
+                    fontSize: 8, lineHeight: 1,
+                    color: isCurrent ? tickEpoch.color : 'rgba(0,0,0,0.3)',
+                    fontWeight: isCurrent ? 700 : 400,
+                  }}>
                     {y < 1000 ? y : y >= 1900 ? String(y).slice(2) : y}
                   </span>
                 </button>
@@ -133,13 +124,11 @@ export default function Timeline({
         </div>
 
         {/* Stats */}
-        <div className="flex-shrink-0 text-right">
-          <div className="text-xs" style={{ color: '#6b5a4a' }}>World Jewish Pop.</div>
-          <div className="font-bold text-sm" style={{ color: epoch.color }}>
-            ~{fmt(totalPopulation)}
-          </div>
+        <div style={{ flexShrink: 0, textAlign: 'right' }}>
+          <div style={{ fontSize: 11, color: '#6b5a4a' }}>World Jewish Pop.</div>
+          <div style={{ fontSize: 13, fontWeight: 700, color: epoch.color }}>~{fmt(totalPopulation)}</div>
           {activeMigrations > 0 && (
-            <div className="text-xs mt-0.5" style={{ color: '#6b5a4a' }}>
+            <div style={{ fontSize: 10, color: '#6b5a4a', marginTop: 1 }}>
               {activeMigrations} migration{activeMigrations !== 1 ? 's' : ''} active
             </div>
           )}

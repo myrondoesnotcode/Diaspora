@@ -76,17 +76,23 @@ export default function App() {
   const activeMigrations = getActiveMigrationCount(currentYear);
 
   return (
-    <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-      {/* Content area — both tabs kept mounted to preserve D3 state */}
-      <div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
-        {/* Map tab */}
+    // position:fixed fills exactly the visible viewport on all mobile browsers
+    <div style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column', background: '#f5f0e8' }}>
+
+      {/* ── Content area ──────────────────────────────────────────────────── */}
+      <div style={{ flex: 1, position: 'relative', overflow: 'hidden', minHeight: 0 }}>
+
+        {/* MAP TAB: flex column — map fills remaining space, timeline below */}
         <div style={{
-          display: activeTab === 'map' ? 'block' : 'none',
-          width: '100%',
-          height: '100%',
-          position: 'relative',
+          position: 'absolute', inset: 0,
+          display: activeTab === 'map' ? 'flex' : 'none',
+          flexDirection: 'column',
         }}>
-          <DiasporaMap year={currentYear} />
+          {/* Map grows to fill */}
+          <div style={{ flex: 1, position: 'relative', overflow: 'hidden', minHeight: 0 }}>
+            <DiasporaMap year={currentYear} />
+          </div>
+          {/* Timeline sits below map, natural height */}
           <Timeline
             currentYear={currentYear}
             isPlaying={isPlaying}
@@ -97,12 +103,11 @@ export default function App() {
           />
         </div>
 
-        {/* Explore tab */}
+        {/* EXPLORE TAB */}
         <div style={{
+          position: 'absolute', inset: 0,
           display: activeTab === 'explore' ? 'flex' : 'none',
           flexDirection: 'column',
-          width: '100%',
-          height: '100%',
           overflowY: 'auto',
           WebkitOverflowScrolling: 'touch',
         } as React.CSSProperties}>
@@ -110,29 +115,20 @@ export default function App() {
         </div>
       </div>
 
-      {/* Bottom tab bar — always cream */}
-      <div
-        style={{
-          height: 56,
-          flexShrink: 0,
-          display: 'flex',
-          borderTop: '1px solid rgba(0,0,0,0.1)',
-          background: '#f5f0e8',
-        }}
-      >
-        {/* MAP tab */}
+      {/* ── Bottom tab bar ────────────────────────────────────────────────── */}
+      <div style={{
+        flexShrink: 0,
+        height: 56,
+        display: 'flex',
+        background: '#f5f0e8',
+        borderTop: '1px solid rgba(0,0,0,0.1)',
+      }}>
         <button
           onClick={() => setActiveTab('map')}
           style={{
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 3,
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
+            flex: 1, display: 'flex', flexDirection: 'column',
+            alignItems: 'center', justifyContent: 'center', gap: 3,
+            background: 'none', border: 'none', cursor: 'pointer',
             color: activeTab === 'map' ? '#e07b39' : '#9a8a7a',
           }}
         >
@@ -141,24 +137,15 @@ export default function App() {
             <line x1="9" y1="3" x2="9" y2="18" />
             <line x1="15" y1="6" x2="15" y2="21" />
           </svg>
-          <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-            Map
-          </span>
+          <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Map</span>
         </button>
 
-        {/* EXPLORE tab */}
         <button
           onClick={() => setActiveTab('explore')}
           style={{
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 3,
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
+            flex: 1, display: 'flex', flexDirection: 'column',
+            alignItems: 'center', justifyContent: 'center', gap: 3,
+            background: 'none', border: 'none', cursor: 'pointer',
             color: activeTab === 'explore' ? '#e07b39' : '#9a8a7a',
           }}
         >
@@ -166,9 +153,7 @@ export default function App() {
             <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
             <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
           </svg>
-          <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-            Explore
-          </span>
+          <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Explore</span>
         </button>
       </div>
     </div>
