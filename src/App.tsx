@@ -77,25 +77,23 @@ export default function App() {
 
   return (
     <div style={{ width: '100vw', height: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-      {/* Map tab content */}
-      {activeTab === 'map' && (
-        <>
-          <DiasporaMap year={currentYear} />
-          <Timeline
-            currentYear={currentYear}
-            isPlaying={isPlaying}
-            onYearChange={handleYearChange}
-            onPlayPause={handlePlayPause}
-            totalPopulation={totalPop}
-            activeMigrations={activeMigrations}
-          />
-        </>
-      )}
+      {/* Map tab — kept mounted so D3 state and world topology fetch are preserved */}
+      <div style={{ display: activeTab === 'map' ? 'contents' : 'none' }}>
+        <DiasporaMap year={currentYear} />
+        <Timeline
+          currentYear={currentYear}
+          isPlaying={isPlaying}
+          onYearChange={handleYearChange}
+          onPlayPause={handlePlayPause}
+          totalPopulation={totalPop}
+          activeMigrations={activeMigrations}
+        />
+      </div>
 
-      {/* Explore tab content */}
-      {activeTab === 'explore' && (
+      {/* Explore tab */}
+      <div style={{ display: activeTab === 'explore' ? 'contents' : 'none' }}>
         <ExploreTab currentYear={currentYear} onSelectEpoch={handleSelectEpoch} />
-      )}
+      </div>
 
       {/* Bottom tab bar */}
       <div
