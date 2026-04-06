@@ -100,7 +100,7 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 12px 24px 16px;
+  padding: 12px 24px 72px; /* 72px = 60px tab bar + 12px breathing room */
   background: linear-gradient(to top, rgba(6, 13, 31, 0.98) 0%, rgba(6, 13, 31, 0.85) 100%);
   backdrop-filter: blur(8px);
 }
