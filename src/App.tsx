@@ -4,7 +4,7 @@ import type { SnapshotYear } from './data/types';
 import { COMMUNITIES } from './data/communities';
 import { MIGRATIONS } from './data/migrations';
 import DiasporaMap from './components/DiasporaMap';
-import Timeline from './components/Timeline';
+import MapOverlay from './components/MapOverlay';
 import ExploreTab from './components/ExploreTab';
 
 type ActiveTab = 'map' | 'explore';
@@ -76,24 +76,18 @@ export default function App() {
   const activeMigrations = getActiveMigrationCount(currentYear);
 
   return (
-    // position:fixed fills exactly the visible viewport on all mobile browsers
     <div style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column', background: '#f5f0e8' }}>
 
-      {/* ── Content area ──────────────────────────────────────────────────── */}
+      {/* Content area */}
       <div style={{ flex: 1, position: 'relative', overflow: 'hidden', minHeight: 0 }}>
 
-        {/* MAP TAB: flex column — map fills remaining space, timeline below */}
+        {/* MAP TAB — full screen map with floating overlay */}
         <div style={{
           position: 'absolute', inset: 0,
-          display: activeTab === 'map' ? 'flex' : 'none',
-          flexDirection: 'column',
+          display: activeTab === 'map' ? 'block' : 'none',
         }}>
-          {/* Map grows to fill */}
-          <div style={{ flex: 1, position: 'relative', overflow: 'hidden', minHeight: 0 }}>
-            <DiasporaMap year={currentYear} />
-          </div>
-          {/* Timeline sits below map, natural height */}
-          <Timeline
+          <DiasporaMap year={currentYear} />
+          <MapOverlay
             currentYear={currentYear}
             isPlaying={isPlaying}
             onYearChange={handleYearChange}
@@ -115,10 +109,9 @@ export default function App() {
         </div>
       </div>
 
-      {/* ── Bottom tab bar ────────────────────────────────────────────────── */}
+      {/* Bottom tab bar */}
       <div style={{
-        flexShrink: 0,
-        height: 56,
+        flexShrink: 0, height: 56,
         display: 'flex',
         background: '#f5f0e8',
         borderTop: '1px solid rgba(0,0,0,0.1)',

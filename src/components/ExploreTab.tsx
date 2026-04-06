@@ -1,4 +1,5 @@
 import { EPOCHS, getEpochForYear } from '../data/epochs';
+import { COMMUNITIES } from '../data/communities';
 import { SNAPSHOT_YEARS } from '../data/types';
 import type { SnapshotYear, CulturalType } from '../data/types';
 
@@ -16,13 +17,24 @@ interface Props {
   onSelectEpoch: (year: SnapshotYear) => void;
 }
 
+function getPopulation(community: { populations: Partial<Record<number, number>> }, year: number): number {
+  const years = Object.keys(community.populations).map(Number).sort((a, b) => a - b);
+  let val = 0;
+  for (const y of years) {
+    if (y <= year) val = community.populations[y] ?? 0;
+  }
+  return val;
+}
+
+function fmt(n: number): string {
+  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
+  if (n >= 1_000) return Math.round(n / 1000) + 'k';
+  return n.toString();
+}
+
 function formatYear(y: number): string {
   if (y <= 0) return `${Math.abs(y)} BCE`;
   return y < 1000 ? `${y} CE` : `${y}`;
-}
-
-function epochDateRange(epoch: (typeof EPOCHS)[0]): string {
-  return `${formatYear(epoch.startYear)} – ${formatYear(epoch.endYear)}`;
 }
 
 function nearestSnapshotYear(midYear: number): SnapshotYear {
@@ -31,238 +43,215 @@ function nearestSnapshotYear(midYear: number): SnapshotYear {
   );
 }
 
+function getTopCommunitiesForEpoch(epoch: typeof EPOCHS[0]): { name: string; pop: number; type: CulturalType }[] {
+  const midYear = nearestSnapshotYear(Math.round((epoch.startYear + epoch.endYear) / 2));
+  return COMMUNITIES
+    .map(c => ({ name: c.name, pop: getPopulation(c, midYear), type: c.culturalType }))
+    .filter(c => c.pop > 0)
+    .sort((a, b) => b.pop - a.pop)
+    .slice(0, 4);
+}
+
 export default function ExploreTab({ currentYear, onSelectEpoch }: Props) {
   const activeEpoch = getEpochForYear(currentYear);
+
+  // Collect all unique sources
+  const allSources = EPOCHS.flatMap(e => e.sources ?? []);
+  const uniqueSources = [...new Set(allSources)];
 
   return (
     <div style={{ background: '#f5f0e8', flex: 1 }}>
       {/* Header */}
-      <div className="px-4 pt-5 pb-3">
-        <div
-          className="text-xs font-bold tracking-widest uppercase mb-1"
-          style={{ color: '#c0392b' }}
-        >
+      <div style={{
+        background: 'linear-gradient(135deg, #2a1000 0%, #0a1428 100%)',
+        color: '#f5f0e8',
+        padding: '24px 20px 20px',
+      }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: '#e07b39', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: 6 }}>
           The Jewish Diaspora
         </div>
-        <div className="text-2xl font-bold" style={{ color: '#1a1a1a' }}>
-          2,000 Years of History
+        <div style={{ fontSize: 26, fontWeight: 800, lineHeight: 1.15, letterSpacing: '-0.02em', marginBottom: 6 }}>
+          2,000 Years of<br />Exile &amp; Return
         </div>
-        <div className="text-sm mt-1" style={{ color: '#6b6b6b' }}>
-          70 CE – 2024 · Scroll to explore every era
+        <div style={{ fontSize: 13, color: 'rgba(245,240,232,0.55)' }}>
+          70 CE – 2024 · Nine eras of history
         </div>
       </div>
 
-      {/* Navigate by Era pills */}
-      <div className="px-4 pb-4">
-        <div
-          className="rounded-2xl p-4"
-          style={{ background: 'rgba(255,255,255,0.7)', border: '1px solid rgba(0,0,0,0.07)' }}
-        >
-          <div
-            className="text-xs font-bold tracking-widest uppercase mb-3"
-            style={{ color: '#555' }}
-          >
-            Navigate by Era
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {EPOCHS.map((epoch) => {
-              const isActive = epoch.name === activeEpoch.name;
-              const midYear = Math.round((epoch.startYear + epoch.endYear) / 2);
-              const targetYear = nearestSnapshotYear(midYear);
-              return (
-                <button
-                  key={epoch.name}
-                  onClick={() => onSelectEpoch(targetYear)}
-                  className="text-xs px-3 py-1.5 rounded-full font-medium transition-all"
-                  style={{
-                    backgroundColor: isActive ? epoch.color : epoch.color + '18',
-                    color: isActive ? '#fff' : epoch.color,
-                    border: `1px solid ${epoch.color}${isActive ? 'ff' : '44'}`,
-                    boxShadow: isActive ? `0 2px 8px ${epoch.color}55` : 'none',
-                  }}
-                >
-                  {epoch.name}
-                </button>
-              );
-            })}
-          </div>
-        </div>
+      {/* Intro blurb */}
+      <div style={{ padding: '16px 20px 4px' }}>
+        <p style={{ fontSize: 13, color: '#4a3a2a', lineHeight: 1.65, margin: 0 }}>
+          The Jewish Diaspora — the dispersion of Jewish communities from the ancient homeland in Judea — is one of history's longest and most consequential migrations. From the destruction of Jerusalem in 70 CE to the founding of Israel in 1948, Jewish communities maintained a living culture, a continuous legal tradition, and an unbroken sense of collective identity across 2,000 years and every continent.
+        </p>
       </div>
 
       {/* Vertical timeline */}
-      <div className="px-4 pb-2">
-        <div
-          className="text-xs font-bold tracking-widest uppercase mb-4"
-          style={{ color: '#555' }}
-        >
-          Timeline
+      <div style={{ padding: '20px 20px 0' }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: '#6b5a4a', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 16 }}>
+          Nine Eras of History
         </div>
 
-        <div className="relative">
-          {/* Vertical line */}
-          <div
-            className="absolute top-0 bottom-0"
-            style={{ left: 11, width: 2, background: 'rgba(0,0,0,0.1)' }}
-          />
+        <div style={{ position: 'relative' }}>
+          {/* Vertical connector */}
+          <div style={{
+            position: 'absolute', left: 11, top: 0, bottom: 0, width: 2,
+            background: 'linear-gradient(to bottom, transparent, rgba(0,0,0,0.1) 4%, rgba(0,0,0,0.1) 96%, transparent)',
+          }} />
 
-          <div className="flex flex-col gap-0">
-            {EPOCHS.map((epoch, i) => {
-              const isActive = epoch.name === activeEpoch.name;
-              const midYear = Math.round((epoch.startYear + epoch.endYear) / 2);
-              const targetYear = nearestSnapshotYear(midYear);
-              const isLast = i === EPOCHS.length - 1;
+          {EPOCHS.map((epoch, i) => {
+            const isActive = epoch.name === activeEpoch.name;
+            const targetYear = nearestSnapshotYear(Math.round((epoch.startYear + epoch.endYear) / 2));
+            const topCommunities = getTopCommunitiesForEpoch(epoch);
 
-              return (
-                <div key={epoch.name} className={isLast ? 'pb-0' : 'pb-6'}>
-                  <div className="flex gap-4">
-                    {/* Dot */}
-                    <div className="flex-shrink-0 flex flex-col items-center" style={{ width: 24 }}>
-                      <div
-                        className="rounded-full transition-all"
-                        style={{
-                          width: isActive ? 22 : 16,
-                          height: isActive ? 22 : 16,
-                          backgroundColor: epoch.color,
-                          border: `3px solid ${isActive ? epoch.color : '#f5f0e8'}`,
-                          boxShadow: isActive ? `0 0 0 3px ${epoch.color}44` : 'none',
-                          marginTop: 2,
-                          marginLeft: isActive ? -3 : 0,
-                        }}
-                      />
+            return (
+              <div key={epoch.name} style={{ paddingLeft: 32, paddingBottom: i < EPOCHS.length - 1 ? 28 : 0, position: 'relative' }}>
+                {/* Dot */}
+                <div style={{
+                  position: 'absolute', left: 4, top: 3,
+                  width: isActive ? 18 : 14, height: isActive ? 18 : 14,
+                  marginLeft: isActive ? -2 : 0,
+                  borderRadius: '50%',
+                  backgroundColor: epoch.color,
+                  boxShadow: isActive ? `0 0 0 4px ${epoch.color}33, 0 0 14px ${epoch.color}66` : '0 1px 3px rgba(0,0,0,0.15)',
+                  zIndex: 1,
+                }} />
+
+                {/* Card */}
+                <div style={{
+                  background: isActive ? '#fff' : 'rgba(255,255,255,0.65)',
+                  borderRadius: 14,
+                  padding: '14px 16px',
+                  border: `1px solid ${isActive ? epoch.color + '55' : 'rgba(0,0,0,0.06)'}`,
+                  boxShadow: isActive ? `0 3px 20px ${epoch.color}22` : '0 1px 4px rgba(0,0,0,0.06)',
+                }}>
+                  {/* Title row */}
+                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8, marginBottom: 6 }}>
+                    <div>
+                      <div style={{ fontSize: 15, fontWeight: 700, color: isActive ? epoch.color : '#1a1410', lineHeight: 1.2 }}>
+                        {epoch.name}
+                      </div>
+                      <div style={{ fontSize: 11, color: '#9a8a7a', marginTop: 2 }}>
+                        {formatYear(epoch.startYear)} – {epoch.endYear}
+                      </div>
                     </div>
-
-                    {/* Card */}
-                    <div
-                      className="flex-1 rounded-2xl p-4 transition-all"
+                    <button
+                      onClick={() => onSelectEpoch(targetYear)}
                       style={{
-                        background: isActive
-                          ? `${epoch.color}12`
-                          : 'rgba(255,255,255,0.65)',
-                        border: `1px solid ${isActive ? epoch.color + '44' : 'rgba(0,0,0,0.06)'}`,
-                        boxShadow: isActive ? `0 2px 16px ${epoch.color}22` : 'none',
+                        flexShrink: 0, padding: '4px 10px',
+                        borderRadius: 20, border: `1px solid ${epoch.color}55`,
+                        background: epoch.color + '14', color: epoch.color,
+                        fontSize: 10, fontWeight: 700, cursor: 'pointer',
+                        letterSpacing: '0.04em', textTransform: 'uppercase',
+                        whiteSpace: 'nowrap',
                       }}
                     >
-                      {/* Epoch name + date */}
-                      <div className="flex items-start justify-between gap-2 mb-2">
-                        <div
-                          className="text-base font-bold leading-tight"
-                          style={{ color: isActive ? epoch.color : '#1a1a1a' }}
-                        >
-                          {epoch.name}
-                        </div>
-                        <button
-                          onClick={() => onSelectEpoch(targetYear)}
-                          className="flex-shrink-0 text-xs px-2 py-0.5 rounded-full font-medium"
-                          style={{
-                            backgroundColor: epoch.color + '20',
-                            color: epoch.color,
-                            border: `1px solid ${epoch.color}44`,
-                          }}
-                        >
-                          View on map
-                        </button>
-                      </div>
-
-                      <div className="text-xs font-semibold mb-2" style={{ color: '#888' }}>
-                        {epochDateRange(epoch)}
-                      </div>
-
-                      {/* Long description */}
-                      <p className="text-sm leading-relaxed mb-3" style={{ color: '#333' }}>
-                        {epoch.longDescription ?? epoch.description}
-                      </p>
-
-                      {/* Key events */}
-                      {epoch.keyEvents && epoch.keyEvents.length > 0 && (
-                        <div className="flex flex-col gap-1.5">
-                          {epoch.keyEvents.map((ev) => (
-                            <div key={ev.year} className="flex items-start gap-2">
-                              <div
-                                className="flex-shrink-0 text-xs font-bold tabular-nums mt-0.5 px-1.5 py-0.5 rounded"
-                                style={{
-                                  background: epoch.color + '20',
-                                  color: epoch.color,
-                                  minWidth: 44,
-                                  textAlign: 'center',
-                                }}
-                              >
-                                {formatYear(ev.year)}
-                              </div>
-                              <div className="text-xs leading-relaxed" style={{ color: '#444' }}>
-                                {ev.label}
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
+                      View map
+                    </button>
                   </div>
+
+                  {/* Description */}
+                  <p style={{ fontSize: 13, color: '#2a1a0a', lineHeight: 1.6, margin: '0 0 12px' }}>
+                    {epoch.longDescription ?? epoch.description}
+                  </p>
+
+                  {/* Key events */}
+                  {epoch.keyEvents && epoch.keyEvents.length > 0 && (
+                    <div style={{ marginBottom: 12 }}>
+                      <div style={{ fontSize: 10, fontWeight: 700, color: '#9a8a7a', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 7 }}>
+                        Key Events
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+                        {epoch.keyEvents.map((ev) => (
+                          <div key={ev.year} style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+                            <span style={{
+                              flexShrink: 0, fontSize: 10, fontWeight: 700,
+                              color: epoch.color,
+                              background: epoch.color + '14',
+                              borderRadius: 4, padding: '1px 6px',
+                              minWidth: 44, textAlign: 'center',
+                            }}>
+                              {formatYear(ev.year)}
+                            </span>
+                            <span style={{ fontSize: 12, color: '#3a2a1a', lineHeight: 1.5 }}>
+                              {ev.label}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Top communities for this epoch */}
+                  {topCommunities.length > 0 && (
+                    <div>
+                      <div style={{ fontSize: 10, fontWeight: 700, color: '#9a8a7a', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>
+                        Major Communities
+                      </div>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
+                        {topCommunities.map(c => (
+                          <div key={c.name} style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'rgba(0,0,0,0.04)', borderRadius: 20, padding: '3px 8px' }}>
+                            <div style={{ width: 7, height: 7, borderRadius: '50%', backgroundColor: CULTURAL_COLORS[c.type], flexShrink: 0 }} />
+                            <span style={{ fontSize: 11, color: '#2a1a0a' }}>{c.name}</span>
+                            <span style={{ fontSize: 10, color: '#9a8a7a' }}>{fmt(c.pop)}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              );
-            })}
-          </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      {/* Cultural Tradition legend */}
-      <div className="px-4 pb-4 mt-2">
-        <div
-          className="rounded-2xl p-4"
-          style={{ background: 'rgba(255,255,255,0.7)', border: '1px solid rgba(0,0,0,0.07)' }}
-        >
-          <div
-            className="text-xs font-bold tracking-widest uppercase mb-3"
-            style={{ color: '#555' }}
-          >
-            Cultural Tradition
+      {/* Legend */}
+      <div style={{ padding: '28px 20px 8px' }}>
+        <div style={{ background: 'rgba(255,255,255,0.7)', borderRadius: 16, padding: '16px', border: '1px solid rgba(0,0,0,0.06)' }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: '#6b5a4a', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 10 }}>
+            Cultural Traditions
           </div>
-          <div className="flex flex-wrap gap-x-4 gap-y-2">
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px 16px', marginBottom: 14 }}>
             {(Object.entries(CULTURAL_COLORS) as [CulturalType, string][]).map(([type, color]) => (
-              <div key={type} className="flex items-center gap-2">
-                <div
-                  className="w-3 h-3 rounded-full flex-shrink-0"
-                  style={{ backgroundColor: color }}
-                />
-                <span className="text-sm" style={{ color: '#333' }}>
-                  {type}
-                </span>
+              <div key={type} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <div style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: color, flexShrink: 0 }} />
+                <span style={{ fontSize: 12, color: '#2a1a0a' }}>{type}</span>
               </div>
             ))}
           </div>
-
-          <div
-            className="mt-3 pt-3"
-            style={{ borderTop: '1px solid rgba(0,0,0,0.07)' }}
-          >
-            <div
-              className="text-xs font-bold tracking-widest uppercase mb-3"
-              style={{ color: '#555' }}
-            >
-              Migration Type
-            </div>
-            <div className="flex gap-6">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-0.5 rounded" style={{ background: '#ff4444' }} />
-                <span className="text-sm" style={{ color: '#333' }}>
-                  Forced migration
-                </span>
+          <div style={{ fontSize: 11, fontWeight: 700, color: '#6b5a4a', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>
+            Migration Types
+          </div>
+          <div style={{ display: 'flex', gap: 20 }}>
+            {[['#ff4444', 'Forced', 'Expulsions, persecution, flight'], ['#44aaff', 'Voluntary', 'Trade, opportunity, religious pilgrimage']] .map(([color, label, sub]) => (
+              <div key={label} style={{ display: 'flex', alignItems: 'flex-start', gap: 7 }}>
+                <div style={{ width: 18, height: 2, backgroundColor: color, marginTop: 7, flexShrink: 0, borderRadius: 1 }} />
+                <div>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: '#1a1410' }}>{label}</div>
+                  <div style={{ fontSize: 10, color: '#9a8a7a', marginTop: 1 }}>{sub}</div>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-0.5 rounded" style={{ background: '#44aaff' }} />
-                <span className="text-sm" style={{ color: '#333' }}>
-                  Voluntary
-                </span>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
 
       {/* Sources */}
-      <div className="px-4 pb-8">
-        <div className="text-xs" style={{ color: '#999' }}>
-          * Population estimates from DellaPergola (2001) and supplementary sources. Community data is
-          illustrative and not exhaustive.
+      <div style={{ padding: '8px 20px 32px' }}>
+        <div style={{ background: 'rgba(255,255,255,0.7)', borderRadius: 16, padding: '16px', border: '1px solid rgba(0,0,0,0.06)' }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: '#6b5a4a', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 10 }}>
+            Sources &amp; Further Reading
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+            {uniqueSources.map((source, i) => (
+              <div key={i} style={{ fontSize: 11, color: '#4a3a2a', lineHeight: 1.5 }}>
+                · {source}
+              </div>
+            ))}
+            <div style={{ fontSize: 11, color: '#9a8a7a', marginTop: 6, lineHeight: 1.5 }}>
+              Population estimates: DellaPergola, Sergio. "World Jewish Population." <em>American Jewish Year Book</em>, 2020. Community data is illustrative; absolute figures carry historical uncertainty.
+            </div>
+          </div>
         </div>
       </div>
     </div>
