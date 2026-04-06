@@ -1,26 +1,13 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { SNAPSHOT_YEARS } from './data/types';
 import type { SnapshotYear } from './data/types';
-import { COMMUNITIES } from './data/communities';
 import { MIGRATIONS } from './data/migrations';
+import { WORLD_JEWISH_POP, WORLD_TOTAL_POP } from './data/worldPopulation';
 import DiasporaMap from './components/DiasporaMap';
 import Timeline from './components/Timeline';
 import Explore from './components/Explore';
 
 type Tab = 'map' | 'explore';
-
-function getPopulation(year: number): number {
-  let total = 0;
-  for (const c of COMMUNITIES) {
-    const years = Object.keys(c.populations).map(Number).sort((a, b) => a - b);
-    let val = 0;
-    for (const y of years) {
-      if (y <= year) val = c.populations[y] ?? 0;
-    }
-    total += val;
-  }
-  return total;
-}
 
 function getActiveMigrationCount(year: number): number {
   return MIGRATIONS.filter((m) => year >= m.startYear && year <= m.endYear).length;
@@ -72,7 +59,8 @@ export default function App() {
     setActiveTab('map');
   }, []);
 
-  const totalPop = getPopulation(currentYear);
+  const totalPop = WORLD_JEWISH_POP[currentYear];
+  const worldPop = WORLD_TOTAL_POP[currentYear];
   const activeMigrations = getActiveMigrationCount(currentYear);
 
   return (
@@ -93,6 +81,7 @@ export default function App() {
           onYearChange={handleYearChange}
           onPlayPause={handlePlayPause}
           totalPopulation={totalPop}
+          worldPopulation={worldPop}
           activeMigrations={activeMigrations}
         />
       </div>

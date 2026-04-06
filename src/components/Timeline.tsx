@@ -10,6 +10,7 @@ interface Props {
   onYearChange: (year: SnapshotYear) => void;
   onPlayPause: () => void;
   totalPopulation: number;
+  worldPopulation: number;
   activeMigrations: number;
 }
 
@@ -23,6 +24,7 @@ export default function Timeline({
   onYearChange,
   onPlayPause,
   totalPopulation,
+  worldPopulation,
   activeMigrations,
 }: Props) {
   const epoch = getEpochForYear(currentYear);
@@ -137,6 +139,9 @@ export default function Timeline({
           <div className="text-xs text-slate-400">World Jewish Pop.</div>
           <div className="font-bold text-sm" style={{ color: epoch.color }}>
             ~{fmt(totalPopulation)}
+          </div>
+          <div className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.35)' }}>
+            {((totalPopulation / worldPopulation) * 100).toFixed(2)}% of humanity
           </div>
           {activeMigrations > 0 && (
             <div className="text-xs text-slate-400 mt-0.5">
