@@ -1014,7 +1014,7 @@ export const COMMUNITIES: Community[] = [
     significance: 'After the Temple\'s destruction in 70 CE, Yohanan ben Zakkai smuggled himself out of besieged Jerusalem and founded the rabbinic academy at Yavne. Here the sages reconstituted the Sanhedrin, fixed the biblical canon, and transformed Judaism from a Temple-based sacrificial religion into one centered on prayer, study, and law — ensuring its survival for two millennia.',
     populations: {
       [-1800]: 0, [-1000]: 500, [-586]: 300, [-516]: 200, [-167]: 1000,
-      70: 5000, 200: 8000, 500: 2000, 700: 500, 1000: 200,
+      70: 5000, 200: 8000, 500: 0, 700: 0, 1000: 0,
       1170: 0, 1300: 0, 1492: 0, 1550: 0, 1650: 0,
       1800: 0, 1850: 0, 1900: 0, 1939: 0, 1948: 2000,
       1970: 15000, 2000: 32000, 2024: 50000,
@@ -1117,7 +1117,7 @@ export const COMMUNITIES: Community[] = [
     populations: {
       [-1800]: 0, [-1000]: 0, [-586]: 0, [-516]: 0, [-167]: 0,
       70: 0, 200: 0, 500: 0, 700: 0, 1000: 0,
-      1170: 0, 1300: 0, 1492: 0, 1550: 0, 1650: 100,
+      1170: 0, 1300: 0, 1492: 0, 1550: 0, 1650: 500,
       1800: 2000, 1850: 2500, 1900: 1500, 1939: 700, 1948: 700,
       1970: 700, 2000: 350, 2024: 250,
     },
