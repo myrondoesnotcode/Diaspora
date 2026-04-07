@@ -104,8 +104,8 @@ export const COMMUNITIES: Community[] = [
     culturalType: 'Mixed',
     significance: 'Holy city and spiritual center of the Jewish people for three millennia.',
     populations: {
-      [-1800]: 500, [-1000]: 30000, [-586]: 25000, [-516]: 15000, [-167]: 50000,
-      70: 80000, 200: 20000, 500: 15000, 700: 12000, 1000: 8000,
+      [-1800]: 500, [-1000]: 30000, [-586]: 25000, [-516]: 15000, [-167]: 120000,
+      70: 400000, 200: 20000, 500: 15000, 700: 12000, 1000: 8000,
       1170: 7000, 1300: 5000, 1492: 5000, 1550: 12000, 1650: 8000,
       1800: 8000, 1850: 15000, 1900: 40000, 1939: 85000, 1948: 100000,
       1970: 195000, 2000: 450000, 2024: 570000,
@@ -150,8 +150,8 @@ export const COMMUNITIES: Community[] = [
     culturalType: 'Mizrahi',
     significance: 'Seat of the great yeshivot (Sura, Pumbedita) and Gaonic leadership for centuries.',
     populations: {
-      [-1800]: 0, [-1000]: 0, [-586]: 50000, [-516]: 80000, [-167]: 100000,
-      70: 150000, 200: 200000, 500: 300000, 700: 250000, 1000: 200000,
+      [-1800]: 0, [-1000]: 0, [-586]: 50000, [-516]: 80000, [-167]: 180000,
+      70: 250000, 200: 200000, 500: 300000, 700: 200000, 1000: 180000,
       1170: 150000, 1300: 120000, 1492: 100000, 1550: 80000, 1650: 80000,
       1800: 70000, 1850: 80000, 1900: 80000, 1939: 90000, 1948: 80000,
       1970: 6000, 2000: 100, 2024: 5,
@@ -166,8 +166,8 @@ export const COMMUNITIES: Community[] = [
     culturalType: 'Sephardic',
     significance: 'Home to a large Hellenistic Jewish community; Philo wrote here.',
     populations: {
-      [-1800]: 0, [-1000]: 0, [-586]: 5000, [-516]: 8000, [-167]: 50000,
-      70: 100000, 200: 60000, 500: 30000, 700: 20000, 1000: 15000,
+      [-1800]: 0, [-1000]: 0, [-586]: 5000, [-516]: 8000, [-167]: 120000,
+      70: 180000, 200: 60000, 500: 30000, 700: 20000, 1000: 15000,
       1170: 12000, 1300: 10000, 1492: 8000, 1550: 8000, 1650: 8000,
       1800: 12000, 1850: 18000, 1900: 30000, 1939: 65000, 1948: 55000,
       1970: 1000, 2000: 100, 2024: 50,
@@ -1150,7 +1150,7 @@ export const COMMUNITIES: Community[] = [
     significance: 'For over 800 years (3rd–11th century CE), the twin academies of Sura (near modern Hillah) and Pumbedita (near modern Fallujah) served as the undisputed intellectual capital of world Jewry. Here the Babylonian Talmud was compiled and edited. The Geonim — heads of these academies — issued responsa that shaped Jewish law from Spain to India. Their Yarchei Kallah (biannual study assemblies) drew thousands.',
     populations: {
       [-1800]: 0, [-1000]: 0, [-586]: 5000, [-516]: 3000, [-167]: 10000,
-      70: 20000, 200: 50000, 500: 80000, 700: 100000, 1000: 30000,
+      70: 20000, 200: 50000, 500: 80000, 700: 90000, 1000: 50000,
       1170: 5000, 1300: 2000, 1492: 0, 1550: 0, 1650: 0,
       1800: 0, 1850: 0, 1900: 0, 1939: 0, 1948: 0,
       1970: 0, 2000: 0, 2024: 0,
@@ -1167,7 +1167,7 @@ export const COMMUNITIES: Community[] = [
     significance: 'The Khazar Khaganate, a Turkic empire controlling the Volga-Don trade routes, adopted Judaism as its state religion around 740 CE — the only large-scale conversion to Judaism in recorded history. The Khazar correspondence with Hasdai ibn Shaprut of Córdoba (c. 960) and Judah Halevi\'s *Kuzari* (1140) kept the memory alive. The empire fell to the Rus\' around 969 CE. Its legacy remains debated by historians.',
     populations: {
       [-1800]: 0, [-1000]: 0, [-586]: 0, [-516]: 0, [-167]: 0,
-      70: 0, 200: 0, 500: 0, 700: 5000, 1000: 30000,
+      70: 0, 200: 0, 500: 0, 700: 1000, 1000: 30000,
       1170: 0, 1300: 0, 1492: 0, 1550: 0, 1650: 0,
       1800: 0, 1850: 0, 1900: 0, 1939: 0, 1948: 0,
       1970: 0, 2000: 0, 2024: 0,

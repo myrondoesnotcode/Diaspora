@@ -18,13 +18,13 @@ export const WORLD_JEWISH_POP: Record<SnapshotYear, number> = {
   [-167]: 2_500_000,    // Late Second Temple period; large communities in Egypt, Babylon, Judea
   70:   5_000_000,   // Peak diaspora just after Temple destruction; large communities in Babylon, Egypt, Rome
   200:  3_200_000,   // ~35% drop: Bar Kokhba revolt (132–135 CE) devastated Judean Jewry
-  500:  3_000_000,   // Gradual decline under Byzantine restrictions
-  700:  3_000_000,   // Stable under early Islamic rule; Babylonian academies thriving
+  500:  2_500_000,   // Continued decline under Byzantine restrictions and Justinian plague
+  700:  2_000_000,   // Late-antiquity decline stabilizing under early Islamic rule; Babylonian academies thriving
   1000: 1_500_000,   // Long-term decline through Late Antiquity; Crusades not yet begun
   1170: 1_500_000,   // First Crusade (1096) massacres; stagnation in Western Europe
   1300: 1_500_000,   // Before the Black Death (1347–51); pre-expulsion from England (1290)
-  1492: 1_000_000,   // Year of Spanish expulsion; major communities expelled from Iberia
-  1550: 1_100_000,   // Sephardic refugees settling in Ottoman Empire, North Africa
+  1492: 1_500_000,   // Year of Spanish expulsion; Spain alone had 200–400K; Ottoman, North Africa, Poland substantial
+  1550: 1_200_000,   // Post-expulsion disruption; Sephardic refugees settling in Ottoman Empire, North Africa
   1650: 1_500_000,   // Polish-Lithuanian & Ottoman communities at height; pre-Khmelnytsky
   1800: 2_500_000,   // Post-Enlightenment; growth in Eastern Europe (Pale of Settlement)
   1850: 5_000_000,   // Rapid growth in Europe; Emancipation era
