@@ -1001,4 +1001,176 @@ export const COMMUNITIES: Community[] = [
       1970: 130000, 2000: 100000, 2024: 95000,
     },
   },
+
+  // ── New Additions: Historically Significant Missing Communities ─────────────
+
+  // Yavne — Birthplace of Rabbinic Judaism
+  {
+    id: 'yavne',
+    name: 'Yavne (Jamnia)',
+    lat: 31.88,
+    lng: 34.73,
+    culturalType: 'Ancient',
+    significance: 'After the Temple\'s destruction in 70 CE, Yohanan ben Zakkai smuggled himself out of besieged Jerusalem and founded the rabbinic academy at Yavne. Here the sages reconstituted the Sanhedrin, fixed the biblical canon, and transformed Judaism from a Temple-based sacrificial religion into one centered on prayer, study, and law — ensuring its survival for two millennia.',
+    populations: {
+      [-1800]: 0, [-1000]: 500, [-586]: 300, [-516]: 200, [-167]: 1000,
+      70: 5000, 200: 8000, 500: 2000, 700: 500, 1000: 200,
+      1170: 0, 1300: 0, 1492: 0, 1550: 0, 1650: 0,
+      1800: 0, 1850: 0, 1900: 0, 1939: 0, 1948: 2000,
+      1970: 15000, 2000: 32000, 2024: 50000,
+    },
+  },
+
+  // Medina (Yathrib) — Pre-Islamic Jewish Arabia
+  {
+    id: 'medina',
+    name: 'Medina (Yathrib)',
+    lat: 24.47,
+    lng: 39.61,
+    culturalType: 'Ancient',
+    significance: 'Three major Jewish tribes — Banu Qaynuqa, Banu Nadir, and Banu Qurayza — lived in Yathrib (Medina) for centuries before Islam. They were farmers, goldsmiths, and poets who deeply influenced Arabian culture. Muhammad\'s Constitution of Medina (622 CE) initially granted them protected status, but escalating conflict led to their expulsion and, in the case of Banu Qurayza, massacre (624–628 CE).',
+    populations: {
+      [-1800]: 0, [-1000]: 0, [-586]: 500, [-516]: 800, [-167]: 2000,
+      70: 5000, 200: 8000, 500: 12000, 700: 0, 1000: 0,
+      1170: 0, 1300: 0, 1492: 0, 1550: 0, 1650: 0,
+      1800: 0, 1850: 0, 1900: 0, 1939: 0, 1948: 0,
+      1970: 0, 2000: 0, 2024: 0,
+    },
+  },
+
+  // Djerba — Ancient Tunisian community
+  {
+    id: 'djerba',
+    name: 'Djerba, Tunisia',
+    lat: 33.81,
+    lng: 10.86,
+    culturalType: 'Sephardic',
+    significance: 'Legend holds that priests fleeing the First Temple\'s destruction in 586 BCE brought a door from the Temple to Djerba and built the El Ghriba synagogue — one of the oldest in Africa and a continuous pilgrimage site for 2,500 years. The island\'s Jewish community survived every upheaval from Rome to the Almohads to modern Tunisia, making it one of the most enduring in the diaspora.',
+    populations: {
+      [-1800]: 0, [-1000]: 0, [-586]: 500, [-516]: 800, [-167]: 2000,
+      70: 3000, 200: 3000, 500: 2500, 700: 2000, 1000: 3000,
+      1170: 3500, 1300: 4000, 1492: 5000, 1550: 5500, 1650: 4000,
+      1800: 4000, 1850: 4500, 1900: 5000, 1939: 5500, 1948: 5000,
+      1970: 2000, 2000: 1200, 2024: 1000,
+    },
+  },
+
+  // Speyer — Third ShUM city
+  {
+    id: 'speyer',
+    name: 'Speyer (ShUM Cities)',
+    lat: 49.32,
+    lng: 8.43,
+    culturalType: 'Ashkenazi',
+    significance: 'Speyer, with Worms and Mainz, formed the ShUM cities (שו״ם) — the cradle of Ashkenazi Judaism. Bishop Rüdiger\'s 1084 charter invited Jews to settle, granting unprecedented protections. The ShUM communities produced foundational Ashkenazi liturgy, legal customs (minhagim), and the Takkanot ShUM — communal ordinances that governed Jewish life across Central Europe for centuries. UNESCO recognized them as a World Heritage Site in 2021.',
+    populations: {
+      [-1800]: 0, [-1000]: 0, [-586]: 0, [-516]: 0, [-167]: 0,
+      70: 0, 200: 0, 500: 0, 700: 0, 1000: 500,
+      1170: 3000, 1300: 2000, 1492: 500, 1550: 300, 1650: 200,
+      1800: 300, 1850: 500, 1900: 800, 1939: 250, 1948: 0,
+      1970: 0, 2000: 50, 2024: 100,
+    },
+  },
+
+  // Livorno — Major Sephardic haven
+  {
+    id: 'livorno',
+    name: 'Livorno (Leghorn), Italy',
+    lat: 43.55,
+    lng: 10.31,
+    culturalType: 'Sephardic',
+    significance: 'The Medici Grand Dukes issued the "Livornina" charter (1593) specifically inviting Jewish settlement with extraordinary freedoms — no ghetto, no special clothing, freedom to trade. Sephardic refugees poured in from Iberia and the Ottoman Empire, making Livorno the only major Italian city where Jews were never ghettoized. It became a hub of Sephardic printing, commerce, and Mediterranean trade networks.',
+    populations: {
+      [-1800]: 0, [-1000]: 0, [-586]: 0, [-516]: 0, [-167]: 0,
+      70: 0, 200: 0, 500: 0, 700: 0, 1000: 0,
+      1170: 0, 1300: 0, 1492: 0, 1550: 500, 1650: 3000,
+      1800: 5000, 1850: 4000, 1900: 3000, 1939: 2500, 1948: 1500,
+      1970: 800, 2000: 600, 2024: 500,
+    },
+  },
+
+  // Recife — First Jewish community in the Americas
+  {
+    id: 'recife',
+    name: 'Recife, Brazil',
+    lat: -8.05,
+    lng: -34.87,
+    culturalType: 'Sephardic',
+    significance: 'Under Dutch rule (1630–1654), Recife hosted the first organized Jewish community in the Americas — Kahal Zur Israel, with the first synagogue in the New World. When Portugal reconquered Recife in 1654, most Jews fled. Twenty-three sailed to New Amsterdam, founding what would become the Jewish community of New York — the seed of American Jewry.',
+    populations: {
+      [-1800]: 0, [-1000]: 0, [-586]: 0, [-516]: 0, [-167]: 0,
+      70: 0, 200: 0, 500: 0, 700: 0, 1000: 0,
+      1170: 0, 1300: 0, 1492: 0, 1550: 0, 1650: 1500,
+      1800: 0, 1850: 0, 1900: 500, 1939: 1000, 1948: 1500,
+      1970: 1500, 2000: 1200, 2024: 1000,
+    },
+  },
+
+  // Curaçao — Oldest continuous synagogue in the Americas
+  {
+    id: 'curacao',
+    name: 'Curaçao',
+    lat: 12.17,
+    lng: -68.98,
+    culturalType: 'Sephardic',
+    significance: 'Sephardic Jews from Amsterdam and Recife settled Curaçao from the 1650s, building Mikvé Israel-Emanuel — the oldest synagogue in continuous use in the Americas (consecrated 1732). Its sand-covered floor commemorates the Israelites\' desert wanderings. At its peak, Jews comprised over a third of the island\'s European population and dominated Caribbean trade networks.',
+    populations: {
+      [-1800]: 0, [-1000]: 0, [-586]: 0, [-516]: 0, [-167]: 0,
+      70: 0, 200: 0, 500: 0, 700: 0, 1000: 0,
+      1170: 0, 1300: 0, 1492: 0, 1550: 0, 1650: 100,
+      1800: 2000, 1850: 2500, 1900: 1500, 1939: 700, 1948: 700,
+      1970: 700, 2000: 350, 2024: 250,
+    },
+  },
+
+  // Dura-Europos — Ancient synagogue with stunning frescoes
+  {
+    id: 'dura-europos',
+    name: 'Dura-Europos',
+    lat: 34.75,
+    lng: 40.73,
+    culturalType: 'Ancient',
+    significance: 'This Roman frontier city on the Euphrates yielded one of archaeology\'s greatest Jewish discoveries: a 3rd-century CE synagogue with brilliantly preserved wall frescoes depicting biblical scenes — Moses at the Red Sea, Ezekiel\'s vision, the Temple of Solomon. These paintings revolutionized understanding of ancient Jewish art, proving that the ban on images was not universally observed.',
+    populations: {
+      [-1800]: 0, [-1000]: 0, [-586]: 0, [-516]: 0, [-167]: 500,
+      70: 1000, 200: 2000, 500: 0, 700: 0, 1000: 0,
+      1170: 0, 1300: 0, 1492: 0, 1550: 0, 1650: 0,
+      1800: 0, 1850: 0, 1900: 0, 1939: 0, 1948: 0,
+      1970: 0, 2000: 0, 2024: 0,
+    },
+  },
+
+  // Sura & Pumbedita — The great Babylonian academies
+  {
+    id: 'sura-pumbedita',
+    name: 'Sura & Pumbedita (Academies)',
+    lat: 32.47,
+    lng: 44.42,
+    culturalType: 'Mizrahi',
+    significance: 'For over 800 years (3rd–11th century CE), the twin academies of Sura (near modern Hillah) and Pumbedita (near modern Fallujah) served as the undisputed intellectual capital of world Jewry. Here the Babylonian Talmud was compiled and edited. The Geonim — heads of these academies — issued responsa that shaped Jewish law from Spain to India. Their Yarchei Kallah (biannual study assemblies) drew thousands.',
+    populations: {
+      [-1800]: 0, [-1000]: 0, [-586]: 5000, [-516]: 3000, [-167]: 10000,
+      70: 20000, 200: 50000, 500: 80000, 700: 100000, 1000: 30000,
+      1170: 5000, 1300: 2000, 1492: 0, 1550: 0, 1650: 0,
+      1800: 0, 1850: 0, 1900: 0, 1939: 0, 1948: 0,
+      1970: 0, 2000: 0, 2024: 0,
+    },
+  },
+
+  // Itil (Khazaria) — Turkic empire that converted to Judaism
+  {
+    id: 'khazaria',
+    name: 'Itil (Khazaria)',
+    lat: 46.35,
+    lng: 48.05,
+    culturalType: 'Mixed',
+    significance: 'The Khazar Khaganate, a Turkic empire controlling the Volga-Don trade routes, adopted Judaism as its state religion around 740 CE — the only large-scale conversion to Judaism in recorded history. The Khazar correspondence with Hasdai ibn Shaprut of Córdoba (c. 960) and Judah Halevi\'s *Kuzari* (1140) kept the memory alive. The empire fell to the Rus\' around 969 CE. Its legacy remains debated by historians.',
+    populations: {
+      [-1800]: 0, [-1000]: 0, [-586]: 0, [-516]: 0, [-167]: 0,
+      70: 0, 200: 0, 500: 0, 700: 5000, 1000: 30000,
+      1170: 0, 1300: 0, 1492: 0, 1550: 0, 1650: 0,
+      1800: 0, 1850: 0, 1900: 0, 1939: 0, 1948: 0,
+      1970: 0, 2000: 0, 2024: 0,
+    },
+  },
 ];

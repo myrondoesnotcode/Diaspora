@@ -99,8 +99,10 @@ export const EPOCHS: Epoch[] = [
     keyEvents: [
       { year: -167, label: 'Antiochus IV bans Jewish practice and desecrates the Temple; Maccabean revolt begins' },
       { year: -164, label: 'Judah Maccabee recaptures and rededicates the Temple — the first Hanukkah' },
+      { year: -161, label: 'Judah Maccabee sends embassy to Rome; Senate ratifies treaty of friendship — first Jewish-Roman diplomatic contact (1 Maccabees 8)' },
       { year: -142, label: 'Simon Maccabee achieves full political independence; Hasmonean dynasty rules Judea' },
       { year: -63, label: 'Pompey conquers Jerusalem; Judea becomes a Roman client state' },
+      { year: -37, label: 'Herod the Great seizes the throne with Roman backing; launches massive building program across Judea' },
       { year: -19, label: 'Herod the Great begins massive expansion of the Second Temple into an architectural wonder' },
       { year: 66, label: 'Great Jewish Revolt against Rome begins; Zealots seize Jerusalem' },
     ],
@@ -132,6 +134,8 @@ export const EPOCHS: Epoch[] = [
       { year: 132, label: 'Bar Kokhba revolt — last major Jewish uprising against Rome' },
       { year: 135, label: 'Hadrian crushes revolt; renames Judea "Syria Palaestina," bans Jews from Jerusalem' },
       { year: 200, label: 'Rabbi Judah HaNasi compiles the Mishnah, fixing the Oral Torah in writing' },
+      { year: 212, label: 'Caracalla grants Roman citizenship to all free inhabitants including Jews across the empire' },
+      { year: 313, label: 'Edict of Milan legalizes Christianity; gradual restriction of Jewish rights under Christian emperors begins' },
     ],
     notableFigures: [
       { name: 'Yohanan ben Zakkai', years: 'c. 30–90 CE', role: 'Saved Judaism by founding the Yavneh academy after the Temple\'s destruction; architect of rabbinic Judaism' },
@@ -160,6 +164,7 @@ export const EPOCHS: Epoch[] = [
       { year: 638, label: 'Arab conquest of Mesopotamia; Abbasid tolerance keeps academies thriving' },
       { year: 762, label: 'Anan ben David founds Karaite movement, rejecting rabbinic authority — a major schism' },
       { year: 882, label: 'Saadia Gaon born; his *Emunot ve-Deot* pioneers Jewish rationalist philosophy' },
+      { year: 740, label: 'Khazar kingdom converts to Judaism — a Turkic empire on the Volga embraces the Jewish faith' },
       { year: 960, label: 'Hai Gaon becomes last great Gaon; soon after, Babylonian supremacy begins to wane' },
     ],
     notableFigures: [
@@ -214,11 +219,14 @@ export const EPOCHS: Epoch[] = [
     longDescription: 'Four centuries of escalating persecution systematically dismantled the Jewish communities of Western Europe. The Crusades, beginning in 1096, turned crowds of holy warriors against Jewish communities in the Rhineland before they ever reached the Holy Land. Jews were expelled from England in 1290, France in 1306 and 1394, and countless German cities repeatedly between the 13th and 15th centuries. The Black Death of 1348–1351 triggered continent-wide massacres — Jews were accused of poisoning wells, and entire communities were murdered. The worst came in 1492, when Ferdinand and Isabella expelled all 200,000 Jews from Spain with 90 days\' notice. Portugal followed in 1497. The refugees — Sephardic Jews (from the Hebrew for "Spain") — flooded into the Ottoman Empire, North Africa, the Netherlands, and Italy, carrying Spanish-Jewish culture intact to new homes across the Mediterranean.',
     keyEvents: [
       { year: 1096, label: 'First Crusade; Rhineland massacres destroy communities at Worms, Mainz, and Cologne' },
+      { year: 1144, label: 'Blood libel of Norwich — first recorded blood libel accusation against Jews in Europe' },
+      { year: 1242, label: 'Talmud trial and burning in Paris: 24 cartloads of Jewish manuscripts destroyed by order of Louis IX' },
       { year: 1290, label: 'Edward I expels all ~16,000 Jews from England' },
       { year: 1306, label: 'Philip IV expels Jews from France; 100,000 forced out' },
       { year: 1348, label: 'Black Death: Jews across Europe massacred on false charges of well-poisoning' },
       { year: 1478, label: 'Spanish Inquisition established; targets Jewish converts (*conversos*) for heresy' },
       { year: 1492, label: 'Alhambra Decree: ~200,000 Jews expelled from Spain within 90 days' },
+      { year: 1497, label: 'Portugal forces conversion of all Jews; those who refuse are expelled or killed' },
     ],
     notableFigures: [
       { name: 'Maimonides (Rambam)', years: '1138–1204 CE', role: 'Greatest medieval Jewish thinker; *Mishneh Torah* codified all Jewish law; *Guide for the Perplexed* reconciled Torah and Aristotle' },
@@ -252,6 +260,7 @@ export const EPOCHS: Epoch[] = [
     notableFigures: [
       { name: 'Joseph Karo', years: '1488–1575 CE', role: 'Codified the *Shulchan Aruch* (1563) in Safed — the authoritative guide to Jewish law still in use today' },
       { name: 'Isaac Luria (the Ari)', years: '1534–1572 CE', role: 'Founder of Lurianic Kabbalah in Safed; transformed Jewish mysticism and created lasting liturgical traditions' },
+      { name: 'Sabbatai Zevi', years: '1626–1676 CE', role: 'Self-proclaimed Messiah whose movement convulsed world Jewry in 1665–66; his conversion to Islam shattered messianic hopes and left lasting theological trauma' },
       { name: 'Israel Ba\'al Shem Tov', years: 'c. 1698–1760 CE', role: 'Founded Hasidism in Poland; revolutionary emphasis on joy, prayer, and direct experience of God over dry scholarship' },
       { name: 'Elijah of Vilna (Vilna Gaon)', years: '1720–1797 CE', role: 'Greatest Talmudic mind of the era; led fierce opposition (*Mitnagdim*) to Hasidism from Vilnius' },
     ],
@@ -275,6 +284,7 @@ export const EPOCHS: Epoch[] = [
       { year: 1807, label: 'Napoleon\'s Sanhedrin: Jewish leaders declare loyalty to France compatible with Jewish law' },
       { year: 1810, label: 'Hamburg Temple founded; Reform Judaism movement begins, revolutionizing Jewish worship' },
       { year: 1829, label: 'Catholic Emancipation in Britain opens path for Jewish legal rights' },
+      { year: 1840, label: 'Damascus Affair: blood libel accusation triggers first international Jewish solidarity campaign' },
       { year: 1858, label: 'Jews admitted to British Parliament; Lionel de Rothschild takes his seat' },
       { year: 1871, label: 'German unification; full legal emancipation for German Jews at last' },
     ],
@@ -302,6 +312,7 @@ export const EPOCHS: Epoch[] = [
     keyEvents: [
       { year: 1881, label: 'Russian pogroms begin after Alexander II\'s assassination; mass emigration accelerates' },
       { year: 1882, label: 'First Aliyah to Palestine begins; Rishon LeZion and Petah Tikva founded' },
+      { year: 1894, label: 'Dreyfus Affair begins in Paris; antisemitic trial galvanizes Theodor Herzl toward political Zionism' },
       { year: 1897, label: 'First Zionist Congress in Basel; Theodor Herzl founds the World Zionist Organization' },
       { year: 1903, label: 'Kishinev pogrom; 49 killed, hundreds injured — shocks world opinion' },
       { year: 1911, label: 'Triangle Shirtwaist fire kills 146 garment workers, mostly Jewish immigrant women; spurs labor movement' },
@@ -332,6 +343,7 @@ export const EPOCHS: Epoch[] = [
       { year: 1935, label: 'Nuremberg Laws strip German Jews of citizenship and civil rights' },
       { year: 1938, label: 'Kristallnacht: state-organized pogrom destroys 7,500 Jewish businesses and 1,400 synagogues' },
       { year: 1942, label: 'Wannsee Conference coordinates the "Final Solution to the Jewish Question"' },
+      { year: 1943, label: 'Warsaw Ghetto Uprising: Jewish fighters resist the Nazis for nearly a month — largest single revolt by Jews during the Holocaust' },
       { year: 1945, label: 'Liberation of the death camps; 6 million Jews murdered, a third of world Jewry' },
       { year: 1947, label: 'UN Partition Plan for Palestine passes; Arab-Jewish conflict intensifies' },
       { year: 1948, label: 'State of Israel declared, May 14; Arab-Israeli War begins immediately after' },
@@ -361,8 +373,11 @@ export const EPOCHS: Epoch[] = [
       { year: 1948, label: 'Operation Magic Carpet begins airlifting 49,000 Yemenite Jews to Israel' },
       { year: 1967, label: 'Six-Day War; Israel captures Jerusalem, West Bank, Sinai, and Golan Heights' },
       { year: 1973, label: 'Yom Kippur War; Egypt and Syria launch surprise attack; Israel survives at great cost' },
+      { year: 1976, label: 'Entebbe Rescue: IDF commandos fly 4,000 km to Uganda to free 106 Jewish hostages' },
+      { year: 1979, label: 'Camp David Accords ratified: Israel-Egypt peace treaty — first peace with an Arab state' },
       { year: 1991, label: 'Operation Solomon: 14,325 Ethiopian Jews airlifted to Israel in 36 hours' },
       { year: 1990, label: 'Soviet collapse triggers emigration of ~1 million Jews to Israel (1990–2000)' },
+      { year: 1993, label: 'Oslo Accords: Rabin and Arafat shake hands at the White House; Israeli-Palestinian peace process begins' },
       { year: 2024, label: 'Israel\'s Jewish population: ~7 million; world diaspora: ~8 million' },
     ],
     notableFigures: [

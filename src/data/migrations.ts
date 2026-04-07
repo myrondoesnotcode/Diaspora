@@ -81,7 +81,7 @@ export const MIGRATIONS: Migration[] = [
     startYear: -167,
     endYear: -63,
     type: 'voluntary',
-    description: 'Hasmonean diplomats and Jewish merchants establish the first Jewish community in Rome.',
+    description: 'Judah Maccabee sends embassy to Rome in 161 BCE, securing a Senate treaty against the Seleucids — first Jewish-Roman diplomatic alliance. Diplomats and merchants establish Rome\'s Jewish community.',
   },
   // ── First Dispersion (70–200 CE) ──────────────────────────────────────────
   {
@@ -648,5 +648,150 @@ export const MIGRATIONS: Migration[] = [
     endYear: 1950,
     type: 'forced',
     description: 'WWII Jewish refugees in Shanghai flee the Communist takeover; most resettle in the United States or Israel.',
+  },
+
+  // ── New Additions: Historically Significant Missing Migrations ──────────────
+
+  // Hasmonean diplomatic embassy to Rome
+  {
+    id: 'hasmonean-embassy',
+    from: 'jerusalem',
+    to: 'rome',
+    startYear: -161,
+    endYear: -142,
+    type: 'voluntary',
+    description: 'Hasmonean diplomatic missions to Rome: Judah Maccabee sends Jason and Eupolemus to secure a Senate treaty of friendship and mutual defense against the Seleucids (1 Maccabees 8). Renewed by Jonathan and Simon.',
+  },
+
+  // Jews settle in pre-Islamic Arabia
+  {
+    id: 'jews-to-medina',
+    from: 'jerusalem',
+    to: 'medina',
+    startYear: -500,
+    endYear: 620,
+    type: 'voluntary',
+    description: 'Jewish tribes settle in the Arabian peninsula over centuries; three major tribes — Banu Qaynuqa, Banu Nadir, Banu Qurayza — become prominent in Yathrib (Medina) as farmers, craftsmen, and poets.',
+  },
+
+  // Expulsion from Medina
+  {
+    id: 'medina-expulsion',
+    from: 'medina',
+    to: 'baghdad',
+    startYear: 624,
+    endYear: 628,
+    type: 'forced',
+    description: 'Muhammad expels or destroys the Jewish tribes of Medina: Banu Qaynuqa expelled (624), Banu Nadir expelled (625), Banu Qurayza massacred (627). Survivors scatter to Khaybar and Babylonia.',
+  },
+
+  // Temple priests to Djerba
+  {
+    id: 'temple-priests-to-djerba',
+    from: 'jerusalem',
+    to: 'djerba',
+    startYear: -586,
+    endYear: -500,
+    type: 'forced',
+    description: 'According to tradition, priests fleeing the First Temple\'s destruction carry a door from the Temple to the island of Djerba, founding the El Ghriba synagogue — one of the oldest in Africa.',
+  },
+
+  // Khazar conversion
+  {
+    id: 'khazar-conversion',
+    from: 'baghdad',
+    to: 'khazaria',
+    startYear: 700,
+    endYear: 740,
+    type: 'voluntary',
+    description: 'Jewish scholars and merchants bring Judaism to the Khazar court; King Bulan converts to Judaism (~740 CE), making the Khazar Khaganate the only state to adopt Judaism — a Turkic empire on the Volga.',
+  },
+
+  // Portuguese expulsion / crypto-Jews to Amsterdam
+  {
+    id: 'portugal-expulsion',
+    from: 'toledo',
+    to: 'amsterdam',
+    startYear: 1497,
+    endYear: 1600,
+    type: 'forced',
+    description: 'Portugal forces conversion of all Jews (1497). Over the next century, conversos (crypto-Jews) flee to Amsterdam, where they openly return to Judaism and build the magnificent Portuguese Synagogue (1675).',
+  },
+
+  // Sephardic refugees to Livorno
+  {
+    id: 'spain-to-livorno',
+    from: 'toledo',
+    to: 'livorno',
+    startYear: 1492,
+    endYear: 1600,
+    type: 'forced',
+    description: 'Sephardic refugees settle in Livorno under the Medici\'s "Livornina" charter (1593) — the most liberal Jewish settlement terms in Europe. No ghetto, freedom to trade, full legal rights.',
+  },
+
+  // Cromwell readmission to England
+  {
+    id: 'cromwell-readmission',
+    from: 'amsterdam',
+    to: 'london',
+    startYear: 1656,
+    endYear: 1700,
+    type: 'voluntary',
+    description: 'Oliver Cromwell informally readmits Jews to England after 366 years of exclusion (since 1290). Amsterdam Sephardim and later Ashkenazim establish London\'s modern Jewish community.',
+  },
+
+  // Galician Jews to Vienna
+  {
+    id: 'galicia-to-vienna',
+    from: 'krakow',
+    to: 'vienna',
+    startYear: 1800,
+    endYear: 1900,
+    type: 'voluntary',
+    description: 'Galician Jews migrate to Vienna in massive numbers during the 19th century; the community grows from ~2,000 to 175,000, producing Freud, Herzl, Mahler, and Schnitzler.',
+  },
+
+  // Recife to New Amsterdam
+  {
+    id: 'recife-to-nyc',
+    from: 'recife',
+    to: 'new-york',
+    startYear: 1654,
+    endYear: 1655,
+    type: 'forced',
+    description: 'When Portugal reconquers Dutch Brazil, 23 Jewish refugees sail from Recife to New Amsterdam (1654), founding what would become the Jewish community of New York — the seed of American Jewry.',
+  },
+
+  // Dreyfus-era French interest in Zionism
+  {
+    id: 'dreyfus-era-aliyah',
+    from: 'paris',
+    to: 'jerusalem',
+    startYear: 1894,
+    endYear: 1914,
+    type: 'voluntary',
+    description: 'The Dreyfus Affair (1894) shatters faith in French emancipation; Theodor Herzl, covering the trial as a journalist, launches political Zionism. French Jews begin looking toward Palestine.',
+  },
+
+  // Kindertransport
+  {
+    id: 'kindertransport',
+    from: 'berlin',
+    to: 'london',
+    startYear: 1938,
+    endYear: 1939,
+    type: 'forced',
+    description: 'Kindertransport: Britain admits ~10,000 Jewish children from Nazi Germany, Austria, and Czechoslovakia. Most never see their parents again. Alumni include four Nobel laureates.',
+  },
+
+  // Vienna to Shanghai wartime refuge
+  {
+    id: 'vienna-to-shanghai',
+    from: 'vienna',
+    to: 'shanghai',
+    startYear: 1938,
+    endYear: 1941,
+    type: 'forced',
+    description: '~18,000 Jewish refugees flee to Shanghai — one of the few places on earth requiring no visa. They survive the war in the Hongkou ghetto under Japanese occupation.',
   },
 ];
