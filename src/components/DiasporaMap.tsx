@@ -9,6 +9,9 @@ import { MIGRATIONS } from '../data/migrations';
 import { getEpochForYear } from '../data/epochs';
 import EventCard from './EventCard';
 
+// Years where catastrophic events trigger shockwave on Jerusalem
+const CATASTROPHE_YEARS = [-586, 70];
+
 const CULTURAL_COLORS: Record<CulturalType, string> = {
   Ashkenazi: '#4a9eff',
   Sephardic: '#f5a623',
@@ -16,6 +19,7 @@ const CULTURAL_COLORS: Record<CulturalType, string> = {
   Yemenite: '#bd10e0',
   Ethiopian: '#e86c2c',
   Mixed: '#9b9b9b',
+  Ancient: '#d4af37',
 };
 
 const ARC_COLORS: Record<string, string> = {
@@ -246,6 +250,26 @@ export default function DiasporaMap({ year }: Props) {
             return <path key={`dash-${m.id}`} d={d} className="arc-dash" stroke={ARC_COLORS[m.type]} />;
           })}
 
+          {/* Ghost trail — faint gold dots for every community that has EVER existed */}
+          {COMMUNITIES.map((c) => {
+            const years = Object.keys(c.populations).map(Number).sort((a, b) => a - b);
+            const everExisted = years.some(y => y <= year && (c.populations[y] ?? 0) > 0);
+            if (!everExisted) return null;
+            // Skip if currently active (will be drawn as full circle)
+            const currentPop = getPopulation(c, year);
+            if (currentPop > 0) return null;
+            const pos = projection([c.lng, c.lat]);
+            if (!pos) return null;
+            return (
+              <circle
+                key={`ghost-${c.id}`}
+                cx={pos[0]} cy={pos[1]} r={5}
+                fill="#d4af37" fillOpacity={0.12}
+                stroke="#d4af37" strokeOpacity={0.08} strokeWidth={1}
+              />
+            );
+          })}
+
           {/* Community circles */}
           {communities.map(({ community, population }) => {
             const pos = projection([community.lng, community.lat]);
@@ -279,6 +303,19 @@ export default function DiasporaMap({ year }: Props) {
               </g>
             );
           })}
+
+          {/* Shockwave on Temple destruction years */}
+          {CATASTROPHE_YEARS.includes(year) && (() => {
+            const jPos = projection([35.22, 31.78]); // Jerusalem coords
+            if (!jPos) return null;
+            return (
+              <circle
+                cx={jPos[0]} cy={jPos[1]} r={10}
+                fill="none" stroke="#ff2222" strokeWidth={3}
+                className="shockwave"
+              />
+            );
+          })()}
         </g>
       </svg>
 

@@ -11,6 +11,11 @@ import type { SnapshotYear } from './types';
  * enslavement/exile — reducing world Jewry by roughly 35% from the 70 CE baseline.
  */
 export const WORLD_JEWISH_POP: Record<SnapshotYear, number> = {
+  [-1800]: 5_000,       // Patriarchal clan; proto-Israelite families in Canaan
+  [-1000]: 250_000,     // United Monarchy under David and Solomon; kingdom at its height
+  [-586]: 500_000,      // Pre-exile Judean and diaspora population combined
+  [-516]: 350_000,      // Post-exile; many remain in Babylon; returnees rebuild Temple
+  [-167]: 2_500_000,    // Late Second Temple period; large communities in Egypt, Babylon, Judea
   70:   5_000_000,   // Peak diaspora just after Temple destruction; large communities in Babylon, Egypt, Rome
   200:  3_200_000,   // ~35% drop: Bar Kokhba revolt (132–135 CE) devastated Judean Jewry
   500:  3_000_000,   // Gradual decline under Byzantine restrictions
@@ -41,6 +46,11 @@ export const WORLD_JEWISH_POP: Record<SnapshotYear, number> = {
  * then recovered steadily from 700 CE onward.
  */
 export const WORLD_TOTAL_POP: Record<SnapshotYear, number> = {
+  [-1800]: 30_000_000,     // Early Bronze Age; Mesopotamian civilizations
+  [-1000]: 50_000_000,     // Iron Age; Egyptian, Mesopotamian, Chinese civilizations
+  [-586]: 100_000_000,     // Neo-Babylonian period; rise of Persia
+  [-516]: 100_000_000,     // Achaemenid Persian Empire at its height
+  [-167]: 200_000_000,     // Hellenistic world; Roman Republic expanding
   70:   300_000_000,    // Roman Empire at its height; estimates range 250–300M
   200:  260_000_000,    // Antonine Plague (165–180 CE) caused significant decline
   500:  190_000_000,    // Fall of Western Rome; Plague of Justinian precursors; demographic nadir

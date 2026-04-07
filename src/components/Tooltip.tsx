@@ -8,6 +8,7 @@ const CULTURAL_COLORS: Record<CulturalType, string> = {
   Yemenite: '#bd10e0',
   Ethiopian: '#e86c2c',
   Mixed: '#9b9b9b',
+  Ancient: '#d4af37',
 };
 
 interface Props {

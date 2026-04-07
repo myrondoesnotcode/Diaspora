@@ -7,6 +7,7 @@ import DiasporaMap from './components/DiasporaMap';
 import MapOverlay from './components/MapOverlay';
 import ExploreTab from './components/ExploreTab';
 import IntroModal from './components/IntroModal';
+import StoryMode from './components/StoryMode';
 
 type ActiveTab = 'map' | 'explore';
 
@@ -27,11 +28,25 @@ function getActiveMigrationCount(year: number): number {
   return MIGRATIONS.filter((m) => year >= m.startYear && year <= m.endYear).length;
 }
 
+function nearestSnapshotYear(year: number): SnapshotYear {
+  return SNAPSHOT_YEARS.reduce((prev, curr) =>
+    Math.abs(curr - year) < Math.abs(prev - year) ? curr : prev
+  );
+}
+
+function getInitialYear(): SnapshotYear {
+  const hash = window.location.hash;
+  const match = hash.match(/year=(-?\d+)/);
+  if (match) return nearestSnapshotYear(parseInt(match[1], 10));
+  return 70;
+}
+
 export default function App() {
-  const [currentYear, setCurrentYear] = useState<SnapshotYear>(70);
+  const [currentYear, setCurrentYear] = useState<SnapshotYear>(getInitialYear);
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeTab, setActiveTab] = useState<ActiveTab>('map');
   const [showIntro, setShowIntro] = useState(true);
+  const [storyMode, setStoryMode] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const advanceYear = useCallback(() => {
@@ -58,6 +73,7 @@ export default function App() {
 
   const handleYearChange = useCallback((year: SnapshotYear) => {
     setCurrentYear(year);
+    window.history.replaceState(null, '', `#year=${year}`);
   }, []);
 
   const handlePlayPause = useCallback(() => {
@@ -89,14 +105,21 @@ export default function App() {
           display: activeTab === 'map' ? 'block' : 'none',
         }}>
           <DiasporaMap year={currentYear} />
-          <MapOverlay
-            currentYear={currentYear}
-            isPlaying={isPlaying}
-            onYearChange={handleYearChange}
-            onPlayPause={handlePlayPause}
-            totalPopulation={totalPop}
-            activeMigrations={activeMigrations}
-          />
+          {storyMode ? (
+            <StoryMode
+              onYearChange={handleYearChange}
+              onExit={() => setStoryMode(false)}
+            />
+          ) : (
+            <MapOverlay
+              currentYear={currentYear}
+              isPlaying={isPlaying}
+              onYearChange={handleYearChange}
+              onPlayPause={handlePlayPause}
+              totalPopulation={totalPop}
+              activeMigrations={activeMigrations}
+            />
+          )}
         </div>
 
         {/* EXPLORE TAB */}
@@ -111,7 +134,16 @@ export default function App() {
         </div>
       </div>
 
-      {showIntro && <IntroModal onClose={() => setShowIntro(false)} />}
+      {showIntro && (
+        <IntroModal
+          onClose={() => setShowIntro(false)}
+          onStoryMode={() => {
+            setShowIntro(false);
+            setStoryMode(true);
+            setActiveTab('map');
+          }}
+        />
+      )}
 
       {/* Bottom tab bar */}
       <div style={{

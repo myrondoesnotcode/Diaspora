@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useRef, useEffect, useState } from 'react';
 import { EPOCHS, getEpochForYear, getEpochIndex } from '../data/epochs';
 import { SNAPSHOT_YEARS } from '../data/types';
 import type { SnapshotYear } from '../data/types';
@@ -13,6 +13,7 @@ interface Props {
 }
 
 function formatYear(y: number): string {
+  if (y <= 0) return `${Math.abs(y)} BCE`;
   return y < 1000 ? `${y} CE` : `${y}`;
 }
 
@@ -40,6 +41,23 @@ export default function MapOverlay({
   const epochIdx = getEpochIndex(epoch);
   const yearIndex = SNAPSHOT_YEARS.indexOf(currentYear);
   const progress = (yearIndex / (SNAPSHOT_YEARS.length - 1)) * 100;
+
+  // Detect large population drops for flash effect
+  const prevPopRef = useRef(totalPopulation);
+  const [popDelta, setPopDelta] = useState<number | null>(null);
+
+  useEffect(() => {
+    const prev = prevPopRef.current;
+    if (prev > 0 && totalPopulation < prev) {
+      const dropPct = (prev - totalPopulation) / prev;
+      if (dropPct > 0.2) {
+        setPopDelta(totalPopulation - prev);
+        const timer = setTimeout(() => setPopDelta(null), 2500);
+        return () => clearTimeout(timer);
+      }
+    }
+    prevPopRef.current = totalPopulation;
+  }, [totalPopulation]);
 
   const goPrevEpoch = useCallback(() => {
     if (epochIdx <= 0) return;
@@ -116,7 +134,7 @@ export default function MapOverlay({
               {epoch.name}
             </div>
             <div style={{ fontSize: 10, color: '#9a8a7a', lineHeight: 1 }}>
-              {formatYear(epoch.startYear)} – {epoch.endYear}
+              {formatYear(epoch.startYear)} – {formatYear(epoch.endYear)}
             </div>
           </div>
 
@@ -140,8 +158,13 @@ export default function MapOverlay({
           <div style={{ fontSize: 18, fontWeight: 700, color: epoch.color, lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>
             {formatYear(currentYear)}
           </div>
-          <div style={{ fontSize: 10, color: '#9a8a7a', lineHeight: 1.3 }}>
+          <div style={{ fontSize: 10, color: popDelta !== null ? '#ff2222' : '#9a8a7a', lineHeight: 1.3, transition: 'color 0.3s ease', fontWeight: popDelta !== null ? 700 : 400 }}>
             ~{fmt(totalPopulation)}
+            {popDelta !== null && (
+              <span style={{ color: '#ff2222', marginLeft: 4 }}>
+                {fmt(popDelta)}
+              </span>
+            )}
             {activeMigrations > 0 && ` · ${activeMigrations} routes`}
           </div>
         </div>

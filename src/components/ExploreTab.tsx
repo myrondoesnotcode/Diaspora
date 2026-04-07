@@ -11,6 +11,7 @@ const CULTURAL_COLORS: Record<CulturalType, string> = {
   Yemenite: '#bd10e0',
   Ethiopian: '#e86c2c',
   Mixed: '#9b9b9b',
+  Ancient: '#d4af37',
 };
 
 interface Props {
@@ -102,17 +103,17 @@ export default function ExploreTab({ currentYear, onSelectEpoch }: Props) {
           The Jewish Diaspora
         </div>
         <div style={{ fontSize: 26, fontWeight: 800, lineHeight: 1.15, letterSpacing: '-0.02em', marginBottom: 6 }}>
-          2,000 Years of<br />Exile &amp; Return
+          4,000 Years of<br />Jewish History
         </div>
         <div style={{ fontSize: 13, color: 'rgba(245,240,232,0.55)' }}>
-          70 CE – 2024 · Nine eras of history
+          1800 BCE – 2024 · Thirteen eras of history
         </div>
       </div>
 
       {/* Intro blurb */}
       <div style={{ padding: '16px 20px 4px' }}>
         <p style={{ fontSize: 13, color: '#4a3a2a', lineHeight: 1.65, margin: 0 }}>
-          The Jewish Diaspora — the dispersion of Jewish communities from the ancient homeland in Judea — is one of history's longest and most consequential migrations. From the destruction of Jerusalem in 70 CE to the founding of Israel in 1948, Jewish communities maintained a living culture, a continuous legal tradition, and an unbroken sense of collective identity across 2,000 years and every continent.
+          The story of the Jewish people — from Abraham's journey to Canaan through sovereignty, exile, and return — spans four millennia and every continent. From the First Temple in Jerusalem to the Babylonian exile, from the Roman destruction to the founding of modern Israel, Jewish communities maintained a living culture, a continuous legal tradition, and an unbroken sense of collective identity across 4,000 years.
         </p>
       </div>
 
@@ -168,7 +169,7 @@ export default function ExploreTab({ currentYear, onSelectEpoch }: Props) {
                         {epoch.name}
                       </div>
                       <div style={{ fontSize: 11, color: '#9a8a7a', marginTop: 2 }}>
-                        {formatYear(epoch.startYear)} – {epoch.endYear}
+                        {formatYear(epoch.startYear)} – {formatYear(epoch.endYear)}
                       </div>
                     </div>
                     <button

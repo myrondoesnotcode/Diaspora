@@ -1,8 +1,9 @@
 interface Props {
   onClose: () => void;
+  onStoryMode: () => void;
 }
 
-export default function IntroModal({ onClose }: Props) {
+export default function IntroModal({ onClose, onStoryMode }: Props) {
   return (
     <div
       style={{
@@ -34,7 +35,7 @@ export default function IntroModal({ onClose }: Props) {
             The Jewish Diaspora
           </div>
           <div style={{ fontSize: 12, color: '#9a8a7a' }}>
-            2,000 years of history · 70 CE to 2024
+            4,000 years of history · 1800 BCE to 2024
           </div>
         </div>
 
@@ -72,15 +73,27 @@ export default function IntroModal({ onClose }: Props) {
         </div>
 
         <button
-          onClick={onClose}
+          onClick={onStoryMode}
           style={{
             width: '100%', padding: '13px 0',
             background: '#e07b39', color: 'white',
             border: 'none', borderRadius: 12,
             fontSize: 15, fontWeight: 600, cursor: 'pointer',
+            marginBottom: 8,
           }}
         >
-          Begin Exploring →
+          Watch the Story →
+        </button>
+        <button
+          onClick={onClose}
+          style={{
+            width: '100%', padding: '12px 0',
+            background: 'rgba(0,0,0,0.06)', color: '#3a2a1a',
+            border: '1px solid rgba(0,0,0,0.08)', borderRadius: 12,
+            fontSize: 14, fontWeight: 600, cursor: 'pointer',
+          }}
+        >
+          Explore Freely
         </button>
       </div>
 
