@@ -47,26 +47,36 @@ function nearestSnapshotYear(midYear: number): SnapshotYear {
 
 /**
  * Returns the two snapshot years that best represent the start and end of an epoch.
- * - snapA: first snapshot year >= epoch.startYear
- * - snapB: last snapshot year <= epoch.endYear that is after snapA;
+ * - snapA: nearest snapshot year to epoch.startYear
+ * - snapB: nearest snapshot year to epoch.endYear that is after snapA;
  *   if the epoch spans only one snapshot interval, use the next snapshot after snapA.
  */
 function getEpochSnapshotYears(epoch: typeof EPOCHS[0]): [SnapshotYear, SnapshotYear] {
-  const snapAIdx = SNAPSHOT_YEARS.findIndex(y => y >= epoch.startYear);
-  const snapA = SNAPSHOT_YEARS[snapAIdx < 0 ? 0 : snapAIdx];
-
-  // Find the last snapshot year within the epoch that comes AFTER snapA
-  let snapBIdx = -1;
-  for (let i = SNAPSHOT_YEARS.length - 1; i > snapAIdx; i--) {
-    if (SNAPSHOT_YEARS[i] <= epoch.endYear) {
-      snapBIdx = i;
-      break;
+  // Find nearest snapshot to epoch start
+  let snapAIdx = 0;
+  let bestDist = Math.abs(SNAPSHOT_YEARS[0] - epoch.startYear);
+  for (let i = 1; i < SNAPSHOT_YEARS.length; i++) {
+    const dist = Math.abs(SNAPSHOT_YEARS[i] - epoch.startYear);
+    if (dist < bestDist) {
+      bestDist = dist;
+      snapAIdx = i;
     }
   }
-  // If no snapshot falls within the epoch after snapA, use the very next snapshot
+
+  // Find nearest snapshot to epoch end that is after snapA
+  let snapBIdx = -1;
+  let bestDistB = Infinity;
+  for (let i = snapAIdx + 1; i < SNAPSHOT_YEARS.length; i++) {
+    const dist = Math.abs(SNAPSHOT_YEARS[i] - epoch.endYear);
+    if (dist < bestDistB) {
+      bestDistB = dist;
+      snapBIdx = i;
+    }
+  }
+  // If no snapshot found after snapA, use the next one
   if (snapBIdx === -1) snapBIdx = Math.min(snapAIdx + 1, SNAPSHOT_YEARS.length - 1);
 
-  return [snapA as SnapshotYear, SNAPSHOT_YEARS[snapBIdx] as SnapshotYear];
+  return [SNAPSHOT_YEARS[snapAIdx] as SnapshotYear, SNAPSHOT_YEARS[snapBIdx] as SnapshotYear];
 }
 
 function fmtWorldPop(n: number): string {
