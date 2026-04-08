@@ -471,7 +471,7 @@ export const MIGRATIONS: Migration[] = [
     from: 'paris',
     to: 'tel-aviv',
     startYear: 2000,
-    endYear: 2024,
+    endYear: 2026,
     type: 'voluntary',
     description: 'Antisemitism and economic concerns drive French Jews (Aliyah) to Israel at record rates.',
   },

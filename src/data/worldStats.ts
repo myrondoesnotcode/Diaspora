@@ -33,7 +33,7 @@ export const WORLD_JEWISH_POP: Record<SnapshotYear, number> = {
   1948: 11_500_000,  // Post-Holocaust: ~6M murdered; Israel founded
   1970: 13_500_000,  // Recovery and Israeli growth; Soviet Jewry still largely trapped
   2000: 13_300_000,  // Slight decline due to assimilation in diaspora
-  2024: 15_700_000,  // Growth driven by Israel (~7M) and global diaspora (~8M)
+  2026: 16_000_000,  // Growth driven by Israel (~7.2M) and global diaspora (~8.8M)
 };
 
 /**
@@ -68,7 +68,7 @@ export const WORLD_TOTAL_POP: Record<SnapshotYear, number> = {
   1948: 2_400_000_000,  // Immediate post-WWII
   1970: 3_700_000_000,  // Population explosion in full swing
   2000: 6_100_000_000,  // Near 6B; growth slowing in developed world
-  2024: 8_200_000_000,  // Current world population
+  2026: 8_300_000_000,  // Current world population
 };
 
 export function getWorldJewishPercent(year: SnapshotYear): number {
