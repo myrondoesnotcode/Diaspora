@@ -134,10 +134,10 @@ export const STORY_BEATS: StoryBeat[] = [
     duration: 7000,
   },
   {
-    year: 2024,
+    year: 2026,
     mapFocus: { lng: 20, lat: 30, zoom: 1.3 },
     title: 'The Story Continues',
-    narration: '15.7 million Jews. 7 million in Israel, 6 million in America, the rest scattered across every continent. Four thousand years, and the story is still being written.',
+    narration: '16 million Jews. 7.2 million in Israel, 6 million in America, the rest scattered across every continent. Four thousand years, and the story is still being written.',
     duration: 8000,
   },
 ];

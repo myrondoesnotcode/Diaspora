@@ -106,7 +106,7 @@ export default function ExploreTab({ currentYear, onSelectEpoch }: Props) {
           4,000 Years of<br />Jewish History
         </div>
         <div style={{ fontSize: 13, color: 'rgba(245,240,232,0.55)' }}>
-          1800 BCE – 2024 · Thirteen eras of history
+          1800 BCE – 2026 · Thirteen eras of history
         </div>
       </div>
 

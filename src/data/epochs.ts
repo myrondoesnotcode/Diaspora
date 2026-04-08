@@ -353,17 +353,17 @@ export const EPOCHS: Epoch[] = [
   {
     name: 'Israeli Era',
     startYear: 1953,
-    endYear: 2024,
+    endYear: 2026,
     color: '#2563eb',
     description: 'Israel absorbs waves of Jewish immigrants from the Arab world, Soviet Union, and Ethiopia while diaspora communities reshape.',
-    longDescription: 'The seven decades since Israel\'s founding have been defined by extraordinary ingathering and equally extraordinary geopolitical transformation. Operation Magic Carpet (1949–1950) airlifted virtually the entire Yemenite Jewish community to Israel. Waves of Jews from Iraq, Morocco, Tunisia, Libya, and Egypt followed through the 1950s–1970s as Arab nationalism made Jewish life untenable across the Middle East. The Six-Day War of 1967 brought Jerusalem and the West Bank under Israeli control and transformed world Jewish identity. The Soviet Jewry movement of the 1970s–1980s, championed by diaspora communities worldwide, culminated in over a million emigrants after the USSR\'s collapse. Operation Solomon (1991) airlifted the Beta Israel community from Ethiopia in 36 hours. Today Israel\'s 7 million Jews live alongside a diaspora of roughly equal size — concentrated in the United States (6 million), France (500,000), Canada, Argentina, and the UK. Both communities wrestle with assimilation, identity, and the relationship between Jewish peoplehood and the Jewish state.',
+    longDescription: 'The seven decades since Israel\'s founding have been defined by extraordinary ingathering and equally extraordinary geopolitical transformation. Operation Magic Carpet (1949–1950) airlifted virtually the entire Yemenite Jewish community to Israel. Waves of Jews from Iraq, Morocco, Tunisia, Libya, and Egypt followed through the 1950s–1970s as Arab nationalism made Jewish life untenable across the Middle East. The Six-Day War of 1967 brought Jerusalem and the West Bank under Israeli control and transformed world Jewish identity. The Soviet Jewry movement of the 1970s–1980s, championed by diaspora communities worldwide, culminated in over a million emigrants after the USSR\'s collapse. Operation Solomon (1991) airlifted the Beta Israel community from Ethiopia in 36 hours. Today Israel\'s 7.2 million Jews live alongside a diaspora of roughly equal size — concentrated in the United States (6 million), France (500,000), Canada, Argentina, and the UK. Both communities wrestle with assimilation, identity, and the relationship between Jewish peoplehood and the Jewish state.',
     keyEvents: [
       { year: 1948, label: 'Operation Magic Carpet begins airlifting 49,000 Yemenite Jews to Israel' },
       { year: 1967, label: 'Six-Day War; Israel captures Jerusalem, West Bank, Sinai, and Golan Heights' },
       { year: 1973, label: 'Yom Kippur War; Egypt and Syria launch surprise attack; Israel survives at great cost' },
       { year: 1991, label: 'Operation Solomon: 14,325 Ethiopian Jews airlifted to Israel in 36 hours' },
       { year: 1990, label: 'Soviet collapse triggers emigration of ~1 million Jews to Israel (1990–2000)' },
-      { year: 2024, label: 'Israel\'s Jewish population: ~7 million; world diaspora: ~8 million' },
+      { year: 2026, label: 'Israel\'s Jewish population: ~7.2 million; world diaspora: ~8.8 million' },
     ],
     notableFigures: [
       { name: 'Golda Meir', years: '1898–1978', role: 'Fourth Prime Minister of Israel; led the country through the Yom Kippur War; first female head of government in the Middle East' },

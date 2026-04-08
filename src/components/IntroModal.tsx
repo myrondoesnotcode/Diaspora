@@ -35,7 +35,7 @@ export default function IntroModal({ onClose, onStoryMode }: Props) {
             The Jewish Diaspora
           </div>
           <div style={{ fontSize: 12, color: '#9a8a7a' }}>
-            4,000 years of history · 1800 BCE to 2024
+            4,000 years of history · 1800 BCE to 2026
           </div>
         </div>
 
