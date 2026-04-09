@@ -8,6 +8,11 @@ interface Props {
   onExit: () => void;
 }
 
+function formatYear(y: number): string {
+  if (y <= 0) return `${Math.abs(y)} BCE`;
+  return y < 1000 ? `${y} CE` : `${y}`;
+}
+
 function nearestSnapshotYear(year: number): SnapshotYear {
   return SNAPSHOT_YEARS.reduce((prev, curr) =>
     Math.abs(curr - year) < Math.abs(prev - year) ? curr : prev
@@ -91,6 +96,9 @@ export default function StoryMode({ onYearChange, onExit }: Props) {
           ))}
         </div>
 
+        <div style={{ fontSize: 11, fontWeight: 700, color: '#e07b39', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>
+          {formatYear(beat.year)}
+        </div>
         <div style={{ fontSize: 16, fontWeight: 700, color: '#f5f0e8', marginBottom: 6, lineHeight: 1.2 }}>
           {beat.title}
         </div>

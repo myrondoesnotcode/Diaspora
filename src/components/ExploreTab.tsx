@@ -178,7 +178,7 @@ export default function ExploreTab({ currentYear, onSelectEpoch }: Props) {
                       <div style={{ fontSize: 15, fontWeight: 700, color: isActive ? epoch.color : '#1a1410', lineHeight: 1.2 }}>
                         {epoch.name}
                       </div>
-                      <div style={{ fontSize: 13, color: isActive ? epoch.color : '#3a2a1a', fontWeight: 700, marginTop: 4, letterSpacing: '0.01em' }}>
+                      <div style={{ fontSize: 11, color: '#9a8a7a', marginTop: 2 }}>
                         {formatYear(epoch.startYear)} – {formatYear(epoch.endYear)}
                       </div>
                     </div>
