@@ -47,13 +47,23 @@ function nearestSnapshotYear(midYear: number): SnapshotYear {
 
 /**
  * Returns the two snapshot years that best represent the start and end of an epoch.
- * - snapA: first snapshot year >= epoch.startYear
+ * - snapA: nearest snapshot year to epoch.startYear (handles off-by-one gaps
+ *   between consecutive epochs, e.g. Hasmonean starts -166 but nearest snapshot is -167)
  * - snapB: last snapshot year <= epoch.endYear that is after snapA;
  *   if the epoch spans only one snapshot interval, use the next snapshot after snapA.
  */
 function getEpochSnapshotYears(epoch: typeof EPOCHS[0]): [SnapshotYear, SnapshotYear] {
-  const snapAIdx = SNAPSHOT_YEARS.findIndex(y => y >= epoch.startYear);
-  const snapA = SNAPSHOT_YEARS[snapAIdx < 0 ? 0 : snapAIdx];
+  // Find the snapshot year nearest to the epoch's start
+  let snapAIdx = 0;
+  let bestDist = Infinity;
+  for (let i = 0; i < SNAPSHOT_YEARS.length; i++) {
+    const dist = Math.abs(SNAPSHOT_YEARS[i] - epoch.startYear);
+    if (dist < bestDist) {
+      bestDist = dist;
+      snapAIdx = i;
+    }
+  }
+  const snapA = SNAPSHOT_YEARS[snapAIdx];
 
   // Find the last snapshot year within the epoch that comes AFTER snapA
   let snapBIdx = -1;
@@ -120,7 +130,7 @@ export default function ExploreTab({ currentYear, onSelectEpoch }: Props) {
       {/* Vertical timeline */}
       <div style={{ padding: '20px 20px 0' }}>
         <div style={{ fontSize: 11, fontWeight: 700, color: '#6b5a4a', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 16 }}>
-          Nine Eras of History
+          Thirteen Eras of History
         </div>
 
         <div style={{ position: 'relative' }}>
@@ -168,7 +178,7 @@ export default function ExploreTab({ currentYear, onSelectEpoch }: Props) {
                       <div style={{ fontSize: 15, fontWeight: 700, color: isActive ? epoch.color : '#1a1410', lineHeight: 1.2 }}>
                         {epoch.name}
                       </div>
-                      <div style={{ fontSize: 11, color: '#9a8a7a', marginTop: 2 }}>
+                      <div style={{ fontSize: 12, color: '#5a4a3a', fontWeight: 600, marginTop: 2 }}>
                         {formatYear(epoch.startYear)} – {formatYear(epoch.endYear)}
                       </div>
                     </div>
