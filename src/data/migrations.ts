@@ -322,9 +322,9 @@ export const MIGRATIONS: Migration[] = [
     from: 'warsaw',
     to: 'new-york',
     startYear: 1880,
-    endYear: 1932,
+    endYear: 1924,
     type: 'forced',
-    description: 'Pogroms and poverty drive 2 million East European Jews to the United States.',
+    description: 'Pogroms and poverty drive ~2.5 million East European Jews westward; ~80% (~2 million) reach the United States. The Johnson-Reed Immigration Act (1924) effectively ends the wave by slashing Eastern European quotas.',
   },
   {
     id: 'vilna-to-nyc',
@@ -637,6 +637,99 @@ export const MIGRATIONS: Migration[] = [
     endYear: 2010,
     type: 'voluntary',
     description: 'Azerbaijan\'s Mountain Jews (Juhuro) emigrate to Israel after the USSR dissolves, halving the community.',
+  },
+
+  // ── Sephardic Diaspora extensions ────────────────────────────────────────────
+  {
+    id: 'spain-to-sarajevo',
+    from: 'toledo',
+    to: 'sarajevo',
+    startYear: 1492,
+    endYear: 1565,
+    type: 'forced',
+    description: 'Sephardic exiles from Spain settle in Ottoman Bosnia; by 1565 a formal community is established in Sarajevo, which becomes one of the great Ladino-speaking cities of the Ottoman world.',
+  },
+  {
+    id: 'spain-to-izmir',
+    from: 'toledo',
+    to: 'izmir',
+    startYear: 1492,
+    endYear: 1550,
+    type: 'forced',
+    description: 'Spanish exiles swell Izmir\'s Jewish quarter under Ottoman protection. The city becomes a major Sephardic center and birthplace of the false messiah Shabbetai Zvi (1626).',
+  },
+
+  // ── 1905 Pogroms → Americas ───────────────────────────────────────────────────
+  {
+    id: 'pogrom-1905-to-americas',
+    from: 'odessa',
+    to: 'new-york',
+    startYear: 1905,
+    endYear: 1907,
+    type: 'forced',
+    description: 'The 1905 pogrom wave (660+ towns; 3,500–4,000 killed) triggers a surge of ~200,000 emigrants: 154,000 to the US, 13,500 to Argentina, 7,000 to Canada, 3,500 to Palestine. Odessa alone loses 50,000 Jews.',
+  },
+
+  // ── Galicia → Americas ────────────────────────────────────────────────────────
+  {
+    id: 'galicia-to-americas',
+    from: 'lviv',
+    to: 'new-york',
+    startYear: 1881,
+    endYear: 1914,
+    type: 'forced',
+    description: 'Some 350,000 Galician Jews (from the Austrian Empire, not the Russian Pale) emigrate to the United States 1881–1914, driven by poverty and anti-Jewish economic discrimination.',
+  },
+
+  // ── Pale Abolition → Russian Cities ──────────────────────────────────────────
+  {
+    id: 'pale-to-moscow',
+    from: 'minsk',
+    to: 'moscow',
+    startYear: 1917,
+    endYear: 1939,
+    type: 'voluntary',
+    description: 'The Provisional Government abolishes the Pale of Settlement in March 1917. Hundreds of thousands of Jews move into Moscow and other Russian cities; Moscow\'s Jewish population surges from ~9,000 to 250,000+ within two decades.',
+  },
+  {
+    id: 'pale-to-st-petersburg',
+    from: 'vilna',
+    to: 'st-petersburg',
+    startYear: 1917,
+    endYear: 1939,
+    type: 'voluntary',
+    description: 'Abolition of the Pale enables mass internal migration to Petrograd/Leningrad. Jewish professionals, intellectuals, and workers pour into the former capital; the community grows from ~20,000 to over 200,000.',
+  },
+
+  // ── Soviet Refuseniks → Israel / USA ─────────────────────────────────────────
+  {
+    id: 'refusenik-to-israel',
+    from: 'moscow',
+    to: 'tel-aviv',
+    startYear: 1970,
+    endYear: 1988,
+    type: 'forced',
+    description: 'Soviet Jews who applied to emigrate were often denied (becoming "refuseniks"), fired from jobs, and surveilled. International pressure after the 1970 Leningrad hijacking trial opened a trickle; 291,000 emigrated 1970–1988, 165,000 to Israel.',
+  },
+
+  // ── Djerba → Israel / France ──────────────────────────────────────────────────
+  {
+    id: 'djerba-to-israel',
+    from: 'djerba',
+    to: 'tel-aviv',
+    startYear: 1948,
+    endYear: 1980,
+    type: 'voluntary',
+    description: 'Tunisia\'s ~100,000 Jews dwindle to a few thousand as most emigrate after independence (1956) and the Six-Day War (1967). The majority of Djerba\'s ancient community goes to Israel, though a small remnant maintains the oldest continuous diaspora community outside the Land of Israel.',
+  },
+  {
+    id: 'djerba-to-france',
+    from: 'djerba',
+    to: 'paris',
+    startYear: 1956,
+    endYear: 1980,
+    type: 'voluntary',
+    description: 'A significant portion of Tunisia\'s Jews, especially urban Tunisois, emigrate to France after independence — already French citizens under the Protectorate. Djerban Jews largely split between Israel and France.',
   },
 
   // ── World War II refuge ───────────────────────────────────────────────────────

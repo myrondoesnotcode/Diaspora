@@ -106,10 +106,17 @@ export const STORY_BEATS: StoryBeat[] = [
     duration: 6000,
   },
   {
+    year: 1850,
+    mapFocus: { lng: 30, lat: 52, zoom: 2.5 },
+    title: 'Locked in the Pale',
+    narration: 'In 1791, Catherine the Great confined Russia\'s Jews to the Pale of Settlement — a vast zone of crowded shtetlakh stretching from the Baltic to the Black Sea. By 1850, nearly 4 million Jews live here, barred from Russian cities, land ownership, and most professions. A pressure cooker about to explode.',
+    duration: 8000,
+  },
+  {
     year: 1900,
     mapFocus: { lng: -20, lat: 48, zoom: 1.3 },
     title: 'The Great Migration',
-    narration: 'Pogroms drive two million Jews from Eastern Europe to America. New York\'s Lower East Side becomes the largest Jewish city in history. Meanwhile, Zionist pioneers drain swamps in Palestine.',
+    narration: 'Pogroms drive ~2.5 million Jews from Eastern Europe to America. In 1905, a single wave of 660 towns is attacked; 200,000 flee in one year. New York\'s Lower East Side becomes the largest Jewish city in history. The Johnson-Reed Act slams the door in 1924.',
     duration: 7000,
   },
   {
@@ -127,10 +134,17 @@ export const STORY_BEATS: StoryBeat[] = [
     duration: 9000,
   },
   {
+    year: 1948,
+    mapFocus: { lng: 37, lat: 56, zoom: 2.2 },
+    title: 'Stalin\'s War on Jewish Culture',
+    narration: 'As Israel is born, Stalin wages war on Soviet Jews. He murders the leader of the Jewish Anti-Fascist Committee, executes 13 Yiddish writers in a single night (1952), and concocts the "Doctors\' Plot" to blame Jewish physicians for murder. Only his death in 1953 prevents mass deportations.',
+    duration: 8000,
+  },
+  {
     year: 1970,
     mapFocus: { lng: 30, lat: 35, zoom: 1.8 },
     title: 'Ingathering',
-    narration: 'Jews from Iraq, Morocco, Yemen, and Ethiopia are airlifted to Israel. The Six-Day War transforms Jewish identity worldwide. A million Soviet Jews will follow after the Iron Curtain falls.',
+    narration: 'Jews from Iraq, Morocco, Yemen, and Ethiopia are airlifted to Israel. The Six-Day War transforms Jewish identity worldwide. Soviet "Refuseniks" fight for the right to leave. A million Soviet Jews follow after the Iron Curtain falls.',
     duration: 7000,
   },
   {
