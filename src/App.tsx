@@ -149,7 +149,7 @@ export default function App() {
         </div>
       </div>
 
-      {showIntro && (
+      {showIntro && activeView !== 'poster' && (
         <IntroModal
           onClose={() => setShowIntro(false)}
           onStoryMode={() => {
@@ -173,12 +173,14 @@ export default function App() {
         </div>
       )}
 
-      {/* Bottom tab bar */}
+      {/* Bottom tab bar — zIndex 60 keeps it above IntroModal backdrop (zIndex 50) */}
       <div style={{
         flexShrink: 0, height: 56,
         display: 'flex',
         background: '#f5f0e8',
         borderTop: '1px solid rgba(0,0,0,0.1)',
+        position: 'relative',
+        zIndex: 60,
       }}>
         <button
           onClick={() => { setActiveView('main'); setActiveTab('map'); }}
