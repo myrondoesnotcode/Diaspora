@@ -8,8 +8,14 @@ import MapOverlay from './components/MapOverlay';
 import ExploreTab from './components/ExploreTab';
 import IntroModal from './components/IntroModal';
 import StoryMode from './components/StoryMode';
+import LineagePoster from './components/LineagePoster';
 
 type ActiveTab = 'map' | 'explore';
+type ActiveView = 'main' | 'poster';
+
+function getInitialView(): ActiveView {
+  return window.location.hash.startsWith('#poster') ? 'poster' : 'main';
+}
 
 function getPopulation(year: number): number {
   let total = 0;
@@ -47,6 +53,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<ActiveTab>('map');
   const [showIntro, setShowIntro] = useState(true);
   const [storyMode, setStoryMode] = useState(false);
+  const [activeView, setActiveView] = useState<ActiveView>(getInitialView);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const advanceYear = useCallback(() => {
@@ -70,6 +77,14 @@ export default function App() {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, [isPlaying, advanceYear]);
+
+  useEffect(() => {
+    const onHashChange = () => {
+      setActiveView(window.location.hash.startsWith('#poster') ? 'poster' : 'main');
+    };
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, []);
 
   const handleYearChange = useCallback((year: SnapshotYear) => {
     setCurrentYear(year);
@@ -143,6 +158,19 @@ export default function App() {
             setActiveTab('map');
           }}
         />
+      )}
+
+      {/* Lineage Poster overlay — accessible via #poster URL hash */}
+      {activeView === 'poster' && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 100, overflowY: 'auto', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}>
+          <LineagePoster
+            currentYear={currentYear}
+            onClose={() => {
+              window.history.pushState(null, '', `#year=${currentYear}`);
+              setActiveView('main');
+            }}
+          />
+        </div>
       )}
 
       {/* Bottom tab bar */}
