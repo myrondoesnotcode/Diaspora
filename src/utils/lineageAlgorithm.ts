@@ -18,6 +18,12 @@ export interface SearchResult {
   matchedOn: 'name' | 'alias' | 'partial';
 }
 
+export interface DualLineageResult {
+  lineage1: LineageResult;
+  lineage2: LineageResult;
+  combinedEpochs: import('../data/types').Epoch[];
+}
+
 // Map of normalized query terms to community IDs
 const COUNTRY_ALIASES: Record<string, string[]> = {
   'israel': ['tel-aviv', 'jerusalem', 'haifa', 'safed'],
@@ -321,4 +327,19 @@ export function fmtPop(n: number): string {
   if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
   if (n >= 1_000) return Math.round(n / 1000) + 'k';
   return n.toString();
+}
+
+export function buildDualLineage(id1: string, id2: string): DualLineageResult | null {
+  const l1 = buildLineage(id1);
+  const l2 = buildLineage(id2);
+  if (!l1 || !l2) return null;
+
+  // Merge epoch lists, dedup by name, sort by startYear, take up to 8
+  const seen = new Set<string>();
+  const combined = [...l1.relevantEpochs, ...l2.relevantEpochs]
+    .filter(e => { if (seen.has(e.name)) return false; seen.add(e.name); return true; })
+    .sort((a, b) => a.startYear - b.startYear)
+    .slice(0, 8);
+
+  return { lineage1: l1, lineage2: l2, combinedEpochs: combined };
 }

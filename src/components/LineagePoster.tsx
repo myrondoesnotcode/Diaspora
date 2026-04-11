@@ -3,11 +3,14 @@ import type { SnapshotYear } from '../data/types';
 import {
   searchCommunities,
   buildLineage,
+  buildDualLineage,
   type SearchResult,
   type LineageResult,
+  type DualLineageResult,
 } from '../utils/lineageAlgorithm';
 import type { Community } from '../data/types';
 import PosterDisplay from './PosterDisplay';
+import DualPosterDisplay from './DualPosterDisplay';
 
 interface Props {
   onClose: () => void;
@@ -38,7 +41,17 @@ export default function LineagePoster({ onClose }: Props) {
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Debounced search
+  // Mixed heritage state
+  const [mixedMode, setMixedMode] = useState(false);
+  const [query2, setQuery2] = useState('');
+  const [searchResults2, setSearchResults2] = useState<SearchResult[]>([]);
+  const [selectedCommunity2, setSelectedCommunity2] = useState<Community | null>(null);
+  const [dualLineage, setDualLineage] = useState<DualLineageResult | null>(null);
+  const [showDropdown2, setShowDropdown2] = useState(false);
+  const debounceRef2 = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const inputRef2 = useRef<HTMLInputElement>(null);
+
+  // Debounced search — first input
   const handleQueryChange = useCallback((value: string) => {
     setQuery(value);
     setSelectedCommunity(null);
@@ -57,6 +70,25 @@ export default function LineagePoster({ onClose }: Props) {
     }, 150);
   }, []);
 
+  // Debounced search — second input (mixed mode)
+  const handleQueryChange2 = useCallback((value: string) => {
+    setQuery2(value);
+    setSelectedCommunity2(null);
+    setDownloadError('');
+
+    if (debounceRef2.current) clearTimeout(debounceRef2.current);
+    if (!value.trim()) {
+      setSearchResults2([]);
+      setShowDropdown2(false);
+      return;
+    }
+    debounceRef2.current = setTimeout(() => {
+      const results = searchCommunities(value);
+      setSearchResults2(results);
+      setShowDropdown2(results.length > 0);
+    }, 150);
+  }, []);
+
   const handleSelectCommunity = useCallback((community: Community) => {
     setSelectedCommunity(community);
     setQuery(community.name);
@@ -64,37 +96,65 @@ export default function LineagePoster({ onClose }: Props) {
     setShowDropdown(false);
   }, []);
 
+  const handleSelectCommunity2 = useCallback((community: Community) => {
+    setSelectedCommunity2(community);
+    setQuery2(community.name);
+    setSearchResults2([]);
+    setShowDropdown2(false);
+  }, []);
+
   const handleGenerate = useCallback(() => {
-    if (!selectedCommunity) return;
-    const result = buildLineage(selectedCommunity.id);
-    setLineage(result);
-  }, [selectedCommunity]);
+    if (mixedMode) {
+      if (!selectedCommunity || !selectedCommunity2) return;
+      const result = buildDualLineage(selectedCommunity.id, selectedCommunity2.id);
+      setDualLineage(result);
+      setLineage(null);
+    } else {
+      if (!selectedCommunity) return;
+      const result = buildLineage(selectedCommunity.id);
+      setLineage(result);
+      setDualLineage(null);
+    }
+  }, [selectedCommunity, selectedCommunity2, mixedMode]);
 
   const handleStartOver = useCallback(() => {
     setLineage(null);
+    setDualLineage(null);
     setQuery('');
     setSelectedCommunity(null);
     setSearchResults([]);
+    setMixedMode(false);
+    setQuery2('');
+    setSelectedCommunity2(null);
+    setSearchResults2([]);
     setDownloadError('');
     setTimeout(() => inputRef.current?.focus(), 100);
   }, []);
 
+  const isPosterVisible = lineage !== null || dualLineage !== null;
+
   const handleDownload = useCallback(async () => {
-    if (!posterRef.current || !lineage) return;
+    if (!posterRef.current) return;
+    if (!lineage && !dualLineage) return;
     setIsDownloading(true);
     setDownloadError('');
     try {
       const html2canvas = (await import('html2canvas')).default;
+      const posterHeight = dualLineage ? 1200 : 1100;
       const canvas = await html2canvas(posterRef.current, {
         scale: 2,
         useCORS: true,
         backgroundColor: '#f5f0e8',
         width: 800,
-        height: 1100,
+        height: posterHeight,
         logging: false,
       });
       const link = document.createElement('a');
-      link.download = `diaspora-lineage-${lineage.destination.id}.png`;
+      if (dualLineage) {
+        link.download = `diaspora-lineage-mixed-${dualLineage.lineage1.destination.id}-${dualLineage.lineage2.destination.id}.png`;
+      } else if (lineage) {
+        link.download = `diaspora-lineage-${lineage.destination.id}.png`;
+      }
       link.href = canvas.toDataURL('image/png');
       link.click();
     } catch {
@@ -102,7 +162,7 @@ export default function LineagePoster({ onClose }: Props) {
     } finally {
       setIsDownloading(false);
     }
-  }, [lineage]);
+  }, [lineage, dualLineage]);
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -110,11 +170,16 @@ export default function LineagePoster({ onClose }: Props) {
       const target = e.target as HTMLElement;
       if (!target.closest('[data-search-container]')) {
         setShowDropdown(false);
+        setShowDropdown2(false);
       }
     };
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
   }, []);
+
+  const canGenerate = mixedMode
+    ? selectedCommunity !== null && selectedCommunity2 !== null
+    : selectedCommunity !== null;
 
   return (
     <div style={{ minHeight: '100vh', background: '#f5f0e8', display: 'flex', flexDirection: 'column' }}>
@@ -130,7 +195,7 @@ export default function LineagePoster({ onClose }: Props) {
         boxShadow: '0 2px 12px rgba(0,0,0,0.25)',
       }}>
         <button
-          onClick={lineage ? handleStartOver : onClose}
+          onClick={isPosterVisible ? handleStartOver : onClose}
           style={{
             background: 'rgba(255,255,255,0.10)',
             border: '1px solid rgba(255,255,255,0.18)',
@@ -148,19 +213,19 @@ export default function LineagePoster({ onClose }: Props) {
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M19 12H5M12 5l-7 7 7 7" />
           </svg>
-          {lineage ? 'Start Over' : 'Back to Map'}
+          {isPosterVisible ? 'Start Over' : 'Back to Map'}
         </button>
 
         <div style={{ textAlign: 'center' }}>
           <div style={{ color: '#d4af37', fontSize: 11, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase' }}>
-            ✡ Your Family Lineage
+            ✡ {dualLineage ? 'Mixed Heritage' : 'Your Family Lineage'}
           </div>
           <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: 9, letterSpacing: '0.10em' }}>
             JEWISH DIASPORA
           </div>
         </div>
 
-        {lineage ? (
+        {isPosterVisible ? (
           <button
             onClick={handleDownload}
             disabled={isDownloading}
@@ -193,7 +258,7 @@ export default function LineagePoster({ onClose }: Props) {
                   <polyline points="7 10 12 15 17 10" />
                   <line x1="12" y1="15" x2="12" y2="3" />
                 </svg>
-                Save PNG
+                Download PNG
               </>
             )}
           </button>
@@ -205,7 +270,7 @@ export default function LineagePoster({ onClose }: Props) {
       {/* ── MAIN CONTENT ── */}
       <div style={{ flex: 1, overflowY: 'auto', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}>
 
-        {!lineage ? (
+        {!isPosterVisible ? (
           /* ── SEARCH VIEW ── */
           <div style={{
             maxWidth: 560,
@@ -227,179 +292,366 @@ export default function LineagePoster({ onClose }: Props) {
               </div>
             </div>
 
-            {/* Search box */}
-            <div data-search-container="" style={{ position: 'relative', marginBottom: 12 }}>
-              <div style={{
-                position: 'relative',
-                background: 'white',
-                borderRadius: 12,
-                border: '1.5px solid rgba(0,0,0,0.10)',
-                boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
-                display: 'flex',
-                alignItems: 'center',
-                overflow: 'visible',
-              }}>
-                <div style={{ padding: '0 14px', color: '#9a8a7a', flexShrink: 0 }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="11" cy="11" r="8" />
-                    <path d="m21 21-4.35-4.35" />
-                  </svg>
+            {/* Mode toggle */}
+            <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
+              <button
+                onClick={() => setMixedMode(false)}
+                style={{
+                  flex: 1, padding: '10px 16px', borderRadius: 8, border: 'none',
+                  cursor: 'pointer', fontWeight: 600, fontSize: 13,
+                  background: !mixedMode ? '#e07b39' : 'rgba(0,0,0,0.08)',
+                  color: !mixedMode ? '#fff' : '#5a4a3a',
+                }}
+              >Single Lineage</button>
+              <button
+                onClick={() => setMixedMode(true)}
+                style={{
+                  flex: 1, padding: '10px 16px', borderRadius: 8, border: 'none',
+                  cursor: 'pointer', fontWeight: 600, fontSize: 13,
+                  background: mixedMode ? '#e07b39' : 'rgba(0,0,0,0.08)',
+                  color: mixedMode ? '#fff' : '#5a4a3a',
+                }}
+              >Mixed Heritage</button>
+            </div>
+
+            {/* First search box */}
+            <div style={{ marginBottom: 6 }}>
+              {mixedMode && (
+                <div style={{ fontSize: 11, fontWeight: 700, color: '#9a8a7a', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 6 }}>
+                  First Background
                 </div>
-                <input
-                  ref={inputRef}
-                  type="text"
-                  placeholder="e.g. New York, Poland, Morocco, Baghdad…"
-                  value={query}
-                  onChange={e => handleQueryChange(e.target.value)}
-                  onFocus={() => searchResults.length > 0 && setShowDropdown(true)}
-                  style={{
-                    flex: 1,
-                    border: 'none',
-                    outline: 'none',
-                    fontSize: 15,
-                    padding: '14px 14px 14px 0',
-                    background: 'transparent',
-                    color: '#1a1410',
-                    fontFamily: 'inherit',
-                  }}
-                  autoFocus
-                />
-                {query && (
-                  <button
-                    onClick={() => handleQueryChange('')}
+              )}
+              <div data-search-container="" style={{ position: 'relative', marginBottom: 12 }}>
+                <div style={{
+                  position: 'relative',
+                  background: 'white',
+                  borderRadius: 12,
+                  border: '1.5px solid rgba(0,0,0,0.10)',
+                  boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  overflow: 'visible',
+                }}>
+                  <div style={{ padding: '0 14px', color: '#9a8a7a', flexShrink: 0 }}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="11" cy="11" r="8" />
+                      <path d="m21 21-4.35-4.35" />
+                    </svg>
+                  </div>
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    placeholder="e.g. New York, Poland, Morocco, Baghdad…"
+                    value={query}
+                    onChange={e => handleQueryChange(e.target.value)}
+                    onFocus={() => searchResults.length > 0 && setShowDropdown(true)}
                     style={{
-                      background: 'none',
+                      flex: 1,
                       border: 'none',
-                      cursor: 'pointer',
-                      color: '#9a8a7a',
-                      padding: '0 14px',
-                      fontSize: 18,
-                      lineHeight: 1,
-                      flexShrink: 0,
+                      outline: 'none',
+                      fontSize: 15,
+                      padding: '14px 14px 14px 0',
+                      background: 'transparent',
+                      color: '#1a1410',
+                      fontFamily: 'inherit',
                     }}
-                  >
-                    ×
-                  </button>
+                    autoFocus
+                  />
+                  {query && (
+                    <button
+                      onClick={() => handleQueryChange('')}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        color: '#9a8a7a',
+                        padding: '0 14px',
+                        fontSize: 18,
+                        lineHeight: 1,
+                        flexShrink: 0,
+                      }}
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
+
+                {/* Dropdown results */}
+                {showDropdown && searchResults.length > 0 && (
+                  <div style={{
+                    position: 'absolute',
+                    top: 'calc(100% + 6px)',
+                    left: 0,
+                    right: 0,
+                    background: 'white',
+                    borderRadius: 12,
+                    border: '1px solid rgba(0,0,0,0.10)',
+                    boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+                    zIndex: 200,
+                    overflow: 'hidden',
+                  }}>
+                    {searchResults.map((result, i) => (
+                      <button
+                        key={result.community.id}
+                        onClick={() => handleSelectCommunity(result.community)}
+                        style={{
+                          width: '100%',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 12,
+                          padding: '11px 16px',
+                          background: 'none',
+                          border: 'none',
+                          borderBottom: i < searchResults.length - 1 ? '1px solid rgba(0,0,0,0.06)' : 'none',
+                          cursor: 'pointer',
+                          textAlign: 'left',
+                        }}
+                        onMouseEnter={e => (e.currentTarget.style.background = '#f5f0e8')}
+                        onMouseLeave={e => (e.currentTarget.style.background = 'none')}
+                      >
+                        <span style={{
+                          width: 10,
+                          height: 10,
+                          borderRadius: '50%',
+                          background: CULTURAL_COLORS[result.community.culturalType] ?? '#9a8a7a',
+                          flexShrink: 0,
+                        }} />
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontSize: 14, fontWeight: 600, color: '#1a1410' }}>
+                            {result.community.name}
+                          </div>
+                          <div style={{ fontSize: 11, color: '#9a8a7a', marginTop: 1 }}>
+                            {result.community.culturalType} community
+                          </div>
+                        </div>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c5b9ad" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M9 18l6-6-6-6" />
+                        </svg>
+                      </button>
+                    ))}
+                  </div>
                 )}
               </div>
 
-              {/* Dropdown results */}
-              {showDropdown && searchResults.length > 0 && (
+              {/* No results hint */}
+              {query.length >= 2 && searchResults.length === 0 && !showDropdown && (
                 <div style={{
-                  position: 'absolute',
-                  top: 'calc(100% + 6px)',
-                  left: 0,
-                  right: 0,
-                  background: 'white',
-                  borderRadius: 12,
-                  border: '1px solid rgba(0,0,0,0.10)',
-                  boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
-                  zIndex: 200,
-                  overflow: 'hidden',
+                  textAlign: 'center',
+                  fontSize: 13,
+                  color: '#9a8a7a',
+                  padding: '8px 0 4px',
                 }}>
-                  {searchResults.map((result, i) => (
-                    <button
-                      key={result.community.id}
-                      onClick={() => handleSelectCommunity(result.community)}
-                      style={{
-                        width: '100%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 12,
-                        padding: '11px 16px',
-                        background: 'none',
-                        border: 'none',
-                        borderBottom: i < searchResults.length - 1 ? '1px solid rgba(0,0,0,0.06)' : 'none',
-                        cursor: 'pointer',
-                        textAlign: 'left',
-                      }}
-                      onMouseEnter={e => (e.currentTarget.style.background = '#f5f0e8')}
-                      onMouseLeave={e => (e.currentTarget.style.background = 'none')}
-                    >
-                      <span style={{
-                        width: 10,
-                        height: 10,
-                        borderRadius: '50%',
-                        background: CULTURAL_COLORS[result.community.culturalType] ?? '#9a8a7a',
-                        flexShrink: 0,
-                      }} />
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: 14, fontWeight: 600, color: '#1a1410' }}>
-                          {result.community.name}
-                        </div>
-                        <div style={{ fontSize: 11, color: '#9a8a7a', marginTop: 1 }}>
-                          {result.community.culturalType} community
-                        </div>
-                      </div>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c5b9ad" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M9 18l6-6-6-6" />
-                      </svg>
-                    </button>
-                  ))}
+                  No communities found. Try a country name like &ldquo;Poland&rdquo; or &ldquo;Morocco&rdquo;.
+                </div>
+              )}
+
+              {/* Selected community confirmation */}
+              {selectedCommunity && (
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 10,
+                  background: 'white',
+                  borderRadius: 10,
+                  padding: '10px 14px',
+                  marginBottom: 12,
+                  border: '1.5px solid rgba(0,0,0,0.08)',
+                }}>
+                  <span style={{
+                    width: 11,
+                    height: 11,
+                    borderRadius: '50%',
+                    background: CULTURAL_COLORS[selectedCommunity.culturalType] ?? '#9a8a7a',
+                    flexShrink: 0,
+                  }} />
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: '#1a1410' }}>{selectedCommunity.name}</div>
+                    <div style={{ fontSize: 11, color: '#9a8a7a' }}>{selectedCommunity.culturalType} tradition</div>
+                  </div>
+                  <span style={{ color: '#4caf50', fontSize: 16 }}>✓</span>
                 </div>
               )}
             </div>
 
-            {/* No results hint */}
-            {query.length >= 2 && searchResults.length === 0 && !showDropdown && (
-              <div style={{
-                textAlign: 'center',
-                fontSize: 13,
-                color: '#9a8a7a',
-                padding: '8px 0 4px',
-              }}>
-                No communities found. Try a country name like &ldquo;Poland&rdquo; or &ldquo;Morocco&rdquo;.
-              </div>
-            )}
-
-            {/* Selected community confirmation */}
-            {selectedCommunity && (
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 10,
-                background: 'white',
-                borderRadius: 10,
-                padding: '10px 14px',
-                marginBottom: 12,
-                border: '1.5px solid rgba(0,0,0,0.08)',
-              }}>
-                <span style={{
-                  width: 11,
-                  height: 11,
-                  borderRadius: '50%',
-                  background: CULTURAL_COLORS[selectedCommunity.culturalType] ?? '#9a8a7a',
-                  flexShrink: 0,
-                }} />
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: '#1a1410' }}>{selectedCommunity.name}</div>
-                  <div style={{ fontSize: 11, color: '#9a8a7a' }}>{selectedCommunity.culturalType} tradition</div>
+            {/* Second search box (mixed mode only) */}
+            {mixedMode && (
+              <div style={{ marginBottom: 6 }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: '#9a8a7a', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 6 }}>
+                  Second Background
                 </div>
-                <span style={{ color: '#4caf50', fontSize: 16 }}>✓</span>
+                <div data-search-container="" style={{ position: 'relative', marginBottom: 12 }}>
+                  <div style={{
+                    position: 'relative',
+                    background: 'white',
+                    borderRadius: 12,
+                    border: '1.5px solid rgba(0,0,0,0.10)',
+                    boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    overflow: 'visible',
+                  }}>
+                    <div style={{ padding: '0 14px', color: '#9a8a7a', flexShrink: 0 }}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="m21 21-4.35-4.35" />
+                      </svg>
+                    </div>
+                    <input
+                      ref={inputRef2}
+                      type="text"
+                      placeholder="e.g. Toledo, Istanbul, Baghdad…"
+                      value={query2}
+                      onChange={e => handleQueryChange2(e.target.value)}
+                      onFocus={() => searchResults2.length > 0 && setShowDropdown2(true)}
+                      style={{
+                        flex: 1,
+                        border: 'none',
+                        outline: 'none',
+                        fontSize: 15,
+                        padding: '14px 14px 14px 0',
+                        background: 'transparent',
+                        color: '#1a1410',
+                        fontFamily: 'inherit',
+                      }}
+                    />
+                    {query2 && (
+                      <button
+                        onClick={() => handleQueryChange2('')}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          cursor: 'pointer',
+                          color: '#9a8a7a',
+                          padding: '0 14px',
+                          fontSize: 18,
+                          lineHeight: 1,
+                          flexShrink: 0,
+                        }}
+                      >
+                        ×
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Dropdown results 2 */}
+                  {showDropdown2 && searchResults2.length > 0 && (
+                    <div style={{
+                      position: 'absolute',
+                      top: 'calc(100% + 6px)',
+                      left: 0,
+                      right: 0,
+                      background: 'white',
+                      borderRadius: 12,
+                      border: '1px solid rgba(0,0,0,0.10)',
+                      boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+                      zIndex: 200,
+                      overflow: 'hidden',
+                    }}>
+                      {searchResults2.map((result, i) => (
+                        <button
+                          key={result.community.id}
+                          onClick={() => handleSelectCommunity2(result.community)}
+                          style={{
+                            width: '100%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 12,
+                            padding: '11px 16px',
+                            background: 'none',
+                            border: 'none',
+                            borderBottom: i < searchResults2.length - 1 ? '1px solid rgba(0,0,0,0.06)' : 'none',
+                            cursor: 'pointer',
+                            textAlign: 'left',
+                          }}
+                          onMouseEnter={e => (e.currentTarget.style.background = '#f5f0e8')}
+                          onMouseLeave={e => (e.currentTarget.style.background = 'none')}
+                        >
+                          <span style={{
+                            width: 10,
+                            height: 10,
+                            borderRadius: '50%',
+                            background: CULTURAL_COLORS[result.community.culturalType] ?? '#9a8a7a',
+                            flexShrink: 0,
+                          }} />
+                          <div style={{ flex: 1 }}>
+                            <div style={{ fontSize: 14, fontWeight: 600, color: '#1a1410' }}>
+                              {result.community.name}
+                            </div>
+                            <div style={{ fontSize: 11, color: '#9a8a7a', marginTop: 1 }}>
+                              {result.community.culturalType} community
+                            </div>
+                          </div>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c5b9ad" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M9 18l6-6-6-6" />
+                          </svg>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* No results hint 2 */}
+                {query2.length >= 2 && searchResults2.length === 0 && !showDropdown2 && (
+                  <div style={{
+                    textAlign: 'center',
+                    fontSize: 13,
+                    color: '#9a8a7a',
+                    padding: '8px 0 4px',
+                  }}>
+                    No communities found. Try a country name like &ldquo;Spain&rdquo; or &ldquo;Baghdad&rdquo;.
+                  </div>
+                )}
+
+                {/* Selected community 2 confirmation */}
+                {selectedCommunity2 && (
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 10,
+                    background: 'white',
+                    borderRadius: 10,
+                    padding: '10px 14px',
+                    marginBottom: 12,
+                    border: '1.5px solid rgba(0,0,0,0.08)',
+                  }}>
+                    <span style={{
+                      width: 11,
+                      height: 11,
+                      borderRadius: '50%',
+                      background: CULTURAL_COLORS[selectedCommunity2.culturalType] ?? '#9a8a7a',
+                      flexShrink: 0,
+                    }} />
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: '#1a1410' }}>{selectedCommunity2.name}</div>
+                      <div style={{ fontSize: 11, color: '#9a8a7a' }}>{selectedCommunity2.culturalType} tradition</div>
+                    </div>
+                    <span style={{ color: '#4caf50', fontSize: 16 }}>✓</span>
+                  </div>
+                )}
               </div>
             )}
 
             {/* Generate button */}
             <button
               onClick={handleGenerate}
-              disabled={!selectedCommunity}
+              disabled={!canGenerate}
               style={{
                 width: '100%',
                 padding: '14px',
                 borderRadius: 12,
                 border: 'none',
-                background: selectedCommunity ? '#e07b39' : 'rgba(0,0,0,0.10)',
-                color: selectedCommunity ? 'white' : '#9a8a7a',
+                background: canGenerate ? '#e07b39' : 'rgba(0,0,0,0.10)',
+                color: canGenerate ? 'white' : '#9a8a7a',
                 fontSize: 15,
                 fontWeight: 700,
-                cursor: selectedCommunity ? 'pointer' : 'default',
+                cursor: canGenerate ? 'pointer' : 'default',
                 letterSpacing: '0.02em',
                 transition: 'background 0.15s, transform 0.1s',
               }}
-              onMouseEnter={e => { if (selectedCommunity) (e.currentTarget as HTMLButtonElement).style.background = '#c9692a'; }}
-              onMouseLeave={e => { if (selectedCommunity) (e.currentTarget as HTMLButtonElement).style.background = '#e07b39'; }}
+              onMouseEnter={e => { if (canGenerate) (e.currentTarget as HTMLButtonElement).style.background = '#c9692a'; }}
+              onMouseLeave={e => { if (canGenerate) (e.currentTarget as HTMLButtonElement).style.background = '#e07b39'; }}
             >
-              Generate My Lineage Poster
+              {mixedMode ? 'Generate Mixed Heritage Poster' : 'Generate My Lineage Poster'}
             </button>
 
             {/* Example queries */}
@@ -475,14 +727,18 @@ export default function LineagePoster({ onClose }: Props) {
               gap: 8,
             }}>
               <div style={{ fontSize: 13, color: '#9a8a7a' }}>
-                Your poster is ready
+                {dualLineage ? 'Your mixed heritage poster is ready' : 'Your poster is ready'}
               </div>
               <div style={{ fontSize: 11, color: '#b0a090' }}>
                 Or use your browser&apos;s screenshot/print function
               </div>
             </div>
 
-            <PosterDisplay lineage={lineage} posterRef={posterRef} />
+            {dualLineage ? (
+              <DualPosterDisplay lineage={dualLineage} posterRef={posterRef} />
+            ) : lineage ? (
+              <PosterDisplay lineage={lineage} posterRef={posterRef} />
+            ) : null}
           </div>
         )}
       </div>
