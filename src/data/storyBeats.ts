@@ -71,6 +71,13 @@ export const STORY_BEATS: StoryBeat[] = [
     duration: 7000,
   },
   {
+    year: 1050,
+    mapFocus: { lng: 8, lat: 50, zoom: 4.5 },
+    title: 'The Rhineland Cradle',
+    narration: 'The three Rhine cities of Mainz, Worms, and Speyer — known by their Hebrew acronym ShUM — are the birthplace of Ashkenazi civilization. Rabbi Gershom "Light of the Exile" codifies Ashkenazi law. Rashi studies in Mainz, then writes the commentaries every traditional student still reads today. When the First Crusade sweeps through the Rhine Valley in 1096, it destroys what it created — survivors carry the liturgy and learning eastward into Germany, France, and eventually Poland.',
+    duration: 7000,
+  },
+  {
     year: 1170,
     mapFocus: { lng: 10, lat: 47, zoom: 2.5 },
     title: 'The Crusades and Expulsions',
@@ -85,6 +92,13 @@ export const STORY_BEATS: StoryBeat[] = [
     duration: 8000,
   },
   {
+    year: 1510,
+    mapFocus: { lng: 18, lat: 37, zoom: 2.3 },
+    title: 'The Sephardic Ports',
+    narration: 'After 1492, the expelled Sephardic Jews rebuild their world in a chain of Mediterranean ports. Edirne — the old Ottoman capital — receives the first great wave. Izmir becomes the busiest Jewish city in the Aegean. In North Africa, Fez, Marrakesh, Oran, and the island of Djerba absorb thousands of refugees. In Italy, the Medici open Livorno as a free port with full Jewish protections — it becomes the crossroads linking Amsterdam, Istanbul, and the Atlantic. Wherever they land, the exiles bring Castilian Spanish, their own prayer rite, and the memory of the world they lost.',
+    duration: 8000,
+  },
+  {
     year: 1550,
     mapFocus: { lng: 25, lat: 43, zoom: 2.5 },
     title: 'Two Great Refuges',
@@ -96,6 +110,13 @@ export const STORY_BEATS: StoryBeat[] = [
     mapFocus: { lng: 25, lat: 48, zoom: 2.5 },
     title: 'Catastrophe in Poland',
     narration: 'The Khmelnytsky Cossack massacres of 1648 kill up to 500,000 Jews in eastern Poland — the worst slaughter before the Holocaust. Survivors flee west. The Hasidic movement will rise from these ashes.',
+    duration: 7000,
+  },
+  {
+    year: 1654,
+    mapFocus: { lng: -55, lat: 20, zoom: 2.0 },
+    title: 'The New World',
+    narration: 'In September 1654, twenty-three Jewish refugees arrive in New Amsterdam by ship from Recife, Brazil — themselves fleeing the Portuguese reconquest of Dutch Brazil. Governor Stuyvesant tries to expel them. The Dutch West India Company, whose shareholders include Amsterdam Jews, orders him to let them stay. These twenty-three are the seed of American Jewry. By 1720, Philadelphia has its first congregation; by 1800, synagogues stand in Newport, Charleston, and Savannah. Rio de Janeiro traces its Jewish roots to the same Dutch-Brazilian exodus. In Mexico, crypto-Jews have practiced in secret for a century, beyond the Inquisition\'s reach.',
     duration: 7000,
   },
   {
