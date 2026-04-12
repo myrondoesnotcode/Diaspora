@@ -215,25 +215,6 @@ export default function App() {
           <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Explore</span>
         </button>
 
-        <button
-          onClick={() => {
-            window.history.pushState(null, '', '#poster');
-            setActiveView('poster');
-          }}
-          style={{
-            flex: 1, display: 'flex', flexDirection: 'column',
-            alignItems: 'center', justifyContent: 'center', gap: 3,
-            background: 'none', border: 'none', cursor: 'pointer',
-            color: activeView === 'poster' ? '#e07b39' : '#9a8a7a',
-            position: 'relative',
-          }}
-        >
-          {/* Star of David icon */}
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-          </svg>
-          <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Lineage</span>
-        </button>
       </div>
     </div>
   );
