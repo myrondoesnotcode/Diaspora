@@ -68,8 +68,9 @@ export default function Explore() {
         <div className="explore-kicker">Epilogue</div>
         <h2 className="explore-title">Explore the Full Map</h2>
         <p className="explore-sub">
-          Scrub through all 1,954 years yourself — every community, every migration,
-          color-coded by cultural tradition. Hover any city for its story.
+          Now go even deeper — scrub through nearly 4,000 years, from Abraham to
+          today. Every community, every migration, color-coded by tradition.
+          Zoom, pan, and click any city for its story.
         </p>
       </div>
       <div className="explore-app">

@@ -45,9 +45,9 @@ export default function EpochBar({ currentYear, onSelectYear }: Props) {
       <div
         className="text-center text-xs px-4 py-1.5 rounded-lg mx-auto max-w-xl"
         style={{
-          backgroundColor: activeEpoch.color + '18',
+          backgroundColor: activeEpoch.color + '14',
           color: activeEpoch.color,
-          border: `1px solid ${activeEpoch.color}33`,
+          border: `1px solid ${activeEpoch.color}30`,
         }}
       >
         {activeEpoch.description}

@@ -4,6 +4,7 @@
 import type { CulturalType } from './types';
 
 export const CULTURAL_COLORS: Record<CulturalType, string> = {
+  Ancient: '#e8b54d', // temple gold
   Ashkenazi: '#6fb4ff', // dawn blue
   Sephardic: '#ffc24d', // amber gold
   Mizrahi: '#57e0a6', // emerald
