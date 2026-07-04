@@ -82,7 +82,7 @@ export default function MapOverlay({
     <div style={{
       position: 'absolute', bottom: 0, left: 0, right: 0,
       zIndex: 10,
-      background: 'rgba(245,240,232,0.96)',
+      background: 'rgba(6,8,14,0.9)',
       backdropFilter: 'blur(12px)',
       borderTop: '1px solid rgba(0,0,0,0.08)',
       padding: '10px 16px 14px',
@@ -121,7 +121,7 @@ export default function MapOverlay({
             style={{
               flexShrink: 0, width: 24, height: 24, borderRadius: 6,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              background: epochIdx === 0 ? 'rgba(0,0,0,0.05)' : epoch.color + '18',
+              background: epochIdx === 0 ? 'rgba(255,255,255,0.06)' : epoch.color + '18',
               border: `1px solid ${epochIdx === 0 ? 'rgba(0,0,0,0.08)' : epoch.color + '44'}`,
               cursor: epochIdx === 0 ? 'default' : 'pointer',
               color: epochIdx === 0 ? '#ccc' : epoch.color,
@@ -133,7 +133,7 @@ export default function MapOverlay({
             <div style={{ fontSize: 12, fontWeight: 700, color: epoch.color, lineHeight: 1.2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               {epoch.name}
             </div>
-            <div style={{ fontSize: 10, color: '#9a8a7a', lineHeight: 1 }}>
+            <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.45)', lineHeight: 1 }}>
               {formatYear(epoch.startYear)} – {formatYear(epoch.endYear)}
             </div>
           </div>
@@ -144,7 +144,7 @@ export default function MapOverlay({
             style={{
               flexShrink: 0, width: 24, height: 24, borderRadius: 6,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              background: epochIdx === EPOCHS.length - 1 ? 'rgba(0,0,0,0.05)' : epoch.color + '18',
+              background: epochIdx === EPOCHS.length - 1 ? 'rgba(255,255,255,0.06)' : epoch.color + '18',
               border: `1px solid ${epochIdx === EPOCHS.length - 1 ? 'rgba(0,0,0,0.08)' : epoch.color + '44'}`,
               cursor: epochIdx === EPOCHS.length - 1 ? 'default' : 'pointer',
               color: epochIdx === EPOCHS.length - 1 ? '#ccc' : epoch.color,

@@ -12,20 +12,7 @@ import EventCard from './EventCard';
 // Years where catastrophic events trigger shockwave on Jerusalem
 const CATASTROPHE_YEARS = [-586, 70];
 
-const CULTURAL_COLORS: Record<CulturalType, string> = {
-  Ashkenazi: '#4a9eff',
-  Sephardic: '#f5a623',
-  Mizrahi: '#7ed321',
-  Yemenite: '#bd10e0',
-  Ethiopian: '#e86c2c',
-  Mixed: '#9b9b9b',
-  Ancient: '#d4af37',
-};
-
-const ARC_COLORS: Record<string, string> = {
-  forced: '#ff4444',
-  voluntary: '#44aaff',
-};
+import { CULTURAL_COLORS, ARC_COLORS } from '../data/palette';
 
 interface SelectedCommunity {
   community: Community;
@@ -325,25 +312,25 @@ export default function DiasporaMap({ year }: Props) {
       {/* Legend — fixed, doesn't zoom */}
       <div style={{
         position: 'absolute', top: 12, right: 12,
-        background: 'rgba(245,240,232,0.93)',
-        border: '1px solid rgba(0,0,0,0.08)',
+        background: 'rgba(6,8,14,0.88)',
+        border: '1px solid rgba(255,255,255,0.1)',
         backdropFilter: 'blur(10px)',
         borderRadius: 12, padding: '10px 12px', fontSize: 11,
       }}>
-        <div style={{ fontSize: 9, fontWeight: 700, color: '#6b5a4a', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 5, textAlign: 'center' }}>
+        <div style={{ fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 5, textAlign: 'center' }}>
           Tradition
         </div>
         {(Object.entries(CULTURAL_COLORS) as [CulturalType, string][]).map(([type, color]) => (
           <div key={type} style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 3 }}>
             <div style={{ width: 9, height: 9, borderRadius: '50%', backgroundColor: color, flexShrink: 0 }} />
-            <span style={{ color: '#1a1410', fontSize: 10 }}>{type}</span>
+            <span style={{ color: 'rgba(255,255,255,0.85)', fontSize: 10 }}>{type}</span>
           </div>
         ))}
-        <div style={{ marginTop: 6, paddingTop: 6, borderTop: '1px solid rgba(0,0,0,0.08)' }}>
-          {[['#ff4444', 'Forced'], ['#44aaff', 'Voluntary']].map(([color, label]) => (
+        <div style={{ marginTop: 6, paddingTop: 6, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+          {[[ARC_COLORS.forced, 'Forced'], [ARC_COLORS.voluntary, 'Voluntary']].map(([color, label]) => (
             <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 3 }}>
               <div style={{ width: 14, height: 2, background: color, borderRadius: 1, flexShrink: 0 }} />
-              <span style={{ color: '#1a1410', fontSize: 10 }}>{label}</span>
+              <span style={{ color: 'rgba(255,255,255,0.85)', fontSize: 10 }}>{label}</span>
             </div>
           ))}
         </div>
@@ -355,11 +342,11 @@ export default function DiasporaMap({ year }: Props) {
         style={{
           position: 'absolute', bottom: 12, right: 12,
           width: 36, height: 36, borderRadius: 10,
-          background: 'rgba(245,240,232,0.93)',
-          border: '1px solid rgba(0,0,0,0.08)',
+          background: 'rgba(6,8,14,0.88)',
+          border: '1px solid rgba(255,255,255,0.1)',
           backdropFilter: 'blur(10px)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          cursor: 'pointer', fontSize: 16, color: '#6b5a4a',
+          cursor: 'pointer', fontSize: 16, color: 'rgba(255,255,255,0.5)',
         }}
         title="Reset view"
       >
@@ -373,8 +360,8 @@ export default function DiasporaMap({ year }: Props) {
           style={{
             position: 'absolute', bottom: 0, left: 0, right: 0,
             zIndex: 20,
-            background: '#f5f0e8',
-            borderTop: '1px solid rgba(0,0,0,0.1)',
+            background: 'rgba(6,8,14,0.96)',
+            borderTop: '1px solid rgba(255,255,255,0.1)',
             borderRadius: '16px 16px 0 0',
             padding: '12px 20px 20px',
             maxHeight: '55%',
@@ -385,7 +372,7 @@ export default function DiasporaMap({ year }: Props) {
         >
           {/* Handle + close */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', marginBottom: 14 }}>
-            <div style={{ width: 36, height: 4, background: 'rgba(0,0,0,0.15)', borderRadius: 2 }} />
+            <div style={{ width: 36, height: 4, background: 'rgba(255,255,255,0.2)', borderRadius: 2 }} />
             <button
               onClick={() => setSelected(null)}
               style={{
@@ -393,7 +380,7 @@ export default function DiasporaMap({ year }: Props) {
                 width: 28, height: 28, borderRadius: '50%',
                 background: 'rgba(0,0,0,0.07)', border: 'none',
                 cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 16, color: '#6b5a4a',
+                fontSize: 16, color: 'rgba(255,255,255,0.5)',
               }}
             >×</button>
           </div>
@@ -402,7 +389,7 @@ export default function DiasporaMap({ year }: Props) {
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
                 <div style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: CULTURAL_COLORS[selected.community.culturalType], flexShrink: 0 }} />
-                <div style={{ fontSize: 17, fontWeight: 700, color: '#1a1410' }}>{selected.community.name}</div>
+                <div style={{ fontSize: 17, fontWeight: 700, color: 'rgba(255,255,255,0.85)' }}>{selected.community.name}</div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
                 <span style={{
@@ -416,19 +403,19 @@ export default function DiasporaMap({ year }: Props) {
                   {selected.community.culturalType}
                 </span>
                 {selected.population > 0 && (
-                  <span style={{ fontSize: 13, fontWeight: 700, color: '#1a1410' }}>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: 'rgba(255,255,255,0.85)' }}>
                     {fmt(selected.population)} Jews
                   </span>
                 )}
               </div>
-              <p style={{ fontSize: 13, color: '#3a2a1a', lineHeight: 1.55, margin: 0 }}>
+              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.85)', lineHeight: 1.55, margin: 0 }}>
                 {selected.community.significance}
               </p>
             </div>
 
             {/* Sparkline */}
             <div style={{ flexShrink: 0 }}>
-              <div style={{ fontSize: 9, color: '#9a8a7a', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4, textAlign: 'center' }}>Population over time</div>
+              <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.45)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4, textAlign: 'center' }}>Population over time</div>
               <Sparkline community={selected.community} />
             </div>
           </div>

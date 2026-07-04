@@ -1,15 +1,6 @@
 import React from 'react';
-import type { Community, CulturalType } from '../data/types';
-
-const CULTURAL_COLORS: Record<CulturalType, string> = {
-  Ashkenazi: '#4a9eff',
-  Sephardic: '#f5a623',
-  Mizrahi: '#7ed321',
-  Yemenite: '#bd10e0',
-  Ethiopian: '#e86c2c',
-  Mixed: '#9b9b9b',
-  Ancient: '#d4af37',
-};
+import type { Community } from '../data/types';
+import { CULTURAL_COLORS } from '../data/palette';
 
 interface Props {
   community: Community;

@@ -125,10 +125,10 @@ export default function Timeline({
 
         {/* Stats */}
         <div style={{ flexShrink: 0, textAlign: 'right' }}>
-          <div style={{ fontSize: 11, color: '#6b5a4a' }}>World Jewish Pop.</div>
+          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)' }}>World Jewish Pop.</div>
           <div style={{ fontSize: 13, fontWeight: 700, color: epoch.color }}>~{fmt(totalPopulation)}</div>
           {activeMigrations > 0 && (
-            <div style={{ fontSize: 10, color: '#6b5a4a', marginTop: 1 }}>
+            <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.5)', marginTop: 1 }}>
               {activeMigrations} migration{activeMigrations !== 1 ? 's' : ''} active
             </div>
           )}

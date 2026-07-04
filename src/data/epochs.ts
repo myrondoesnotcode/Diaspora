@@ -122,7 +122,7 @@ export const EPOCHS: Epoch[] = [
     name: 'Roman Diaspora',
     startYear: 70,
     endYear: 399,
-    color: '#c0392b',
+    color: '#ff9a5c',
     description: 'Destruction of the Second Temple scatters Jewish communities across the Roman Empire and beyond.',
     longDescription: 'The Roman legions\' destruction of Jerusalem\'s Second Temple in 70 CE ended two thousand years of Temple-based Judaism in a single catastrophic campaign. General Titus marched over a million Jewish captives through Rome in a triumph whose arch still stands today. Jewish communities already existed from Spain to Babylonia — now they would be the primary centers of a religion reinventing itself around text and prayer rather than sacrifice. The great rabbis, led by Yohanan ben Zakkai, rebuilt Judaism at Yavneh by codifying oral law into what would become the Mishnah. By the end of this era, Jews in Babylonia under Parthian rule were actually more numerous and more prosperous than those still living in Roman Palestine.',
     keyEvents: [
@@ -151,7 +151,7 @@ export const EPOCHS: Epoch[] = [
     name: 'Geonic Era',
     startYear: 400,
     endYear: 999,
-    color: '#d4a017',
+    color: '#ffcf6b',
     description: 'Babylonian academies (yeshivot) flourish under Sasanian and later Islamic rule. The Geonim lead world Jewry.',
     longDescription: 'For six centuries, the great academies of Sura and Pumbedita in Babylonia served as the undisputed intellectual and spiritual capital of world Jewry. Their leaders, the Geonim (from the Hebrew for "eminences"), issued thousands of legal responsa that shaped Jewish practice from Spain to India. Under Sasanian Persian rule, Jews enjoyed relative autonomy governed by the Exilarch (Resh Galuta), a hereditary prince claiming descent from King David. The Arab conquests of the 7th century initially changed little — the Abbasid caliphate, ruling from nearby Baghdad, proved broadly tolerant and even employed Jewish scholars at court. The Babylonian Talmud, compiled and edited during this period, became the definitive guide to Jewish law for all future generations, superseding even the Jerusalem Talmud.',
     keyEvents: [
@@ -180,7 +180,7 @@ export const EPOCHS: Epoch[] = [
     name: 'Golden Age of Spain',
     startYear: 1000,
     endYear: 1148,
-    color: '#f39c12',
+    color: '#ffc24d',
     description: 'Umayyad Iberia witnesses an extraordinary flowering of Jewish philosophy, poetry, science, and culture.',
     longDescription: 'The Umayyad caliphate of Córdoba created a unique convivencia — a coexistence of Muslim, Christian, and Jewish scholars — that produced one of the most dazzling intellectual flowerings in human history. Jewish courtiers rose to the highest levels of government: Samuel ibn Naghrillah served as vizier and military commander of Granada; his son Joseph succeeded him. Poets like Judah Halevi composed Hebrew verse of heartbreaking beauty, while thinkers like Solomon ibn Gabirol (Avicebron) wrote philosophy that influenced both Islamic and scholastic Christian thought. Medicine, astronomy, and mathematics flowed freely across religious lines. The great Maimonides, though born as this golden age collapsed, was its direct intellectual heir. The period ended violently when the Almohad dynasty invaded from Morocco in 1148 — fanatically intolerant, they forced Jews to convert, flee, or die.',
     keyEvents: [
@@ -209,7 +209,7 @@ export const EPOCHS: Epoch[] = [
     name: 'Era of Expulsions',
     startYear: 1149,
     endYear: 1549,
-    color: '#e74c3c',
+    color: '#ff5e52',
     description: 'Crusades, the Black Death, and rising Christian nationalism drive waves of expulsions across Western Europe.',
     longDescription: 'Four centuries of escalating persecution systematically dismantled the Jewish communities of Western Europe. The Crusades, beginning in 1096, turned crowds of holy warriors against the great ShUM communities — Speyer, Worms, and Mainz — the cradle of Ashkenazi civilization, before the crusaders ever reached the Holy Land. Rashi had studied in Mainz; his commentaries would survive even as the city burned. Jews were expelled from England in 1290, France in 1306 and 1394, and countless German cities repeatedly between the 13th and 15th centuries. The Black Death of 1348–1351 triggered continent-wide massacres — Jews were accused of poisoning wells, and entire communities were murdered; Nuremberg expelled its Jews in 1349 and again in 1499. The worst came in 1492, when Ferdinand and Isabella expelled all 200,000 Jews from Spain with 90 days\' notice. Portugal followed in 1497. The refugees — Sephardic Jews (from the Hebrew for "Spain") — flooded into the Ottoman Empire, North Africa, the Netherlands, and Italy, carrying Spanish-Jewish culture intact to new homes across the Mediterranean.',
     keyEvents: [
@@ -238,7 +238,7 @@ export const EPOCHS: Epoch[] = [
     name: 'Polish–Ottoman Axis',
     startYear: 1550,
     endYear: 1788,
-    color: '#8e44ad',
+    color: '#c891ff',
     description: 'Poland-Lithuania and the Ottoman Empire become twin centers of Jewish life, each harboring hundreds of thousands.',
     longDescription: 'After the expulsions from Western Europe, two great powers welcomed Jewish refugees and created the twin pillars of early modern Jewish civilization. The Polish-Lithuanian Commonwealth, governed by a unique nobility-republic (the Szlachta), gave Jews legal protections, autonomy, and economic roles as trade intermediaries — by 1650, Poland housed over half of world Jewry. The Council of Four Lands (Va\'ad Arba Aratzot), a Jewish parliamentary body, governed Polish Jews with real legal authority. Meanwhile the Ottoman sultans, particularly Bayezid II, actively recruited Sephardic refugees, famously asking: "How can you call Ferdinand a wise king? He is impoverishing his country and enriching mine." Ottoman Jewish communities flourished across the empire: Salonika (where Sephardic Jews became the city\'s majority), Istanbul, Izmir — the busiest Jewish port in the Aegean — and Edirne, the old Ottoman capital where the first waves of exiles arrived. In Italy, the Medici Grand Dukes opened Livorno (Leghorn) as a free port in 1593 with guaranteed Jewish protections; it became the critical hub linking the Sephardic trading world from Amsterdam to North Africa. Safed briefly became the world center of Jewish mysticism under the Kabbalists. This era ended in catastrophe for Polish Jewry: the Khmelnytsky Cossack uprising of 1648–1657 killed 100,000–500,000 Jews in eastern Poland — the greatest mass slaughter of Jews before the Holocaust.',
     keyEvents: [
@@ -267,7 +267,7 @@ export const EPOCHS: Epoch[] = [
     name: 'Emancipation',
     startYear: 1789,
     endYear: 1879,
-    color: '#2980b9',
+    color: '#6fb4ff',
     description: 'The French Revolution triggers a century-long struggle for legal equality in Western and Central Europe.',
     longDescription: 'The Enlightenment\'s ideas of universal rights crashed into centuries of Jewish exclusion and produced a century of transformation. France granted Jews full citizenship in 1791 — the first country in Europe to do so. Napoleon convened a Great Sanhedrin in 1807 to ask Jewish leaders whether Jewish law was compatible with French citizenship; the answer, carefully crafted, was yes. German Jews navigated the difficult bargain of the *Haskalah* (Jewish Enlightenment): secular education and German cultural integration in exchange for legal rights. Moses Mendelssohn translated the Torah into German and argued Jews could be both fully Jewish and fully German. Reform Judaism, born in Hamburg in 1810, modernized liturgy and theology to fit bourgeois German life. By 1871, unification gave German Jews full legal equality. Yet emancipation bred its own backlash: as Jews entered universities, professions, and public life, modern racial antisemitism emerged to replace the old religious anti-Judaism.',
     keyEvents: [
@@ -296,7 +296,7 @@ export const EPOCHS: Epoch[] = [
     name: 'Mass Migration',
     startYear: 1880,
     endYear: 1932,
-    color: '#27ae60',
+    color: '#57e0a6',
     description: 'Pogroms and poverty propel two million Jews from Eastern Europe to the Americas and Palestine.',
     longDescription: 'Czar Alexander II\'s assassination in 1881 unleashed a wave of pogroms across the Russian Pale of Settlement that triggered the largest Jewish migration in history. Over fifty years, more than two million Jews left the Pale — a region covering parts of today\'s Ukraine, Belarus, Poland, and Lithuania — for new lives in the Americas and Palestine. New York\'s Lower East Side became the world\'s largest Jewish city by 1910, but the migration spread far beyond: to Philadelphia, Chicago, Toronto, and San Francisco on the Pacific coast. Each city developed its own Jewish institutions — newspapers, mutual aid societies, labor unions, and eventually great universities. The garment industry, the Bund, the Forverts newspaper, and Yiddish theater all flourished. At the same time, Zionist pioneers (the First, Second, and Third Aliyot) began draining swamps, founding kibbutzim, and reviving Hebrew as a spoken language in Ottoman and British Palestine. The era produced two visions of Jewish redemption: universal socialist brotherhood and national self-determination in the ancestral homeland.',
     keyEvents: [
@@ -325,7 +325,7 @@ export const EPOCHS: Epoch[] = [
     name: 'Holocaust & Founding',
     startYear: 1933,
     endYear: 1952,
-    color: '#888888',
+    color: '#9aa0ab',
     description: 'Nazi genocide destroys European Jewry. Survivors and refugees help establish the State of Israel in 1948.',
     longDescription: 'In twelve years, the Nazi regime murdered six million Jews — two thirds of European Jewry and one third of world Jewry — in history\'s most systematic genocide. Ancient communities that had survived a thousand years were annihilated entirely: Polish Jewry (3.3 million), Ukrainian Jewry (1.5 million), Dutch Jewry (100,000). The Nuremberg Laws (1935) stripped German Jews of citizenship; Kristallnacht (1938) announced the shift from persecution to physical destruction; the Wannsee Conference (1942) coordinated the "Final Solution." Six million died in gas chambers, shootings, and starvation. Yet out of catastrophe came an act of historical transformation: the founding of Israel in 1948. Holocaust survivors in displaced persons camps formed the core of Zionist immigration. The United Nations voted partition in November 1947; David Ben-Gurion declared independence on May 14, 1948. Within hours, five Arab armies attacked. Israel survived — and immediately began absorbing hundreds of thousands of refugees.',
     keyEvents: [
@@ -354,7 +354,7 @@ export const EPOCHS: Epoch[] = [
     name: 'Israeli Era',
     startYear: 1953,
     endYear: 2026,
-    color: '#2563eb',
+    color: '#7fb3ff',
     description: 'Israel absorbs waves of Jewish immigrants from the Arab world, Soviet Union, and Ethiopia while diaspora communities reshape.',
     longDescription: 'The seven decades since Israel\'s founding have been defined by extraordinary ingathering and equally extraordinary geopolitical transformation. Operation Magic Carpet (1949–1950) airlifted virtually the entire Yemenite Jewish community to Israel. Waves of Jews from Iraq, Morocco, Tunisia, Libya, and Egypt followed through the 1950s–1970s as Arab nationalism made Jewish life untenable across the Middle East. The Six-Day War of 1967 brought Jerusalem and the West Bank under Israeli control and transformed world Jewish identity. The Soviet Jewry movement of the 1970s–1980s, championed by diaspora communities worldwide, culminated in over a million emigrants after the USSR\'s collapse. Operation Solomon (1991) airlifted the Beta Israel community from Ethiopia in 36 hours. Today Israel\'s 7.2 million Jews live alongside a diaspora of roughly equal size — concentrated in the United States (6 million), France (500,000), Canada, Argentina, and the UK. Both communities wrestle with assimilation, identity, and the relationship between Jewish peoplehood and the Jewish state.',
     keyEvents: [

@@ -1,221 +1,147 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { SNAPSHOT_YEARS } from './data/types';
-import type { SnapshotYear } from './data/types';
+import { useEffect, useRef, useState } from 'react';
+import { CHAPTERS } from './data/chapters';
 import { COMMUNITIES } from './data/communities';
 import { MIGRATIONS } from './data/migrations';
-import DiasporaMap from './components/DiasporaMap';
-import MapOverlay from './components/MapOverlay';
-import ExploreTab from './components/ExploreTab';
-import IntroModal from './components/IntroModal';
-import StoryMode from './components/StoryMode';
-import LineagePoster from './components/LineagePoster';
+import { MOMENTS } from './data/moments';
+import { storyStateAt, populationAt } from './utils/story';
+import type { StoryState } from './utils/story';
+import ScrollMap from './components/ScrollMap';
+import Hero from './components/Hero';
+import ChapterSection from './components/ChapterSection';
+import StoryHUD, { StoryFeed } from './components/StoryHUD';
+import type { FeedMoment } from './components/StoryHUD';
+import CommunityCard from './components/CommunityCard';
+import Explore from './components/Explore';
 
-type ActiveTab = 'map' | 'explore';
-type ActiveView = 'main' | 'poster';
-
-function getInitialView(): ActiveView {
-  return window.location.hash.startsWith('#poster') ? 'poster' : 'main';
-}
-
-function getPopulation(year: number): number {
+function totalPopulationAt(year: number): number {
   let total = 0;
-  for (const c of COMMUNITIES) {
-    const years = Object.keys(c.populations).map(Number).sort((a, b) => a - b);
-    let val = 0;
-    for (const y of years) {
-      if (y <= year) val = c.populations[y] ?? 0;
-    }
-    total += val;
-  }
+  for (const c of COMMUNITIES) total += populationAt(c, year);
   return total;
 }
 
-function getActiveMigrationCount(year: number): number {
-  return MIGRATIONS.filter((m) => year >= m.startYear && year <= m.endYear).length;
+function momentsAt(year: number): FeedMoment[] {
+  // Most recent moments still "echoing" (shown for ~30 years of story time)
+  return MOMENTS.filter((m) => year >= m.year && year - m.year < 30)
+    .slice(-3)
+    .reverse()
+    .map((m) => ({ year: m.year, label: m.label, kind: m.kind }));
 }
 
-function nearestSnapshotYear(year: number): SnapshotYear {
-  return SNAPSHOT_YEARS.reduce((prev, curr) =>
-    Math.abs(curr - year) < Math.abs(prev - year) ? curr : prev
-  );
-}
-
-function getInitialYear(): SnapshotYear {
-  const hash = window.location.hash;
-  const match = hash.match(/year=(-?\d+)/);
-  if (match) return nearestSnapshotYear(parseInt(match[1], 10));
-  return 70;
+function migrationsAt(year: number): string[] {
+  return MIGRATIONS.filter((m) => year >= m.startYear && year <= m.endYear)
+    .slice(0, 2)
+    .map((m) => m.description);
 }
 
 export default function App() {
-  const [currentYear, setCurrentYear] = useState<SnapshotYear>(getInitialYear);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [activeTab, setActiveTab] = useState<ActiveTab>('map');
-  const [showIntro, setShowIntro] = useState(true);
-  const [storyMode, setStoryMode] = useState(false);
-  const [activeView, setActiveView] = useState<ActiveView>(getInitialView);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  const advanceYear = useCallback(() => {
-    setCurrentYear((prev) => {
-      const idx = SNAPSHOT_YEARS.indexOf(prev);
-      if (idx >= SNAPSHOT_YEARS.length - 1) {
-        setIsPlaying(false);
-        return prev;
-      }
-      return SNAPSHOT_YEARS[idx + 1];
-    });
-  }, []);
+  const storyRef = useRef<HTMLDivElement>(null);
+  const stateRef = useRef<StoryState>(storyStateAt(0));
+  const [picked, setPicked] = useState<string | null>(null);
+  const [hud, setHud] = useState({
+    year: CHAPTERS[0].startYear,
+    population: totalPopulationAt(CHAPTERS[0].startYear),
+    chapterIndex: -1,
+    accent: '#e8b54d',
+    inStory: true,
+    progress: 0,
+    moments: momentsAt(CHAPTERS[0].startYear),
+    migrations: migrationsAt(CHAPTERS[0].startYear),
+  });
 
   useEffect(() => {
-    if (isPlaying) {
-      intervalRef.current = setInterval(advanceYear, 1500);
-    } else {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    }
+    let raf = 0;
+    let lastYear = -1;
+    let lastChapter = -2;
+    let lastInStory: boolean | null = null;
+
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const story = storyRef.current;
+        if (!story) return;
+        const vh = window.innerHeight;
+        const rect = story.getBoundingClientRect();
+        const scrolled = -rect.top;
+
+        // Measure actual section boundaries: t = 0..1 across the hero, then
+        // 1 + i + progress through chapter i.
+        let t: number;
+        const sections = Array.from(
+          story.querySelectorAll<HTMLElement>('.hero, .chapter')
+        );
+        const heroLen = sections[0]?.offsetHeight ?? vh;
+        if (scrolled < heroLen) {
+          t = Math.max(0, scrolled / heroLen);
+        } else {
+          t = 1 + CHAPTERS.length - 0.0001; // past the last chapter
+          for (let i = 1; i < sections.length; i++) {
+            const top = sections[i].offsetTop;
+            const len = sections[i].offsetHeight;
+            if (scrolled < top + len) {
+              t = i + (scrolled - top) / len;
+              break;
+            }
+          }
+        }
+
+        const s = storyStateAt(t);
+        stateRef.current = s;
+
+        const storyBottom = rect.bottom - vh; // >0 while story still on screen
+        const inStory = storyBottom > -vh * 0.2;
+
+        const yr = Math.round(s.year);
+        if (yr !== lastYear || s.chapterIndex !== lastChapter || inStory !== lastInStory) {
+          lastYear = yr;
+          lastChapter = s.chapterIndex;
+          lastInStory = inStory;
+          setHud({
+            year: s.year,
+            population: totalPopulationAt(s.year),
+            chapterIndex: s.chapterIndex,
+            accent: s.palette.accent,
+            inStory,
+            progress: Math.min(1, Math.max(0, t / (1 + CHAPTERS.length))),
+            moments: momentsAt(s.year),
+            migrations: migrationsAt(s.year),
+          });
+        }
+      });
+    };
+
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
     return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
+      cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
     };
-  }, [isPlaying, advanceYear]);
-
-  useEffect(() => {
-    const onHashChange = () => {
-      setActiveView(window.location.hash.startsWith('#poster') ? 'poster' : 'main');
-    };
-    window.addEventListener('hashchange', onHashChange);
-    return () => window.removeEventListener('hashchange', onHashChange);
   }, []);
-
-  const handleYearChange = useCallback((year: SnapshotYear) => {
-    setCurrentYear(year);
-    window.history.replaceState(null, '', `#year=${year}`);
-  }, []);
-
-  const handlePlayPause = useCallback(() => {
-    setIsPlaying((p) => {
-      if (!p && currentYear === SNAPSHOT_YEARS[SNAPSHOT_YEARS.length - 1]) {
-        setCurrentYear(SNAPSHOT_YEARS[0]);
-      }
-      return !p;
-    });
-  }, [currentYear]);
-
-  const handleSelectEpoch = useCallback((year: SnapshotYear) => {
-    setCurrentYear(year);
-    setActiveTab('map');
-  }, []);
-
-  const totalPop = getPopulation(currentYear);
-  const activeMigrations = getActiveMigrationCount(currentYear);
 
   return (
-    <div style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column', background: '#f5f0e8' }}>
-
-      {/* Content area */}
-      <div style={{ flex: 1, position: 'relative', overflow: 'hidden', minHeight: 0 }}>
-
-        {/* MAP TAB — full screen map with floating overlay */}
-        <div style={{
-          position: 'absolute', inset: 0,
-          display: activeTab === 'map' ? 'block' : 'none',
-        }}>
-          <DiasporaMap year={currentYear} />
-          {storyMode ? (
-            <StoryMode
-              onYearChange={handleYearChange}
-              onExit={() => setStoryMode(false)}
-            />
-          ) : (
-            <MapOverlay
-              currentYear={currentYear}
-              isPlaying={isPlaying}
-              onYearChange={handleYearChange}
-              onPlayPause={handlePlayPause}
-              totalPopulation={totalPop}
-              activeMigrations={activeMigrations}
-            />
-          )}
-        </div>
-
-        {/* EXPLORE TAB */}
-        <div style={{
-          position: 'absolute', inset: 0,
-          display: activeTab === 'explore' ? 'flex' : 'none',
-          flexDirection: 'column',
-          overflowY: 'auto',
-          WebkitOverflowScrolling: 'touch',
-        } as React.CSSProperties}>
-          <ExploreTab currentYear={currentYear} onSelectEpoch={handleSelectEpoch} />
-        </div>
-      </div>
-
-      {showIntro && activeView !== 'poster' && (
-        <IntroModal
-          onClose={() => setShowIntro(false)}
-          onStoryMode={() => {
-            setShowIntro(false);
-            setStoryMode(true);
-            setActiveTab('map');
-          }}
-        />
+    <div className="story-root">
+      <ScrollMap stateRef={stateRef} visible={hud.inStory} onPickCommunity={setPicked} />
+      <div className="film-grain" aria-hidden="true" />
+      <StoryFeed moments={hud.moments} migrations={hud.migrations} visible={hud.inStory} />
+      <StoryHUD
+        year={hud.year}
+        population={hud.population}
+        chapterIndex={hud.chapterIndex}
+        accent={hud.accent}
+        visible={hud.inStory}
+        progress={hud.progress}
+      />
+      {picked && hud.inStory && (
+        <CommunityCard communityId={picked} year={hud.year} onClose={() => setPicked(null)} />
       )}
-
-      {/* Lineage Poster overlay — accessible via #poster URL hash */}
-      {activeView === 'poster' && (
-        <div style={{ position: 'fixed', inset: 0, zIndex: 100, overflowY: 'auto', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}>
-          <LineagePoster
-            currentYear={currentYear}
-            onClose={() => {
-              window.history.pushState(null, '', `#year=${currentYear}`);
-              setActiveView('main');
-            }}
-          />
-        </div>
-      )}
-
-      {/* Bottom tab bar — zIndex 60 keeps it above IntroModal backdrop (zIndex 50) */}
-      <div style={{
-        flexShrink: 0, height: 56,
-        display: 'flex',
-        background: '#f5f0e8',
-        borderTop: '1px solid rgba(0,0,0,0.1)',
-        position: 'relative',
-        zIndex: 60,
-      }}>
-        <button
-          onClick={() => { setActiveView('main'); setActiveTab('map'); }}
-          style={{
-            flex: 1, display: 'flex', flexDirection: 'column',
-            alignItems: 'center', justifyContent: 'center', gap: 3,
-            background: 'none', border: 'none', cursor: 'pointer',
-            color: activeView === 'main' && activeTab === 'map' ? '#e07b39' : '#9a8a7a',
-          }}
-        >
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-            <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" />
-            <line x1="9" y1="3" x2="9" y2="18" />
-            <line x1="15" y1="6" x2="15" y2="21" />
-          </svg>
-          <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Map</span>
-        </button>
-
-        <button
-          onClick={() => { setActiveView('main'); setActiveTab('explore'); }}
-          style={{
-            flex: 1, display: 'flex', flexDirection: 'column',
-            alignItems: 'center', justifyContent: 'center', gap: 3,
-            background: 'none', border: 'none', cursor: 'pointer',
-            color: activeView === 'main' && activeTab === 'explore' ? '#e07b39' : '#9a8a7a',
-          }}
-        >
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
-            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-          </svg>
-          <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Explore</span>
-        </button>
-
+      <div ref={storyRef} className="story-scroll">
+        <Hero />
+        {CHAPTERS.map((c) => (
+          <ChapterSection key={c.id} chapter={c} />
+        ))}
       </div>
+      <Explore />
     </div>
   );
 }

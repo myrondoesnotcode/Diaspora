@@ -1,14 +1,11 @@
 import type { Migration } from '../data/types';
+import { ARC_COLORS } from '../data/palette';
 
 interface Props {
   year: number;
   migrations: Migration[];
 }
 
-const ARC_COLORS: Record<string, string> = {
-  forced: '#ff4444',
-  voluntary: '#44aaff',
-};
 
 export default function EventCard({ year, migrations }: Props) {
   if (migrations.length === 0) return null;
@@ -31,7 +28,7 @@ export default function EventCard({ year, migrations }: Props) {
       style={{
         position: 'absolute', top: 12, left: 12,
         maxWidth: 'min(270px, calc(100vw - 24px))',
-        background: 'rgba(245,240,232,0.93)',
+        background: 'rgba(6,8,14,0.92)',
         border: '1px solid rgba(0,0,0,0.08)',
         backdropFilter: 'blur(10px)',
         borderRadius: 12,
@@ -40,7 +37,7 @@ export default function EventCard({ year, migrations }: Props) {
       }}
     >
       <div style={{
-        fontSize: 9, fontWeight: 700, color: '#9a8a7a',
+        fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.45)',
         textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 7,
       }}>
         What's happening
@@ -54,7 +51,7 @@ export default function EventCard({ year, migrations }: Props) {
               flexShrink: 0, marginTop: 3,
               background: ARC_COLORS[m.type],
             }} />
-            <span style={{ fontSize: 11, color: '#3a2a1a', lineHeight: 1.45 }}>
+            <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.85)', lineHeight: 1.45 }}>
               {m.description}
             </span>
           </div>
@@ -62,7 +59,7 @@ export default function EventCard({ year, migrations }: Props) {
       </div>
 
       {extra > 0 && (
-        <div style={{ fontSize: 9, color: '#9a8a7a', marginTop: 6 }}>
+        <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.45)', marginTop: 6 }}>
           +{extra} more active
         </div>
       )}
