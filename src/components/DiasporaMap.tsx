@@ -5,21 +5,8 @@ import type { Topology, GeometryCollection } from 'topojson-specification';
 import type { Community, Migration, CulturalType } from '../data/types';
 import { COMMUNITIES } from '../data/communities';
 import { MIGRATIONS } from '../data/migrations';
+import { CULTURAL_COLORS, ARC_COLORS } from '../data/palette';
 import Tooltip from './Tooltip';
-
-const CULTURAL_COLORS: Record<CulturalType, string> = {
-  Ashkenazi: '#4a9eff',
-  Sephardic: '#f5a623',
-  Mizrahi: '#7ed321',
-  Yemenite: '#bd10e0',
-  Ethiopian: '#e86c2c',
-  Mixed: '#9b9b9b',
-};
-
-const ARC_COLORS: Record<string, string> = {
-  forced: '#ff4444',
-  voluntary: '#44aaff',
-};
 
 interface TooltipState {
   community: Community;
@@ -130,8 +117,8 @@ export default function DiasporaMap({ year }: Props) {
       >
         <defs>
           <radialGradient id="oceanGradient" cx="50%" cy="50%" r="70%">
-            <stop offset="0%" stopColor="#0d1b3e" />
-            <stop offset="100%" stopColor="#020510" />
+            <stop offset="0%" stopColor="#0c1018" />
+            <stop offset="100%" stopColor="#03040a" />
           </radialGradient>
           <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur stdDeviation="3" result="blur" />
@@ -278,7 +265,7 @@ export default function DiasporaMap({ year }: Props) {
       <div
         className="absolute top-3 right-3 rounded-xl p-3 text-xs"
         style={{
-          background: 'rgba(10,15,40,0.88)',
+          background: 'rgba(6,8,14,0.85)',
           border: '1px solid rgba(255,255,255,0.1)',
           backdropFilter: 'blur(8px)',
         }}
@@ -313,8 +300,12 @@ export default function DiasporaMap({ year }: Props) {
       {/* Title overlay */}
       <div className="absolute top-3 left-3">
         <div
-          className="text-lg font-bold tracking-tight"
-          style={{ color: 'rgba(255,255,255,0.9)', textShadow: '0 2px 12px rgba(0,0,0,0.8)' }}
+          className="text-xl font-semibold tracking-tight"
+          style={{
+            fontFamily: 'var(--serif)',
+            color: '#f4eee0',
+            textShadow: '0 2px 12px rgba(0,0,0,0.8)',
+          }}
         >
           The Jewish Diaspora
         </div>
